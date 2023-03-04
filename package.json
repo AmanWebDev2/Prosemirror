@@ -9,7 +9,14 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-scripts": "5.0.1",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^2.1.4",
+    "prosemirror-example-setup": "1.2.1",
+    "prosemirror-model": "1.18.1",
+    "prosemirror-schema-basic": "1.2.0",
+    "prosemirror-schema-list": "1.2.2",
+    "prosemirror-state": "1.4.1",
+    "prosemirror-view": "1.28.0",
+    "react-frame-component": "^5.2.6"
   },
   "scripts": {
     "start": "react-scripts start",
