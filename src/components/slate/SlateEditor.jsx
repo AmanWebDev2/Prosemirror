@@ -1,6 +1,7 @@
 import React, { useMemo, useRef, useEffect,useState,useCallback } from 'react'
-import { Slate, Editable, withReact, useSlate, useFocused } from 'slate-react'
+import { Slate, Editable, withReact, useSlate, useFocused, useSlateStatic,useSelected,  ReactEditor,} from 'slate-react'
 import isUrl from 'is-url'
+import imageExtensions from 'image-extensions'
 import {
   Editor,
   Transforms,
@@ -47,6 +48,54 @@ const withInlines = editor => {
 
   return editor
 }
+const withImages = editor => {
+  const { insertData, isVoid } = editor
+
+  editor.isVoid = element => {
+    return element.type === 'image' ? true : isVoid(element)
+  }
+
+  editor.insertData = data => {
+    const text = data.getData('text/plain')
+    const { files } = data
+
+    if (files && files.length > 0) {
+      for (const file of files) {
+        const reader = new FileReader()
+        const [mime] = file.type.split('/')
+
+        if (mime === 'image') {
+          reader.addEventListener('load', () => {
+            const url = reader.result
+            insertImage(editor, url)
+          })
+
+          reader.readAsDataURL(file)
+        }
+      }
+    } else if (isImageUrl(text)) {
+      insertImage(editor, text)
+    } else {
+      insertData(data)
+    }
+  }
+
+  return editor
+}
+
+const isImageUrl = url => {
+  if (!url) return false
+  if (!isUrl(url)) return false
+  const ext = new URL(url).pathname.split('.').pop()
+  return imageExtensions.includes(ext)
+}
+
+const insertImage = (editor, url) => {
+  const text = { text: '' }
+  const image = { type: 'image', url, children: [text] }
+  Transforms.insertNodes(editor, image)
+}
+
 const isLinkActive = editor => {
   const [link] = Editor.nodes(editor, {
     match: n =>
@@ -90,7 +139,7 @@ const SlateEditor = () => {
   ]);
   // const editor = useMemo(() => withHistory(withReact(createEditor())), [])
   const editor = useMemo(
-    () => withInlines(withHistory(withReact(createEditor()))),
+    () => withEmbeds(withImages(withInlines(withHistory(withReact(createEditor()))))),
     []
   )
   const handleInsertCustomSpan = () => {
@@ -115,12 +164,15 @@ const SlateEditor = () => {
       // }
     }
   };
+
   const handleGetValue = () => {
     if (value) {
-      const editorValue = Editor.string(editor, value);
-      console.log(editorValue);
+      console.log(value)
     }
   };
+  useEffect(()=>{
+    console.log(value);
+  },[value])
     // Define a rendering function based on the element passed to `props`. We use
   // `useCallback` here to memoize the function for subsequent renders.
   const renderElement = useCallback(props => {
@@ -131,15 +183,32 @@ const SlateEditor = () => {
         return <CustomSpan {...props} />
         case 'button':
           return <EditableButtonComponent {...props} />
+        case 'image':
+          return <Image {...props} />
+          case 'video':
+            return <VideoElement {...props} />
       default:
         return <DefaultElement {...props} />
     }
   }, [])
   return (
-    <Slate editor={editor} value={value}>
+    <Slate editor={editor} value={value}
+    onChange={value => {
+      const isAstChange = editor.operations.some(
+        op => 'set_selection' !== op.type
+      )
+      if (isAstChange) {
+        // Save the value to Local Storage.
+        // const content = JSON.stringify(value)
+        // localStorage.setItem('content', content)
+        setValue(value)
+      }
+    }}
+    >
        <button onClick={handleInsertCustomSpan}>Insert Custom Span</button>
        <button onClick={handleGetValue}>Get Editor Value</button>
        <ToggleEditableButtonButton/>
+       <InsertImageButton />
       <HoveringToolbar />
       <Editable
       style={{ minHeight: '200px', backgroundColor: '#f8f8f8',padding:'12px',borderRadius:'12px',margin:'3px' }} 
@@ -165,6 +234,32 @@ const SlateEditor = () => {
       />
     </Slate>
   )
+}
+
+const InsertImageButton = () => {
+  const editor = useSlateStatic()
+  return (
+    <button
+      onMouseDown={event => {
+        event.preventDefault()
+        const url = window.prompt('Enter the URL of the image:')
+        if (url && !isImageUrl(url)) {
+          alert('URL is not an image')
+          return
+        }
+        url && insertImage(editor, url)
+      }}
+    >
+      insert img
+      {/* <Icon>image</Icon> */}
+    </button>
+  )
+}
+
+const withEmbeds = editor => {
+  const { isVoid } = editor
+  editor.isVoid = element => (element.type === 'video' ? true : isVoid(element))
+  return editor
 }
 
 const toggleFormat = (editor, format) => {
@@ -329,6 +424,116 @@ const ToggleEditableButtonButton = () => {
   )
 }
 
+const Image = ({ attributes, children, element }) => {
+  const editor = useSlateStatic()
+  const path = ReactEditor.findPath(editor, element)
+
+  const selected = useSelected()
+  const focused = useFocused()
+  return (
+    <div {...attributes}>
+      {children}
+      <div
+        contentEditable={false}
+        style={{
+          position: 'relative'
+        }}
+      >
+        <img
+          src={element.url}
+          alt='img'
+          style={{
+            display: 'block',
+            maxWidth: '100%',
+            maxHeight: '20em',
+            boxShadow: `${selected && focused ? '0 0 0 3px #B4D5FF' : 'none'}`
+          }}
+        />
+        <button
+          active
+          onClick={() => {
+            Transforms.removeNodes(editor, { at: path })
+            console.log('dlt btn clicked')
+          }}
+          style={{
+            display: `${selected && focused ? 'inline' : 'none'}`,
+            position: 'absolute',
+            top: "0.5em",
+            left: '0.5em',
+            backgroundColor: 'white'
+          }}
+        >
+          {/* <Icon>delete</Icon> */}
+          delete
+        </button>
+      </div>
+    </div>
+  )
+}
+
+const VideoElement = ({ attributes, children, element }) => {
+  const editor = useSlateStatic()
+  const { url } = element
+  return (
+    <div {...attributes}>
+      <div contentEditable={false}>
+        <div
+          style={{
+            padding: '75% 0 0 0',
+            position: 'relative',
+          }}
+        >
+          <iframe
+            src={`${url}?title=0&byline=0&portrait=0`}
+            frameBorder="0"
+            style={{
+              position: 'absolute',
+              top: '0',
+              left: '0',
+              width: '100%',
+              height: '100%',
+            }}
+            title='unknown'
+          />
+        </div>
+        <UrlInput
+          url={url}
+          onChange={val => {
+            const path = ReactEditor.findPath(editor, element)
+            const newProperties= {
+              url: val,
+            }
+            Transforms.setNodes(editor, newProperties, {
+              at: path,
+            })  
+          }}
+        />
+      </div>
+      {children}
+    </div>
+  )
+}
+
+const UrlInput = ({ url, onChange }) => {
+  const [value, setValue] = React.useState(url)
+  return (
+    <input
+      value={value}
+      onClick={e => e.stopPropagation()}
+      style={{
+        marginTop: '5px',
+        boxSizing: 'border-box',
+      }}
+      onChange={e => {
+        const newUrl = e.target.value
+        setValue(newUrl)
+        onChange(newUrl)
+      }}
+    />
+  )
+}
+
+
 const initialValue = [
   {
     type: 'paragraph',
@@ -342,6 +547,17 @@ const initialValue = [
       { text: 'italic', italic: true },
       { text: ', or anything else you might want to do!' },
     ],
+    
+  },
+  {
+    type: 'image',
+    url: 'https://source.unsplash.com/kFrdX5IeQzI',
+    children: [{ text: '' }],
+  },
+  {
+    type: 'video',
+    url: 'https://player.vimeo.com/video/26689853',
+    children: [{ text: '' }],
   },
   {
     type: 'paragraph',
