@@ -3,11 +3,18 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-
+import SlateEditor from './components/slate/SlateEditor';
+import Frame from 'react-frame-component'
 const root = ReactDOM.createRoot(document.getElementById('root'));
+
+
 root.render(
   <React.StrictMode>
-    <App />
+    <Frame 
+    style={{minWidth:'70%',maxHeight:'80%',margin:'30px auto',display:'block'}}
+    >
+    </Frame>
+      <SlateEditor />
   </React.StrictMode>
 );
 

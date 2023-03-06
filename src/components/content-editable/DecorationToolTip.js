@@ -36,6 +36,7 @@ class DecorationTooltip {
       let left = Math.max((start.left + end.left) / 2, start.left + 3);
       this.tooltip.style.left = left - box.left + "px";
       this.tooltip.style.bottom = box.bottom - start.top + "px";
+      // this.tooltip.appendChild(<div></div>)
       this.tooltip.textContent = to - from;
     }
   

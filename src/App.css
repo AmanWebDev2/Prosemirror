@@ -366,6 +366,7 @@ img.ProseMirror-separator {
     margin-bottom: 7px;
     -webkit-transform: translateX(-50%);
     transform: translateX(-50%);
+    opacity: 1;
   }
   .tooltip:before {
     content: "";
