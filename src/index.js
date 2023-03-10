@@ -10,12 +10,7 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 
 root.render(
   <React.StrictMode>
-    <Editor />
-    <Frame 
-    style={{minWidth:'70%',maxHeight:'80%',margin:'30px auto',display:'block'}}
-    >
-      <Editor />
-    </Frame>
+  <App/>    
   </React.StrictMode>
 );
 

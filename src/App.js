@@ -16,6 +16,7 @@ function App() {
           display: "block",
           margin: "0 auto",
         }}
+        
         initialContent='<!DOCTYPE html><html>
           <head>
             <link rel="stylesheet" href="./App.css"></link>
