@@ -3,6 +3,45 @@ import Editor from "./components/content-editable/Editor";
 import Frame from "react-frame-component";
 import { useRef } from "react";
 
+const content = [
+  {
+      "type": "paragraph",
+      "content": [
+          {
+              "type": "text",
+              "text": "line one"
+          }
+      ]
+  },
+  {
+      "type": "paragraph",
+      "content": [
+          {
+              "type": "text",
+              "text": "line two"
+          }
+      ]
+  },
+  {
+      "type": "paragraph",
+      "content": [
+          {
+              "type": "text",
+              "text": "line three"
+          }
+      ]
+  },
+  {
+      "type": "paragraph",
+      "content": [
+          {
+              "type": "text",
+              "text": "🤞"
+          }
+      ]
+  }
+]
+
 function App() {
   const iframeRef = useRef();
   return (
@@ -409,14 +448,43 @@ img.ProseMirror-separator {
     border-top-color: white;
   }
   #editor { position: relative; }
-
+  .pm-selectionmenu {
+    background-color: #fff;
+    box-shadow: 0 4px 14px 0 rgb(0 0 0 / 20%);
+    white-space: nowrap;
+    border-radius: 4px;
+    background-clip: padding-box;
+    padding: 4px;
+  }
+  .kudoshub-prosemirror-composer-icon-btn {
+    font-size: 14px;
+    line-height: 18px;
+    font-weight: 500;
+    border: none;
+    border-radius: 4px;
+    padding: 7px 8px 7px;
+    display: inline-block;
+    text-decoration: none;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+    box-sizing: border-box;
+    transition: box-shadow linear 40ms;
+    vertical-align: bottom;
+    background-color: transparent;
+    background-clip: padding-box;
+  }
+  .kudoshub-prosemirror-composer-icon-btn:hover svg{
+    fill: #334bfa;
+  }
           </style>
           <body>
             <div id="mountHere"></div>
           </body>
           </html>'
       >
-        <Editor />
+        <Editor content={content} />
       </Frame>
     </div>
   );
