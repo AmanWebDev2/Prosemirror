@@ -29,27 +29,49 @@ import {
   MenuItemSpec,
 } from "prosemirror-menu";
 import MenuView from "./custom/MenuView";
-import { tooltipMenuPlugin } from "./custom/menuItems";
+import { menu, tooltipMenuPlugin } from "./custom/menuItems";
 
-const mySchema = new Schema({
+export const mySchema = new Schema({
   nodes: addListNodes(schema.spec.nodes, "paragraph block*", "block"),
   marks: schema.spec.marks,
 });
 
-const doc = DOMParser.fromSchema(mySchema).parse(document.createElement("div"));
+function icon(text, name) {
+  let span = document.createElement("span")
+  span.className = "menuicon " + name
+  span.title = name
+  span.textContent = text
+  return span
+}
+
+const strong = new MenuItem({
+  title: "Toggle strong style", icon: icons.strong,
+  // active(state) { return markActive(state, markType) },
+  enable(state) { return true },
+  run(state, dispatch, view) {
+    console.log(view);
+    // if (markActive(state, markType)) {
+      toggleMark(schema.marks.strong)(state, dispatch)
+      return true
+    // }
+  }
+  });
+  const ab = buildMenuItems(mySchema).inlineMenu;
+  console.log(ab)
+  console.log([[strong]]);
+
+const doc = DOMParser.fromSchema(schema).parse(document.createElement("div"));
 let selectionSizePlugin = new Plugin({
   view(editorView) {
     return new DecorationTooltip(editorView);
   },
 });
-const menu = buildMenuItems(mySchema).inlineMenu;
-console.log(menu);
 const plugins = [
   history(),
   keymap({ "Mod-z": undo, "Mod-y": redo }),
   keymap(baseKeymap),
-  // selectionMenu({content:menu}),
-  tooltipMenuPlugin,
+  selectionMenu({content:[[strong]]}),
+  // tooltipMenuPlugin,
 ];
 
 export default function Editor() {
