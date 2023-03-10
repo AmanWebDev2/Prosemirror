@@ -490,6 +490,9 @@ img.ProseMirror-separator {
   .ProseMirror-menuitem {
     margin-right:8px;
   }
+  .kudoshub-prosemirror-composer-editor p code {
+    background-color: #d3d3d3;
+  }
           </style>
           <body>
             <div id="mountHere"></div>

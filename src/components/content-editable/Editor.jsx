@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from "react";
 import { EditorState } from "prosemirror-state";
 import { EditorView } from "prosemirror-view";
 import { Schema, DOMParser } from "prosemirror-model";
-import { schema } from "prosemirror-schema-basic";
+import { schema } from "./custom/schema/schema";
 import { addListNodes } from "prosemirror-schema-list";
 import { Decoration, DecorationSet } from "prosemirror-view";
 import { baseKeymap, toggleMark } from "prosemirror-commands";
@@ -13,11 +13,6 @@ import "../../App.css";
  
 // import MenuView from "./custom/MenuView";
 import { tooltipMenuItems, } from "./custom/menuItems";
-
-export const mySchema = new Schema({
-  nodes: addListNodes(schema.spec.nodes, "paragraph block*", "block"),
-  marks: schema.spec.marks,
-});
 
 // const doc = DOMParser.fromSchema(mySchema).parse(document.createElement("div"));
 const doc = schema.nodeFromJSON({"type":"doc","content":[
@@ -107,6 +102,8 @@ export default function Editor({ doc:doc1 }) {
       state: EditorState.create({ doc, plugins }),
       decorations: (state) => tooltipDecoration(state),
     });
+    const editorWrapper = editorRef.current.dom;
+    editorWrapper.classList.add('kudoshub-prosemirror-composer-editor');
     // Define your custom tooltip content
   }, []);
 
