@@ -2,18 +2,38 @@ import { toggleMark } from "prosemirror-commands";
 import { MenuItem } from "prosemirror-menu";
 import { schema } from "prosemirror-schema-basic";
 
-const strong = new MenuItem({
+let markType = {
+  strong: schema.marks.strong,
+  em: schema.marks.em,
+  code: schema.marks.code,
+  link: schema.marks.link,
+}
+function markActive(state, type) {
+  let {from, to} = state.selection
+  return state.doc.rangeHasMark(from, to, type)
+}
+
+const boldItem = new MenuItem({
   label: "B",
   enable(state) {
     return true;
   },
 
   run(state, dispatch, view) {
-    console.log(view);
     // if (markActive(state, markType)) {
-    toggleMark(schema.marks.strong)(state, dispatch);
+    toggleMark(markType.strong)(state, dispatch);
     return true;
     // }
+  },
+  active(state) {
+    console.log(state)
+    return markActive(state,markType.strong);
+  },
+  update(state) {
+    const isActive = markActive(state,markType.strong);
+    console.log(this.wrapper)
+    // this.wrapper.classList.toggle('selected', isActive);
+    return true;
   },
   render() {
     const item = document.createElement("div");
@@ -27,18 +47,20 @@ const strong = new MenuItem({
     return item;
   },
 });
-const italic = new MenuItem({
+const italicItem = new MenuItem({
   label: "I",
   enable(state) {
     return true;
   },
 
   run(state, dispatch, view) {
-    console.log(view);
     // if (markActive(state, markType)) {
     toggleMark(schema.marks.em)(state, dispatch);
     return true;
     // }
+  },
+  active(state) {
+    return markActive(state,markType.em);
   },
   render() {
     const item = document.createElement("div");
@@ -52,18 +74,18 @@ const italic = new MenuItem({
     return item;
   },
 });
-const code = new MenuItem({
+const codeItem = new MenuItem({
   label: "code",
   enable(state) {
     return true;
   },
 
   run(state, dispatch, view) {
-    console.log(view);
-    // if (markActive(state, markType)) {
     toggleMark(schema.marks.code)(state, dispatch);
     return true;
-    // }
+  },
+  active(state) {
+    return markActive(state,markType.code);
   },
   render() {
     const item = document.createElement("div");
@@ -77,21 +99,18 @@ const code = new MenuItem({
     return item;
   },
 });
-const link = new MenuItem({
+const linkItem = new MenuItem({
   label: "link",
   enable(state) {
     return true;
   },
 
   run(state, dispatch, view) {
-    console.log(view);
-    console.log(state);
-    const content = state.doc.toJSON();
-    console.log(content);
-    // if (markActive(state, markType)) {
     toggleMark(schema.marks.link)(state, dispatch);
     return true;
-    // }
+  },
+  active(state) {
+    return markActive(state,markType.link);
   },
   render() {
     const item = document.createElement("div");
@@ -106,4 +125,4 @@ const link = new MenuItem({
   },
 });
 
-export const menuitems = [strong, italic, code,link];
+export const tooltipMenuItems = [boldItem, italicItem, codeItem,linkItem];

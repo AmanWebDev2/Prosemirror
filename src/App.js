@@ -3,44 +3,47 @@ import Editor from "./components/content-editable/Editor";
 import Frame from "react-frame-component";
 import { useRef } from "react";
 
-const content = [
-  {
-      "type": "paragraph",
-      "content": [
-          {
-              "type": "text",
-              "text": "line one"
-          }
-      ]
-  },
-  {
-      "type": "paragraph",
-      "content": [
-          {
-              "type": "text",
-              "text": "line two"
-          }
-      ]
-  },
-  {
-      "type": "paragraph",
-      "content": [
-          {
-              "type": "text",
-              "text": "line three"
-          }
-      ]
-  },
-  {
-      "type": "paragraph",
-      "content": [
-          {
-              "type": "text",
-              "text": "🤞"
-          }
-      ]
-  }
-]
+const doc = {
+  type: "doc",
+  content: [
+    {
+      type: "paragraph",
+      content: [
+        {
+          type: "text",
+          text: "line one",
+        },
+      ],
+    },
+    {
+      type: "paragraph",
+      content: [
+        {
+          type: "text",
+          text: "line two",
+        },
+      ],
+    },
+    {
+      type: "paragraph",
+      content: [
+        {
+          type: "text",
+          text: "line three",
+        },
+      ],
+    },
+    {
+      type: "paragraph",
+      content: [
+        {
+          type: "text",
+          text: "🤞",
+        },
+      ],
+    },
+  ],
+};
 
 function App() {
   const iframeRef = useRef();
@@ -55,7 +58,6 @@ function App() {
           display: "block",
           margin: "0 auto",
         }}
-        
         initialContent='<!DOCTYPE html><html>
           <head>
             <link rel="stylesheet" href="./App.css"></link>
@@ -478,13 +480,23 @@ img.ProseMirror-separator {
   .kudoshub-prosemirror-composer-icon-btn:hover svg{
     fill: #334bfa;
   }
+  .ProseMirror-menu-active {
+    color: #334bfa;
+    background-color: #e8f0ff;
+  }
+  .ProseMirror-menu-active svg {
+    fill: #334bfa;
+  }
+  .ProseMirror-menuitem {
+    margin-right:8px;
+  }
           </style>
           <body>
             <div id="mountHere"></div>
           </body>
           </html>'
       >
-        <Editor content={content} />
+        <Editor doc={doc} />
       </Frame>
     </div>
   );
