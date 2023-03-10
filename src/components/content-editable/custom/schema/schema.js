@@ -1,7 +1,7 @@
 import {Schema, NodeSpec, MarkSpec, DOMOutputSpec} from "prosemirror-model"
 
 const pDOM = ["p",{class:'new-class-added'}, 0], blockquoteDOM = ["blockquote", 0],
-      hrDOM = ["hr"], preDOM = ["pre", ["code", 0]],
+      hrDOM = ["hr"], preDOM = ["pre"],
       brDOM = ["br"]
 
 /// [Specs](#model.NodeSpec) for the nodes defined in this schema.
@@ -152,6 +152,11 @@ export const marks = {
   code: {
     parseDOM: [{tag: "code"}],
     toDOM() { return codeDOM }
+  },
+
+  code_block1: {
+    parseDOM: [{tag: "pre"}],
+    toDOM() { return preDOM }
   } 
 }
 
