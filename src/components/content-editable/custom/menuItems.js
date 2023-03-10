@@ -1,4 +1,4 @@
-import { toggleMark } from "prosemirror-commands";
+import { setBlockType, toggleMark } from "prosemirror-commands";
 import { MenuItem } from "prosemirror-menu";
 import { schema } from "prosemirror-schema-basic";
 
@@ -132,7 +132,11 @@ const codeBlockItem = new MenuItem({
   },
 
   run(state, dispatch, view) {
-    toggleMark(state.schema.marks.code_block1)(state, dispatch);
+    const { $from } = state.selection;
+    const nodeType = state.schema.nodes.code_block;
+    // toggleMark(state.schema.marks.code_block1)(state, dispatch);
+    setBlockType(nodeType)(state, dispatch);
+    // dispatch(transaction);
     return true;
   },
   // active(state) {
