@@ -2,6 +2,13 @@ class DecorationTooltip {
     constructor(view) {
       this.tooltip = document.createElement("div");
       this.tooltip.className = "tooltip";
+      this.tooltip.innerHTML = `
+      <div>
+        <span>bold</span>
+        <span>italic</span>
+        <span>code</span>
+      </div>
+      `
       view.dom.parentNode.appendChild(this.tooltip);
   
       this.update(view, null);
@@ -36,12 +43,9 @@ class DecorationTooltip {
       let left = Math.max((start.left + end.left) / 2, start.left + 3);
       this.tooltip.style.left = left - box.left + "px";
       this.tooltip.style.bottom = box.bottom - start.top + "px";
-      this.tooltip.textContent = to - from;
-    }
+     }
   
-    destroy() {
-      this.tooltip.remove();
-    }
+    
   }
   
   export default DecorationTooltip;
