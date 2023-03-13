@@ -8,6 +8,7 @@ import { keymap } from "prosemirror-keymap";
 import { undo, redo, history } from "prosemirror-history";
 import { selectionMenu } from "./selectionMenu";
 import { tooltipMenuItems, } from "./custom/menuItems";
+import { editorDOMEvents } from "./editorDOMEvents";
 
 const doc = schema.nodeFromJSON({"type":"doc","content":[
   {
