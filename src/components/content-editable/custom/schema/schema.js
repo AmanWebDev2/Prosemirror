@@ -1,6 +1,6 @@
-import {Schema, NodeSpec, MarkSpec, DOMOutputSpec} from "prosemirror-model"
+import { Schema } from "prosemirror-model"
 
-const pDOM = ["p",{class:'new-class-added'}, 0], blockquoteDOM = ["blockquote", 0],
+const blockquoteDOM = ["blockquote", 0],
       hrDOM = ["hr"], preDOM = ["pre",0],
       brDOM = ["br"]
 
@@ -15,9 +15,14 @@ export const nodes = {
   /// as a `<p>` element.
   paragraph: {
     content: "inline*",
+    attrs: {
+      align: { default:'left'},
+    },
     group: "block",
     parseDOM: [{tag: "p",}],
-    toDOM() { return pDOM }
+    toDOM(node) { 
+       return ['p',{'data-align':node.attrs.align,class:'new-para'},0] 
+    }
   } ,
 
   /// A blockquote (`<blockquote>`) wrapping one or more blocks.
@@ -156,7 +161,7 @@ export const marks = {
   code_block1: {
     parseDOM: [{tag: "pre"}],
     toDOM() { return preDOM }
-  } 
+  },
 }
 
 /// This schema roughly corresponds to the document schema used by

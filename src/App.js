@@ -493,6 +493,18 @@ img.ProseMirror-separator {
   .kudoshub-prosemirror-composer-editor p code {
     background-color: #d3d3d3;
   }
+  .kudoshub-prosemirror-composer-editor pre {
+    margin: 0 0 10px;
+    padding: 10px;
+    background-color: #f5f5f5;
+    overflow: auto;
+    font-family: Courier,monospace;
+    font-size: 14px;
+    line-height: 1.4;
+  }
+  [data-align=center] {
+    text-align: center!important;
+  }
           </style>
           <body>
             <div id="mountHere"></div>
