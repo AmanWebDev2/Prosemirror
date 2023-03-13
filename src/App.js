@@ -502,6 +502,9 @@ img.ProseMirror-separator {
     font-size: 14px;
     line-height: 1.4;
   }
+  [data-align=center] {
+    text-align: center!important;
+  }
           </style>
           <body>
             <div id="mountHere"></div>

@@ -8,13 +8,13 @@ let markType = {
   code: schema.marks.code,
   link: schema.marks.link,
   code_block: schema.marks.code_block,
-  heading: schema.marks.heading,
 }
 function markActive(state, type) {
   let {from, to} = state.selection
   return state.doc.rangeHasMark(from, to, type)
 }
-
+ 
+ 
 const boldItem = new MenuItem({
   label: "B",
   enable(state) {
@@ -207,5 +207,32 @@ const headingTwoItem = new MenuItem({
     return item;
   },
 });
+const alignCenterItem = new MenuItem({
+  label: "align center",
+  enable(state) {
+    return true;
+  },
 
-export const tooltipMenuItems = [boldItem, italicItem, codeItem,linkItem,codeBlockItem,headingOneItem,headingTwoItem];
+  run(state, dispatch, view) {
+    const nodeType = state.schema.nodes.paragraph;
+    const attrs = { align: "center"};
+    setBlockType(nodeType,attrs)(state, dispatch);
+    return true;
+  },
+  active(state) {
+    // return markActive(state,markType.heading);
+  },
+  render() {
+    const item = document.createElement("div");
+    item.innerHTML = `
+    <button class="kudoshub-prosemirror-composer-icon-btn
+    " data-test-text-formatter-header="" type="button">
+    <svg class="interface-icon o__standard o__standard__center" width="16" height="16" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M1.15 3.85c0-.47.38-.85.85-.85h12a.85.85 0 0 1 0 1.7H2a.85.85 0 0 1-.85-.85zM4.15 8c0-.47.38-.85.85-.85h6a.85.85 0 0 1 0 1.7H5A.85.85 0 0 1 4.15 8zM2.65 12.15c0-.47.38-.85.85-.85h9a.85.85 0 0 1 0 1.7h-9a.85.85 0 0 1-.85-.85z"></path></svg>
+  </button>
+    `;
+    item.className = "align_center_item";
+    return item;
+  },
+});
+
+export const tooltipMenuItems = [boldItem, italicItem, codeItem,linkItem,codeBlockItem,headingOneItem,headingTwoItem,alignCenterItem];
