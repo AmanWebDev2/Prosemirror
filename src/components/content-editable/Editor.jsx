@@ -59,6 +59,7 @@ const plugins = [
   keymap({ "Mod-z": undo, "Mod-y": redo }),
   keymap(baseKeymap),
   selectionMenu({ content: [tooltipMenuItems] }),
+  editorDOMEvents(),
   // tooltipMenuPlugin,
 ];
 
