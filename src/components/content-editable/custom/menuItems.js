@@ -8,6 +8,7 @@ let markType = {
   code: schema.marks.code,
   link: schema.marks.link,
   code_block: schema.marks.code_block,
+  heading: schema.marks.heading,
 }
 function markActive(state, type) {
   let {from, to} = state.selection
@@ -132,9 +133,7 @@ const codeBlockItem = new MenuItem({
   },
 
   run(state, dispatch, view) {
-    const { $from } = state.selection;
     const nodeType = state.schema.nodes.code_block;
-    // toggleMark(state.schema.marks.code_block1)(state, dispatch);
     setBlockType(nodeType)(state, dispatch);
     // dispatch(transaction);
     return true;
@@ -154,5 +153,59 @@ const codeBlockItem = new MenuItem({
     return item;
   },
 });
+const headingOneItem = new MenuItem({
+  label: "heading one",
+  enable(state) {
+    return true;
+  },
 
-export const tooltipMenuItems = [boldItem, italicItem, codeItem,linkItem,codeBlockItem];
+  run(state, dispatch, view) {
+    const nodeType = state.schema.nodes.heading;
+    // default attribute is h1
+    setBlockType(nodeType)(state, dispatch);
+    return true;
+  },
+  active(state) {
+    // return markActive(state,markType.heading);
+  },
+  render() {
+    const item = document.createElement("div");
+    item.innerHTML = `
+    <button class="kudoshub-prosemirror-composer-icon-btn
+    " data-test-text-formatter-header="" type="button">
+    H1
+  </button>
+    `;
+    item.className = "heading-one-item";
+    return item;
+  },
+});
+const headingTwoItem = new MenuItem({
+  label: "heading two",
+  enable(state) {
+    return true;
+  },
+
+  run(state, dispatch, view) {
+    const nodeType = state.schema.nodes.heading;
+    const attrs = { level: 2 };
+    setBlockType(nodeType,attrs)(state, dispatch);
+    return true;
+  },
+  active(state) {
+    // return markActive(state,markType.heading);
+  },
+  render() {
+    const item = document.createElement("div");
+    item.innerHTML = `
+    <button class="kudoshub-prosemirror-composer-icon-btn
+    " data-test-text-formatter-header="" type="button">
+    H2
+  </button>
+    `;
+    item.className = "heading-two-item";
+    return item;
+  },
+});
+
+export const tooltipMenuItems = [boldItem, italicItem, codeItem,linkItem,codeBlockItem,headingOneItem,headingTwoItem];
