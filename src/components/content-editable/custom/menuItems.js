@@ -1,6 +1,10 @@
 import { setBlockType, toggleMark } from "prosemirror-commands";
 import { MenuItem } from "prosemirror-menu";
 import { schema } from "prosemirror-schema-basic";
+import { HEADING } from "./schema/nodes/Names";
+import toggleHeading from "../utils/ToggleHeading";
+
+import {findParentNodeOfType} from 'prosemirror-utils';
 
 let markType = {
   strong: schema.marks.strong,
@@ -8,13 +12,14 @@ let markType = {
   code: schema.marks.code,
   link: schema.marks.link,
   code_block: schema.marks.code_block,
-}
+  heading_one: schema.marks.heading_one,
+};
 function markActive(state, type) {
-  let {from, to} = state.selection
-  return state.doc.rangeHasMark(from, to, type)
+  let { from, $from, to, empty } = state.selection;
+  if (empty) return !!type.isInSet(state.storedMarks || $from.marks());
+  else return state.doc.rangeHasMark(from, to, type);
 }
- 
- 
+
 const boldItem = new MenuItem({
   label: "B",
   enable(state) {
@@ -28,15 +33,10 @@ const boldItem = new MenuItem({
     // }
   },
   active(state) {
-    console.log(state)
-    return markActive(state,markType.strong);
+    console.log(state);
+    return markActive(state, markType.strong);
   },
-  update(state) {
-    const isActive = markActive(state,markType.strong);
-    console.log(this.wrapper)
-    // this.wrapper.classList.toggle('selected', isActive);
-    return true;
-  },
+
   render() {
     const item = document.createElement("div");
     item.innerHTML = `
@@ -62,7 +62,7 @@ const italicItem = new MenuItem({
     // }
   },
   active(state) {
-    return markActive(state,markType.em);
+    return markActive(state, markType.em);
   },
   render() {
     const item = document.createElement("div");
@@ -87,7 +87,7 @@ const codeItem = new MenuItem({
     return true;
   },
   active(state) {
-    return markActive(state,markType.code);
+    return markActive(state, state.schema.marks.code);
   },
   render() {
     const item = document.createElement("div");
@@ -112,7 +112,7 @@ const linkItem = new MenuItem({
     return true;
   },
   active(state) {
-    return markActive(state,markType.link);
+    return markActive(state, markType.link);
   },
   render() {
     const item = document.createElement("div");
@@ -158,16 +158,44 @@ const headingOneItem = new MenuItem({
   enable(state) {
     return true;
   },
-
   run(state, dispatch, view) {
-    const nodeType = state.schema.nodes.heading;
-    // default attribute is h1
-    setBlockType(nodeType)(state, dispatch);
-    return true;
+    const {schema, selection} = state;
+    const tr = toggleHeading(
+      state.tr.setSelection(selection),
+      schema,
+      1
+    );
+    if (tr.docChanged) {
+      dispatch && dispatch(tr);
+      return true;
+    } else {
+      return false;
+    }
   },
   active(state) {
-    // return markActive(state,markType.heading);
+    const result = this._findHeading(state);
+    return !!(
+      result &&
+      result.node &&
+      result.node.attrs &&
+      result.node.attrs.level === 1
+    );
   },
+  _findHeading(state) {
+    const heading = state.schema.nodes[HEADING];
+    const fn = heading ? findParentNodeOfType(heading) : () => {};
+    return fn(state.selection);
+  },
+  isActive(state) {
+    const result = this._findHeading(state);
+    return !!(
+      result &&
+      result.node &&
+      result.node.attrs &&
+      result.node.attrs.level === 1
+    );
+  },
+
   render() {
     const item = document.createElement("div");
     item.innerHTML = `
@@ -187,14 +215,45 @@ const headingTwoItem = new MenuItem({
   },
 
   run(state, dispatch, view) {
-    const nodeType = state.schema.nodes.heading;
-    const attrs = { level: 2 };
-    setBlockType(nodeType,attrs)(state, dispatch);
-    return true;
+    const {schema, selection} = state;
+    const tr = toggleHeading(
+      state.tr.setSelection(selection),
+      schema,
+      2
+    );
+    if (tr.docChanged) {
+      dispatch && dispatch(tr);
+      return true;
+    } else {
+      return false;
+    }
   },
   active(state) {
     // return markActive(state,markType.heading);
+    const result = this._findHeading(state);
+    return !!(
+      result &&
+      result.node &&
+      result.node.attrs &&
+      result.node.attrs.level === 2
+    );
   },
+
+  _findHeading(state) {
+    const heading = state.schema.nodes[HEADING];
+    const fn = heading ? findParentNodeOfType(heading) : () => {};
+    return fn(state.selection);
+  },
+  isActive(state) {
+    const result = this._findHeading(state);
+    return !!(
+      result &&
+      result.node &&
+      result.node.attrs &&
+      result.node.attrs.level === 1
+    );
+  },
+
   render() {
     const item = document.createElement("div");
     item.innerHTML = `
@@ -215,8 +274,8 @@ const alignCenterItem = new MenuItem({
 
   run(state, dispatch, view) {
     const nodeType = state.schema.nodes.paragraph;
-    const attrs = { align: "center"};
-    setBlockType(nodeType,attrs)(state, dispatch);
+    const attrs = { align: "center" };
+    setBlockType(nodeType, attrs)(state, dispatch);
     return true;
   },
   active(state) {
@@ -235,4 +294,13 @@ const alignCenterItem = new MenuItem({
   },
 });
 
-export const tooltipMenuItems = [boldItem, italicItem, codeItem,linkItem,codeBlockItem,headingOneItem,headingTwoItem,alignCenterItem];
+export const tooltipMenuItems = [
+  boldItem,
+  italicItem,
+  codeItem,
+  linkItem,
+  codeBlockItem,
+  headingOneItem,
+  headingTwoItem,
+  alignCenterItem,
+];

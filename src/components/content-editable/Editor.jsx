@@ -3,12 +3,8 @@ import { EditorState } from "prosemirror-state";
 import { EditorView } from "prosemirror-view";
 import { schema } from "./custom/schema/schema";
 import { Decoration, DecorationSet } from "prosemirror-view";
-import { baseKeymap, toggleMark } from "prosemirror-commands";
-import { keymap } from "prosemirror-keymap";
-import { undo, redo, history } from "prosemirror-history";
-import { selectionMenu } from "./selectionMenu";
-import { tooltipMenuItems, } from "./custom/menuItems";
-import { editorDOMEvents } from "./editorDOMEvents";
+import { plugins } from "./plugins/plugins";
+import { toggleMark } from "prosemirror-commands";
 
 const doc = schema.nodeFromJSON({"type":"doc","content":[
   {
@@ -50,14 +46,7 @@ const doc = schema.nodeFromJSON({"type":"doc","content":[
 
 ]});
 
-const plugins = [
-  history(),
-  keymap({ "Mod-z": undo, "Mod-y": redo }),
-  keymap(baseKeymap),
-  selectionMenu({ content: [tooltipMenuItems] }),
-  editorDOMEvents(),
-
-];
+ 
 
 export default function Editor() {
   const editorRef = useRef(null);

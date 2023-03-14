@@ -15,7 +15,7 @@ export function editorDOMEvents(options) {
                   
                   const pos = posAtCoords.pos
                   let node = view.domAtPos(pos).node;
-                  let nodes = []
+                  // let nodes = []
                   let parent = null;
                 let lastNode = node;
                 if(node && node.pmViewDesc){
@@ -26,7 +26,7 @@ export function editorDOMEvents(options) {
                     }
                 }
                 if(lastNode && parent){
-                    console.log(lastNode)
+                    // console.log(lastNode)
                 }
                   return false
             },
