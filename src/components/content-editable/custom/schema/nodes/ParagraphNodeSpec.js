@@ -35,7 +35,6 @@ function toDOM(node) {
   let style = "";
   if (align && align !== "left") {
     style += `text-align: ${align};`;
-    style += `color: red;`;
   }
   style && (attrs.style = style);
   if (id) {

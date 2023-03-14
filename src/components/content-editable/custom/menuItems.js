@@ -1,7 +1,8 @@
-import { setBlockType, toggleMark } from "prosemirror-commands";
+import { toggleMark } from "prosemirror-commands";
 import { MenuItem } from "prosemirror-menu";
 import { schema } from "prosemirror-schema-basic";
-import { CODE_BLOCK, HEADING } from "./schema/nodes/Names";
+import { CODE_BLOCK, HEADING, PARAGRAPH } from "./schema/nodes/Names";
+import {AllSelection, TextSelection} from 'prosemirror-state';
 import toggleHeading from "../utils/ToggleHeading";
 
 import {findParentNodeOfType} from 'prosemirror-utils';
@@ -282,6 +283,85 @@ const headingTwoItem = new MenuItem({
     return item;
   },
 });
+
+/* ALIGN ITEM CENTER */
+export function setTextAlign(
+  tr,
+  schema,
+  alignment
+) {
+  const {selection, doc} = tr;
+  if (!selection || !doc) {
+    return tr;
+  }
+  const {from, to} = selection;
+  const {nodes} = schema;
+
+  // const blockquote = nodes[BLOCKQUOTE];
+  // const listItem = nodes[LIST_ITEM];
+  const heading = nodes[HEADING];
+  const paragraph = nodes[PARAGRAPH];
+
+  const tasks = [];   
+  const tasks2 = []; // for toggle
+  alignment = alignment || null;
+
+  const allowedNodeTypes = new Set([ heading, paragraph]);
+
+  doc.nodesBetween(from, to, (node, pos, parentNode) => {
+    const nodeType = node.type;
+    const align = node.attrs.align || null;
+    if (align !== alignment && allowedNodeTypes.has(nodeType)) {
+      tasks.push({
+        node,
+        pos,
+        nodeType,
+      });
+    }else if(allowedNodeTypes.has(nodeType)){
+      tasks2.push({
+        node,
+        pos,
+        nodeType,
+      });
+    }
+    return true;
+  });
+
+  if (tasks2.length) {
+    tasks2.forEach(job => {
+      const {node, pos, nodeType} = job;
+      let {attrs} = node;
+      if (alignment)   {
+        attrs = {
+          ...attrs,
+          align: null,
+        };
+      }
+      tr = tr.setNodeMarkup(pos, nodeType, attrs, node.marks);
+    });
+    return tr;
+  }
+
+  tasks.forEach(job => {
+    const {node, pos, nodeType} = job;
+    let {attrs} = node;
+    if (alignment) {
+      attrs = {
+        ...attrs,
+        align: alignment,
+      };
+    } else {
+      attrs = {
+        ...attrs,
+        align: null,
+      };
+    }
+    tr = tr.setNodeMarkup(pos, nodeType, attrs, node.marks);
+  });
+
+  return tr;
+}
+
 const alignCenterItem = new MenuItem({
   label: "align center",
   enable(state) {
@@ -289,14 +369,45 @@ const alignCenterItem = new MenuItem({
   },
 
   run(state, dispatch, view) {
-    const nodeType = state.schema.nodes.paragraph;
-    const attrs = { align: "center" };
-    setBlockType(nodeType, attrs)(state, dispatch);
-    return true;
+    // const nodeType = state.schema.nodes.paragraph;
+    // const attrs = { align: "center" };
+    // setBlockType(nodeType, attrs)(state, dispatch);
+    const {schema, selection} = state;
+    const tr = setTextAlign(
+      state.tr.setSelection(selection),
+      schema,
+      'center'
+    );
+    
+    if (tr.docChanged) {
+      dispatch && dispatch(tr);
+      return true;
+    } else {
+      return false;
+    }
   },
   active(state) {
+    const {selection, doc} = state;
+    const {from, to} = selection;
+    let keepLooking = true;
+    let active = false;
+    doc.nodesBetween(from, to, (node, pos) => {
+      if (keepLooking && node.attrs.align === 'center') {
+        keepLooking = false;
+        active = true;
+      }
+      return keepLooking;
+    });
+    return active;
     // return markActive(state,markType.heading);
   },
+  isEnabled (state) {
+    const {selection} = state;
+    return (
+      selection instanceof TextSelection || selection instanceof AllSelection
+    );
+  },
+  
   render() {
     const item = document.createElement("div");
     item.innerHTML = `
