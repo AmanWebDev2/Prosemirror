@@ -2,11 +2,11 @@ import { Schema } from "prosemirror-model"
 
 import * as MarkNames from './marks/Names'
 
-import FontSizeMarkSpec from "./marks/FontSizeMarkSpecs"
-import StrongMarkSpec from "./marks/StrongMarkSpecs"
-import headingOneSpec from "./marks/HeadingOneSpecs"
-import CodeMarkSpec from "./marks/CodeMarksSpecs"
-import EMMarkSpec from "./marks/EMMarkSpecs"
+import FontSizeMarkSpec from "./marks/FontSizeMarkSpec"
+import StrongMarkSpec from "./marks/StrongMarkSpec"
+import headingOneSpec from "./marks/HeadingOneSpec"
+import CodeMarkSpec from "./marks/CodeMarksSpec"
+import EMMarkSpec from "./marks/EMMarkSpec"
 
 import CodeBlockNodeSpec from "./nodes/CodeBlockNodeSpec"
 import ParagraphNodeSpec from "./nodes/ParagraphNodeSpec"
