@@ -1,16 +1,20 @@
 import { Schema } from "prosemirror-model"
-import HeadingNodeSpec from "./marks/HeadingNodeSpecs"
-import ParagraphNodeSpec from "./marks/ParagraphNodeSpecs"
+
 import * as MarkNames from './marks/Names'
+
 import FontSizeMarkSpec from "./marks/FontSizeMarkSpecs"
 import StrongMarkSpec from "./marks/StrongMarkSpecs"
-import EMMarkSpec from "./marks/EMMarkSpecs"
-import CodeMarkSpec from "./marks/CodeMarksSpecs"
 import headingOneSpec from "./marks/HeadingOneSpecs"
-const blockquoteDOM = ["blockquote", 0],
-      hrDOM = ["hr"], preDOM = ["pre",0],
-      brDOM = ["br"]
+import CodeMarkSpec from "./marks/CodeMarksSpecs"
+import EMMarkSpec from "./marks/EMMarkSpecs"
 
+import CodeBlockNodeSpec from "./nodes/CodeBlockNodeSpec"
+import ParagraphNodeSpec from "./nodes/ParagraphNodeSpec"
+import HeadingNodeSpec from "./nodes/HeadingNodeSpec"
+import DocNodeSpec from "./nodes/DocNodeSpec"
+import TextNodeSpec from "./nodes/TextNodeSpec"
+import HardBreakNodeSpec from "./nodes/HardBreakNodeSpec"
+import { CODE_BLOCK, DOC, HARD_BREAK, HEADING, PARAGRAPH,TEXT } from "./nodes/Names"
 
 const {
   MARK_CODE,
@@ -23,48 +27,12 @@ const {
 /// [Specs](#model.NodeSpec) for the nodes defined in this schema.
 export const nodes = {
   /// NodeSpec The top level document node.
-  doc: {
-    content: "block+"
-  } ,
-  paragraph: ParagraphNodeSpec ,
-
-  /// A blockquote (`<blockquote>`) wrapping one or more blocks.
-  blockquote: {
-    content: "block+",
-    group: "block",
-    defining: true,
-    parseDOM: [{tag: "blockquote"}],
-    toDOM() { return blockquoteDOM }
-  },
-
-  /// A horizontal rule (`<hr>`).
-  horizontal_rule: {
-    group: "block",
-    parseDOM: [{tag: "hr"}],
-    toDOM() { return hrDOM }
-  } ,
-
-  /// A heading textblock, with a `level` attribute that
-  /// should hold the number 1 to 6. Parsed and serialized as `<h1>` to
-  /// `<h6>` elements.
-  heading: HeadingNodeSpec,
-
-  /// A code listing. Disallows marks or non-text inline
-  /// nodes by default. Represented as a `<pre>` element with a
-  /// `<code>` element inside of it.
-  code_block: {
-    content: "text*",
-    marks: "",
-    group: "block",
-    defining: true,
-    parseDOM: [{tag: "pre", preserveWhitespace: "full"}],
-    toDOM() { return preDOM }
-  } ,
-
-  /// The text node.
-  text: {
-    group: "inline"
-  },
+  [DOC]: DocNodeSpec ,
+  [PARAGRAPH]: ParagraphNodeSpec ,
+  [HEADING]: HeadingNodeSpec,
+  [CODE_BLOCK]: CodeBlockNodeSpec,
+  [TEXT]: TextNodeSpec,
+  [HARD_BREAK]: HardBreakNodeSpec,
 
   /// An inline image (`<img>`) node. Supports `src`,
   /// `alt`, and `href` attributes. The latter two default to the empty
@@ -89,13 +57,6 @@ export const nodes = {
   },
 
   /// A hard line break, represented in the DOM as `<br>`.
-  hard_break: {
-    inline: true,
-    group: "inline",
-    selectable: false,
-    parseDOM: [{tag: "br"}],
-    toDOM() { return brDOM }
-  }
 }
 
 

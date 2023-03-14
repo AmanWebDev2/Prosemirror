@@ -19,7 +19,7 @@ export default function toggleHeading(
       !selection ||
       !doc ||
       !heading ||
-      !paragraph  || !blockquote
+      !paragraph 
     ) {
       return tr;
     }

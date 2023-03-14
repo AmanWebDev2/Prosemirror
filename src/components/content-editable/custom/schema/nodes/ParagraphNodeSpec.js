@@ -45,7 +45,6 @@ function toDOM(node) {
   return ["p", attrs, 0];
 }
 
-
 export const toParagraphDOM = toDOM;
 export const getParagraphNodeAttrs = getAttrs;
 export default ParagraphNodeSpec;

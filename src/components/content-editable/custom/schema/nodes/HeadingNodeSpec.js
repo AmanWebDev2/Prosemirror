@@ -1,7 +1,7 @@
 import ParagraphNodeSpec, {
   getParagraphNodeAttrs,
   toParagraphDOM,
-} from "./ParagraphNodeSpecs";
+} from "./ParagraphNodeSpec";
 const TAG_NAME_TO_LEVEL = {
   H1: 1,
   H2: 2,
