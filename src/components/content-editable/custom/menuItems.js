@@ -1,10 +1,11 @@
 import { setBlockType, toggleMark } from "prosemirror-commands";
 import { MenuItem } from "prosemirror-menu";
 import { schema } from "prosemirror-schema-basic";
-import { HEADING } from "./schema/nodes/Names";
+import { CODE_BLOCK, HEADING } from "./schema/nodes/Names";
 import toggleHeading from "../utils/ToggleHeading";
 
 import {findParentNodeOfType} from 'prosemirror-utils';
+import toggleCodeBlock from "../utils/ToggleCodeBlock";
 
 let markType = {
   strong: schema.marks.strong,
@@ -131,16 +132,31 @@ const codeBlockItem = new MenuItem({
   enable(state) {
     return true;
   },
+  _findCodeBlock(state) {
+    const codeBlock = state.schema.nodes[CODE_BLOCK];
+    const findCodeBlock = codeBlock ? findParentNodeOfType(codeBlock) : ()=>{};
+    return findCodeBlock(state.selection);
+  },
 
   run(state, dispatch, view) {
-    const nodeType = state.schema.nodes.code_block;
-    setBlockType(nodeType)(state, dispatch);
-    // dispatch(transaction);
-    return true;
+    const {schema, selection} = state;
+    let {tr} = state;
+    tr = tr.setSelection(selection);
+    tr = toggleCodeBlock(tr, schema);
+    if (tr.docChanged) {
+      dispatch && dispatch(tr);
+      return true;
+    } else {
+      return false;
+    }
+    
   },
-  // active(state) {
-  //   return markActive(state,markType.code_block);
-  // },
+  active(state) {
+    const result = this._findCodeBlock(state);
+    return !!(result && result.node);
+
+  },
+
   render() {
     const item = document.createElement("div");
     item.innerHTML = `
