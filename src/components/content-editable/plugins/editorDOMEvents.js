@@ -30,6 +30,23 @@ export function editorDOMEvents(options) {
                 }
                   return false
             },
+            click(view, event) {
+              // console.log('Clicked on editor root element!',event.target);
+            }
+          },
+          nodeViews: {
+            link(node, view, getPos) {
+              const dom = document.createElement('a');
+              dom.href = node.attrs.href;
+              dom.textContent = node.textContent;
+              dom.addEventListener('click', (event) => {
+                event.preventDefault();
+                console.log('Link clicked:', node.attrs.href);
+              });
+              return {
+                dom,
+              };
+            },          
           },
         }
       })

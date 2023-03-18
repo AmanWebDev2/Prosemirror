@@ -1,13 +1,24 @@
 import { toggleMark } from "prosemirror-commands";
 import { MenuItem } from "prosemirror-menu";
 import { schema } from "prosemirror-schema-basic";
-import { CODE_BLOCK, HEADING, PARAGRAPH } from "./schema/nodes/Names";
-import {AllSelection, TextSelection} from 'prosemirror-state';
-import toggleHeading from "../utils/ToggleHeading";
+import { AllSelection, TextSelection } from "prosemirror-state";
+import { findParentNodeOfType } from "prosemirror-utils";
 
-import {findParentNodeOfType} from 'prosemirror-utils';
-import toggleCodeBlock from "../utils/ToggleCodeBlock";
+
+import toggleHeading from "../utils/ToggleHeading";
 import { toggleAlignment } from "../utils/ToggleAlignment";
+import createPopup from "../utils/createPopup";
+import findNodesWithSameMark from "../utils/findNodeWithSameMark";
+import toggleCodeBlock from "../utils/ToggleCodeBlock";
+import applyMark from "../utils/applyMark";
+import LinkURLEditor from "../../LinkUrlEditor";
+import { MARK_LINK } from "./schema/marks/Names";
+import {
+  hideSelectionPlaceholder,
+  showSelectionPlaceholder,
+} from "../plugins/SelectionPlaceholderPlugin";
+import { linkToolTipItem } from "./menu/items/linkToolTipItem";
+import { CODE_BLOCK, HEADING } from "./schema/nodes/Names";
 
 let markType = {
   strong: schema.marks.strong,
@@ -17,7 +28,7 @@ let markType = {
   code_block: schema.marks.code_block,
   heading_one: schema.marks.heading_one,
 };
-function markActive(state, type) {
+export function markActive(state, type) {
   let { from, $from, to, empty } = state.selection;
   if (empty) return !!type.isInSet(state.storedMarks || $from.marks());
   else return state.doc.rangeHasMark(from, to, type);
@@ -30,13 +41,10 @@ const boldItem = new MenuItem({
   },
 
   run(state, dispatch, view) {
-    // if (markActive(state, markType)) {
     toggleMark(markType.strong)(state, dispatch);
     return true;
-    // }
   },
   active(state) {
-    console.log(state);
     return markActive(state, markType.strong);
   },
 
@@ -59,10 +67,8 @@ const italicItem = new MenuItem({
   },
 
   run(state, dispatch, view) {
-    // if (markActive(state, markType)) {
     toggleMark(schema.marks.em)(state, dispatch);
     return true;
-    // }
   },
   active(state) {
     return markActive(state, markType.em);
@@ -86,7 +92,7 @@ const codeItem = new MenuItem({
   },
 
   run(state, dispatch, view) {
-    toggleMark(schema.marks.code)(state, dispatch);
+    toggleMark(state.schema.marks.code)(state, dispatch);
     return true;
   },
   active(state) {
@@ -104,18 +110,100 @@ const codeItem = new MenuItem({
     return item;
   },
 });
-const linkItem = new MenuItem({
+export const linkItem = new MenuItem({
   label: "link",
   enable(state) {
     return true;
   },
+  _popUp: null,
 
+  isEnabled(state) {
+    if (!(state.selection instanceof TextSelection)) {
+      // Could be a NodeSelection or CellSelection.
+      return false;
+    }
+
+    const markType = state.schema.marks[MARK_LINK];
+    if (!markType) {
+      return false;
+    }
+    const { from, to } = state.selection;
+    return from < to;
+  },
   run(state, dispatch, view) {
-    toggleMark(schema.marks.link)(state, dispatch);
+    if (this.active(state)) {
+      toggleMark(state.schema.marks.link)(state, dispatch);
+      return true;
+    } else {
+      this.waitForUserInput(state, dispatch, undefined, undefined).then(
+        (val) => {
+          this.executeWithUserInput(state, dispatch, view, val);
+        }
+      );
+    }
     return true;
   },
   active(state) {
-    return markActive(state, markType.link);
+    return markActive(state, state.schema.marks.link);
+  },
+
+  executeWithUserInput(state, dispatch, view, href) {
+    if (dispatch) {
+      const { selection, schema } = state;
+      let { tr } = state;
+      let trx = tr;
+      trx = view ? hideSelectionPlaceholder(view.state) : tr;
+      trx = trx.setSelection(selection);
+      if (href !== undefined) {
+        const markType = schema.marks[MARK_LINK];
+        const attrs = href ? { href } : null;
+        trx = applyMark(
+          trx,
+          schema,
+          markType,
+          attrs
+        );
+      }
+      // Create a new selection that is near the current selection
+      const ns = TextSelection.create(trx.doc,selection.to) // create a new selection at the end position
+      trx = trx.setSelection(ns) // set the selection in the editor view
+      dispatch(trx);
+    }
+    view && view.focus();  
+    return true;
+  },
+  waitForUserInput(state, dispatch, view, event, _popUp) {
+    if (_popUp) {
+      return Promise.resolve(undefined);
+    }
+
+    if (dispatch) {
+      dispatch(showSelectionPlaceholder(state));
+    }
+
+    const { doc, schema, selection } = state;
+    const markType = schema.marks[MARK_LINK];
+    if (!markType) {
+      return Promise.resolve(undefined);
+    }
+    const { from, to } = selection;
+    const result = findNodesWithSameMark(doc, from, to, markType);
+    const href = result ? result.mark.attrs.href : null;
+    return new Promise((resolve) => {
+      this._popUp = createPopup(
+        LinkURLEditor,
+        { href },
+        {
+          modal: true,
+          onClose: (val) => {
+            if (this._popUp) {
+              this._popUp = null;
+              resolve(val);
+            }
+          },
+        }
+      );
+    });
   },
   render() {
     const item = document.createElement("div");
@@ -136,13 +224,15 @@ const codeBlockItem = new MenuItem({
   },
   _findCodeBlock(state) {
     const codeBlock = state.schema.nodes[CODE_BLOCK];
-    const findCodeBlock = codeBlock ? findParentNodeOfType(codeBlock) : ()=>{};
+    const findCodeBlock = codeBlock
+      ? findParentNodeOfType(codeBlock)
+      : () => {};
     return findCodeBlock(state.selection);
   },
 
   run(state, dispatch, view) {
-    const {schema, selection} = state;
-    let {tr} = state;
+    const { schema, selection } = state;
+    let { tr } = state;
     tr = tr.setSelection(selection);
     tr = toggleCodeBlock(tr, schema);
     if (tr.docChanged) {
@@ -151,12 +241,10 @@ const codeBlockItem = new MenuItem({
     } else {
       return false;
     }
-    
   },
   active(state) {
     const result = this._findCodeBlock(state);
     return !!(result && result.node);
-
   },
 
   render() {
@@ -171,18 +259,15 @@ const codeBlockItem = new MenuItem({
     return item;
   },
 });
+
 const headingOneItem = new MenuItem({
   label: "heading one",
   enable(state) {
     return true;
   },
   run(state, dispatch, view) {
-    const {schema, selection} = state;
-    const tr = toggleHeading(
-      state.tr.setSelection(selection),
-      schema,
-      1
-    );
+    const { schema, selection } = state;
+    const tr = toggleHeading(state.tr.setSelection(selection), schema, 1);
     if (tr.docChanged) {
       dispatch && dispatch(tr);
       return true;
@@ -233,12 +318,8 @@ const headingTwoItem = new MenuItem({
   },
 
   run(state, dispatch, view) {
-    const {schema, selection} = state;
-    const tr = toggleHeading(
-      state.tr.setSelection(selection),
-      schema,
-      2
-    );
+    const { schema, selection } = state;
+    const tr = toggleHeading(state.tr.setSelection(selection), schema, 2);
     if (tr.docChanged) {
       dispatch && dispatch(tr);
       return true;
@@ -286,7 +367,7 @@ const headingTwoItem = new MenuItem({
 });
 
 /* ALIGN ITEM CENTER */
- 
+
 const alignCenterItem = new MenuItem({
   label: "align center",
   enable(state) {
@@ -294,13 +375,13 @@ const alignCenterItem = new MenuItem({
   },
 
   run(state, dispatch, view) {
-    const {schema, selection} = state;
+    const { schema, selection } = state;
     const tr = toggleAlignment(
       state.tr.setSelection(selection),
       schema,
-      'center'
+      "center"
     );
-    
+
     if (tr.docChanged) {
       dispatch && dispatch(tr);
       return true;
@@ -309,12 +390,12 @@ const alignCenterItem = new MenuItem({
     }
   },
   active(state) {
-    const {selection, doc} = state;
-    const {from, to} = selection;
+    const { selection, doc } = state;
+    const { from, to } = selection;
     let keepLooking = true;
     let active = false;
     doc.nodesBetween(from, to, (node, pos) => {
-      if (keepLooking && node.attrs.align === 'center') {
+      if (keepLooking && node.attrs.align === "center") {
         keepLooking = false;
         active = true;
       }
@@ -323,13 +404,13 @@ const alignCenterItem = new MenuItem({
     return active;
     // return markActive(state,markType.heading);
   },
-  isEnabled (state) {
-    const {selection} = state;
+  isEnabled(state) {
+    const { selection } = state;
     return (
       selection instanceof TextSelection || selection instanceof AllSelection
     );
   },
-  
+
   render() {
     const item = document.createElement("div");
     item.innerHTML = `

@@ -49,20 +49,25 @@ function App() {
   const iframeRef = useRef();
   return (
     <div className="App">
-      <Editor />
+      {/* <Editor /> */}
       <Frame
         ref={iframeRef}
+        id = "kudoshub-editor-frame"
         style={{
           width: "700px",
           height: "400px",
           display: "block",
-          margin: "0 auto",
+          margin: "120px auto",
         }}
         initialContent='<!DOCTYPE html><html>
           <head>
             <link rel="stylesheet" href="./App.css"></link>
           </head>
           <style>
+
+          body{
+            font-family: -apple-system, BlinkMacSystemFont,;
+          }
           
           .ProseMirror {
             position: relative;
@@ -476,6 +481,7 @@ img.ProseMirror-separator {
     vertical-align: bottom;
     background-color: transparent;
     background-clip: padding-box;
+
   }
   .kudoshub-prosemirror-composer-icon-btn:hover svg{
     fill: #334bfa;
@@ -505,6 +511,98 @@ img.ProseMirror-separator {
   [data-align=center] {
     text-align: center!important;
   }
+  .kudoshub-prosemirror-composer-editor .ProseMirror a:link, .ProseMirror a:visited, .ProseMirror a:hover, .ProseMirror a:active {
+    color: rgb(0, 0, 238);
+  }
+  .f__text {
+    padding-right:32px;
+    width: 100%;
+    max-width: 558px;
+    -webkit-appearance: none;
+    padding: 5px 11px;
+    box-sizing: border-box;
+    border: 1px solid rgba(0,0,0,.2);
+    border-radius: 6px;
+    flex:1;
+  } 
+  .smartlinks-input-container {
+    display:flex;
+    width:full;
+    position:relative;
+  }
+  .smart-links-wrapper{
+    padding:8px 16px;
+    display: flex;
+    align-items: center;
+    cursor:pointer;
+  }
+  .smart-links-wrapper:hover{
+    background-color:rgba(227,231,250,1);
+    color:rgba(51,75,250,1);
+  }
+  .kudoshub-icon svg {
+    width: 16px;
+    height: 16px;
+    display: inline-block;
+    vertical-align: bottom;
+    margin-bottom: 2px;
+  }
+  .smart-links__list-two{
+    padding:8px 16px;
+    display: flex;
+    align-items: center;
+  }
+  .text-blue{
+    color:rgba(51,75,250,1);
+    fill: rgba(51,75,250,1);
+  }
+  .text-gray {
+    color: rgba(115,115,118,1);
+  }
+  .kudoshub-prosemirror-composer-pointer {
+    background-color: #fff;
+    white-space: nowrap;
+    border-radius: 4px;
+    background-clip: padding-box;
+    padding: 14px;
+    z-index: 10000;
+}
+
+.smart-links-info {
+  display:flex;
+  align-items:center;
+  height:32px;
+  padding:8px 16px;
+}
+.decoration__line{
+  width:1px;
+  height:24px;
+  background-color:gray;
+  margin-right:16px;
+}
+
+.kudoshub-prosemirror-composer-icon-btn, .kudoshub-prosemirror-composer-labelled-btn {
+  font-size: 14px;
+  line-height: 18px;
+  font-weight: 500;
+  border: none;
+  border-radius: 4px;
+  padding: 7px 8px 7px;
+  display: inline-block;
+  text-decoration: none;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+  box-sizing: border-box;
+  transition: box-shadow linear 40ms;
+  vertical-align: bottom;
+  background-color: transparent;
+  background-clip: padding-box;
+}
+
+
+
           </style>
           <body>
             <div id="mountHere"></div>

@@ -15,13 +15,15 @@ import DocNodeSpec from "./nodes/DocNodeSpec"
 import TextNodeSpec from "./nodes/TextNodeSpec"
 import HardBreakNodeSpec from "./nodes/HardBreakNodeSpec"
 import { CODE_BLOCK, DOC, HARD_BREAK, HEADING, PARAGRAPH,TEXT } from "./nodes/Names"
+import LinkMarkSpec from "./marks/LinkMarkSpec"
 
 const {
   MARK_CODE,
   MARK_EM,
   MARK_FONT_SIZE,
   MARK_STRONG,
-  HEADING_ONE
+  HEADING_ONE,
+  MARK_LINK
 } = MarkNames;
 
 /// [Specs](#model.NodeSpec) for the nodes defined in this schema.
@@ -33,6 +35,7 @@ export const nodes = {
   [CODE_BLOCK]: CodeBlockNodeSpec,
   [TEXT]: TextNodeSpec,
   [HARD_BREAK]: HardBreakNodeSpec,
+ 
 
   /// An inline image (`<img>`) node. Supports `src`,
   /// `alt`, and `href` attributes. The latter two default to the empty
@@ -64,6 +67,7 @@ export const nodes = {
 const marks = {
   // Link mark should be rendered first.
   // https://discuss.prosemirror.net/t/prevent-marks-from-breaking-up-links/401/5
+  [MARK_LINK]: LinkMarkSpec,
   [MARK_FONT_SIZE]: FontSizeMarkSpec,
   [MARK_STRONG]: StrongMarkSpec,
   [MARK_EM]: EMMarkSpec,
