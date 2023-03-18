@@ -1,17 +1,20 @@
 import { Plugin, TextSelection } from "prosemirror-state";
-import { markActive, tooltipMenuItems } from "../custom/menuItems";
+
+import { tooltipMenuItems } from "../custom/menu/menuItems";
 import { selectionMenu } from "./selectionMenu";
+import { MARK_LINK } from "../custom/schema/marks/Names";
+import LinkUrlEditor from "../../LinkUrlEditor";
 import {
   hideSelectionPlaceholder,
   showSelectionPlaceholder,
 } from "./SelectionPlaceholderPlugin";
-import { MARK_LINK } from "../custom/schema/marks/Names";
+
 import findNodesWithSameMark from "../utils/findNodeWithSameMark";
 import createPopup from "../utils/createPopup";
-import LinkUrlEditor from "../../LinkUrlEditor";
 import { atAnchorTopCenter } from "../utils/PopupPosition";
 import applyMark from "../utils/applyMark";
 import lookUpElement from "../utils/lookUpElement";
+import { markActive } from "../utils/markActive";
 
 export function editorUpdateObserver(options) {
   return new Plugin({
@@ -154,11 +157,11 @@ class EditorUpdateObserver {
       }
     });
     const newState = this.editorView.state.reconfigure({
-      plugins: [ ...myPlugin ],
+      plugins: [...myPlugin],
     });
     this.editorView.updateState(newState);
 
-    // this.editorView && this.editorView.focus(); 
+    // this.editorView && this.editorView.focus();
     this._anchorEl = null;
     this._editor = null;
     this._popup = null;

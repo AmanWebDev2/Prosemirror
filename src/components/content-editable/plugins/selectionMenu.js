@@ -1,8 +1,7 @@
 import { Plugin } from "prosemirror-state";
+
 import { renderGrouped } from "prosemirror-menu";
-import { markActive, tooltipMenuItems } from "../custom/menuItems";
-import { plugins } from "./plugins";
-/*import { coordsAtPos } from "../utils/position.js"*/
+import { markActive } from "../utils/markActive";
 
 export function selectionMenu(options) {
   return new Plugin({
