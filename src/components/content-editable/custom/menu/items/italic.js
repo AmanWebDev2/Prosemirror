@@ -6,7 +6,7 @@ import { markActive } from "../../../utils/markActive";
 export const italicItem = new MenuItem({
   label: "I",
   run(state, dispatch, view) {
-    toggleMark(schema.marks.em)(state, dispatch);
+    toggleMark(state.schema.marks.em)(state, dispatch);
     return true;
   },
   active(state) {
