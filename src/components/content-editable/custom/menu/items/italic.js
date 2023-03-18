@@ -1,6 +1,5 @@
 import { MenuItem } from "prosemirror-menu";
 import { toggleMark } from "prosemirror-commands";
-import { schema } from "prosemirror-schema-basic";
 import { markActive } from "../../../utils/markActive";
 
 export const italicItem = new MenuItem({
