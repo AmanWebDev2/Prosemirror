@@ -1,7 +1,11 @@
 import "./App.css";
+import "bootstrap/dist/css/bootstrap.min.css";
+
 import Editor from "./components/content-editable/Editor";
 import Frame from "react-frame-component";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
+import { useFrame } from "react-frame-component";
+import { Button } from "react-bootstrap";
 
 const doc = {
   type: "doc",
@@ -47,12 +51,32 @@ const doc = {
 
 function App() {
   const iframeRef = useRef();
+
+  useEffect(() => {
+    const iframe = document.getElementById("kudoshub-editor-frame");
+    if (iframe) {
+      const iframeDoc = iframe.contentWindow
+        ? iframe.contentWindow.document
+        : null;
+      if (iframeDoc) {
+        // how to access css from a build folder,if it is accessable then we can directly append that css into iframe
+        // we have to only run build command everytime we changes in our css
+        // var link = document.createElement("link");
+        // link.href = `${BASE_URL}:5555/static/css/a.css`;
+        // link.rel = "stylesheet";
+        // link.type = "text/css";
+        // if (doc && doc.head) {
+        // doc.head.appendChild(link);
+      }
+    }
+    console.log(iframe);
+  }, []);
   return (
     <div className="App">
-      {/* <Editor /> */}
+      <Button>BOOTSTRAP WORKING</Button>
       <Frame
         ref={iframeRef}
-        id = "kudoshub-editor-frame"
+        id="kudoshub-editor-frame"
         style={{
           width: "700px",
           height: "400px",
@@ -62,6 +86,12 @@ function App() {
         initialContent='<!DOCTYPE html><html>
           <head>
             <link rel="stylesheet" href="./App.css"></link>
+            <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"
+            integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65"
+            crossorigin="anonymous"
+            />
           </head>
           <style>
 
@@ -69,17 +99,17 @@ function App() {
             font-family: -apple-system, BlinkMacSystemFont,;
           }
           
-          .ProseMirror {
-            position: relative;
-          }
-          .ProseMirror {
-            word-wrap: break-word;
-            white-space: pre-wrap;
-            white-space: break-spaces;
-            -webkit-font-variant-ligatures: none;
-            font-variant-ligatures: none;
-            font-feature-settings: "liga" 0;
-          }
+.ProseMirror {
+  position: relative;
+}
+.ProseMirror {
+  word-wrap: break-word;
+  white-space: pre-wrap;
+  white-space: break-spaces;
+  -webkit-font-variant-ligatures: none;
+  font-variant-ligatures: none;
+  font-feature-settings: "liga" 0;
+}
           
 .ProseMirror pre {
   white-space: pre-wrap;
@@ -610,6 +640,7 @@ img.ProseMirror-separator {
           </html>'
       >
         <Editor doc={doc} />
+        <Button>BOOTSTRAP WORKING INSIDE FRAME</Button>
       </Frame>
     </div>
   );
