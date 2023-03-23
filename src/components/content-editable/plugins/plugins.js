@@ -6,16 +6,18 @@ import { baseKeymap } from "prosemirror-commands";
 import SelectionPlaceholderPlugin from "./SelectionPlaceholderPlugin";
 import { editorUpdateObserver } from "./editorUpdateObserver";
 import { tooltipMenuItems } from "../custom/menu/menuItems";
+import { rulseSetAttribute } from "./rulseSetAttribute";
+import { buildKeymap } from "./keyMap";
+import { prosmirrorSchema } from "../custom/schema/schema";
 
 export const plugins = [
-   // Plugin to let user edit link's url inline.
-  //  new LinkTooltipPlugin(),
-   new SelectionPlaceholderPlugin(),
-    history(),
-    keymap({ "Mod-z": undo, "Mod-y": redo }),
-    keymap(baseKeymap),
-    selectionMenu({ content: [tooltipMenuItems] }),
-    editorDOMEvents(),
-    editorUpdateObserver()
-  
-  ];
+  new SelectionPlaceholderPlugin(),
+  // rulseSetAttribute(),
+  history(),
+  keymap({ "Mod-z": undo, "Mod-y": redo }),
+  keymap(buildKeymap(prosmirrorSchema)),
+  keymap(baseKeymap),
+  selectionMenu({ content: [tooltipMenuItems] }),
+  editorDOMEvents(),
+  editorUpdateObserver(),
+];
