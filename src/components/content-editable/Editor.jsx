@@ -313,9 +313,15 @@ export default function Editor() {
     observer.observe(editorWrapper.parentNode, CONFIG);
 
     // hide attribute menu 
-    editorWrapper.addEventListener("input",handleEditorClick)
-    editorWrapper.addEventListener("click",handleEditorClick)
-    editorWrapper.addEventListener("focus",handleEditorClick)
+    editorWrapper.addEventListener("input",handleEditorClick);
+    editorWrapper.addEventListener("click",handleEditorClick);
+    editorWrapper.addEventListener("focus",handleEditorClick);
+
+    return () => {
+      editorWrapper.removeEventListener("input",handleEditorClick);
+      editorWrapper.removeEventListener("click",handleEditorClick);
+      editorWrapper.removeEventListener("focus",handleEditorClick);
+    }
 
   }, []);
 
