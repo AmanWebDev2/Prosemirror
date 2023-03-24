@@ -710,6 +710,7 @@ img.ProseMirror-separator {
     border: 1px dashed red;
     box-sizing: border-box;
     width:400px;
+    visibility:hidden;
 }
 
 .inserter-container {
@@ -719,8 +720,14 @@ img.ProseMirror-separator {
   left: -30px;
   width: min-content;
   z-index: 2;
-  visibility:hidden
+  visibility:hidden;
 }
+
+.rulset-position {
+  visibility:hidden;
+
+}
+
 
           </style>
           <body>
