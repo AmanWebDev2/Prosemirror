@@ -3,6 +3,7 @@ import { Plugin } from "prosemirror-state";
 import { renderGrouped } from "prosemirror-menu";
 import { markActive } from "../utils/markActive";
 import lookUpElement from "../utils/lookUpElement";
+import { ATTRIBUTE_SPAN } from "../custom/schema/nodes/Names";
 
 export function selectionMenu(options) {
   return new Plugin({
@@ -65,13 +66,21 @@ class SelectionMenu {
     const end = view.coordsAtPos(to);
     const tooltipNode = this.menu.querySelector("div.czi-link-tooltip");
     let isLinkToolTip = tooltipNode ? true : false;
-    if ((!state || readOnly || state.selection.empty) && !isLinkToolTip) {
+
+    // update plugin, have to show popover when attribute span is selected
+    if(state.selection?.node?.type?.name === ATTRIBUTE_SPAN) {
+      console.log("fallback popover")
+    }
+
+    if ((!state || readOnly || state.selection.empty || state.selection?.node?.type?.name === ATTRIBUTE_SPAN) && !isLinkToolTip) {
       if (this.menu.style.display !== "none") {
         this.menu.style.display = "none";
       }
       this.handleRulset({ start, view })
       return;
     }
+
+
 
     this.menu.style.display = "block";
 
@@ -106,7 +115,7 @@ class SelectionMenu {
         this.menu.style.top =
           start.top - offsetParentBox.top - box.height + "px";
       }
-    } catch (err) {}
+    } catch (err) { }
   }
 
   handleRulset({ start, view }) {
