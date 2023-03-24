@@ -68,7 +68,7 @@ class EditorUpdateObserver {
       state.selection.from !== state.selection.to
     ) {
       // update plugin
-      console.log(state)
+      // console.log(state)
  
       const myPlugin = state.plugins.filter((plugin) => {
         if (plugin?.spec?.name === "myPlugin") {
@@ -164,14 +164,12 @@ class EditorUpdateObserver {
   };
 
   _onClose = (url) => {
-    console.log(url, "from edit observer");
     const { selection, schema } = this.editorView.state;
     if (this.editorView.dispatch) {
       let { tr } = this.editorView.state;
       const { to, from } = selection;
       const markType = schema.marks[MARK_LINK];
       const result = findNodesWithSameMark(tr.doc, from, to, markType);
-      console.log(result);
       tr = this.editorView
         ? hideSelectionPlaceholder(this.editorView.state)
         : tr;
@@ -188,7 +186,6 @@ class EditorUpdateObserver {
         const attrs = url ? { href: url } : null;
         tr = applyMark(tr, schema, markType, attrs);
       }
-
       this.editorView.dispatch(tr);
     }
 
@@ -248,7 +245,6 @@ class EditorUpdateObserver {
   };
 
   _onRemove = (view) => {
-    console.log(view);
     this._onEditEnd(view, view.state.selection, null);
   };
 

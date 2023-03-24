@@ -122,7 +122,7 @@ class SelectionMenu {
     if (this.ruleSetPosBlockElm) {
       let topPos = +this.ruleSetPosBlockElm.style.top.replace("px", "");
       if (Math.ceil(topPos) !== Math.ceil(start.top))
-      console.log(view.dom.scrollTop,start.top);
+      // console.log(view.dom.scrollTop,start.top);
       // const scrollTop = view.dom.scrollTop;
         this.ruleSetPosBlockElm.style.top = start.top + "px";
       this.rulsetElm.style.display = "block";
