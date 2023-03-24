@@ -36,6 +36,45 @@ function handleHoveringElement(event, element, view) {
     });
   }
 }
+
+function handleInserterAndRulsetLeave(view, event) {
+  const blockInserter = view.dom.parentNode.querySelector("#blockInserter");
+  const inserterPointer = view.dom.parentNode.querySelector(
+    ".prosemirror-composer-inserter-pointer-line"
+  );
+  const rulset = view.dom.parentNode.querySelector(".rulset-position");
+
+  if (
+    event.toElement?.id !== "blockInserter-dropdown" &&
+    event.toElement?.id !== "rulset-attribute"
+  ) {
+    setElementProperties(blockInserter, { visibility: "hidden" });
+    setElementProperties(inserterPointer, { visibility: "hidden" });
+    setElementProperties(rulset, { visibility: "hidden" });
+  } else {
+    rulset.addEventListener("mouseleave", (e) => {
+      if (
+        e.toElement &&
+        !e.toElement.classList.contains("kudoshub-prosemirror-composer-editor")
+      ) {
+        setElementProperties(blockInserter, { visibility: "hidden" });
+        setElementProperties(inserterPointer, { visibility: "hidden" });
+        setElementProperties(rulset, { visibility: "hidden" });
+      }
+    });
+    blockInserter.addEventListener("mouseleave", (e) => {
+      if (
+        e.toElement &&
+        !e.toElement.classList.contains("kudoshub-prosemirror-composer-editor")
+      ) {
+        setElementProperties(blockInserter, { visibility: "hidden" });
+        setElementProperties(inserterPointer, { visibility: "hidden" });
+        setElementProperties(rulset, { visibility: "hidden" });
+      }
+    });
+  }
+}
+
 export function editorDOMEvents(options) {
   return new Plugin({
     props: {
@@ -74,35 +113,14 @@ export function editorDOMEvents(options) {
           const inserterPointer = view.dom.parentNode.querySelector(
             ".prosemirror-composer-inserter-pointer-line"
           );
-          const rulset = view.dom.parentNode.querySelector(
-            ".rulset-position"
-          );
+          const rulset = view.dom.parentNode.querySelector(".rulset-position");
 
           setElementProperties(blockInserter, { visibility: "visible" });
           setElementProperties(inserterPointer, { visibility: "visible" });
           setElementProperties(rulset, { visibility: "visible" });
         },
         mouseleave(view, event) {
-          const blockInserter =
-            view.dom.parentNode.querySelector("#blockInserter");
-          const inserterPointer = view.dom.parentNode.querySelector(
-            ".prosemirror-composer-inserter-pointer-line"
-          );
-          const rulset = view.dom.parentNode.querySelector(
-            ".rulset-position"
-          );
-
-          if((event.toElement?.id !== "blockInserter-dropdown") && (event.toElement?.id !== "rulset-attribute") ) {
-            setElementProperties(blockInserter, { visibility: "hidden" });
-            setElementProperties(inserterPointer, { visibility: "hidden" });
-            setElementProperties(rulset, { visibility: "hidden" });
-          }else {
-            if(event.toElement && !event.toElement.classList.contains('kudoshub-prosemirror-composer-editor')) {
-              // setElementProperties(blockInserter, { visibility: "hidden" });
-              // setElementProperties(inserterPointer, { visibility: "hidden" });
-              // setElementProperties(rulset, { visibility: "hidden" });
-            }
-          }
+          handleInserterAndRulsetLeave(view, event);
 
           // console.log(event.target)
           // setElementProperties(blockInserter, { visibility: "hidden" });
