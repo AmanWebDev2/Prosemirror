@@ -9,6 +9,7 @@ import { ATTRIBUTE_SPAN } from "./custom/schema/nodes/Names";
 import RuleSetBlock from "../RuleSetBlock";
 import { attributes } from "../../data/attributes";
 import { DOMSerializer } from "prosemirror-model";
+import BlockInserter from "../BlockInserter";
 
 const doc = prosmirrorSchema.nodeFromJSON(  {
   "type": "doc",
@@ -358,6 +359,7 @@ export default function Editor() {
       }}
       >
      </div>
+     <BlockInserter/>
 
      </div>
      <button onClick={handleAddSpan}>ADD SPAN</button>

@@ -5,15 +5,16 @@ function handleHoveringElement(event,element,view) {
   const inserterPointer =  view.dom.parentNode.querySelector('.prosemirror-composer-inserter-pointer-line');
   const editorContainer = view.dom
   const elmRect = element.getBoundingClientRect();
+  const rulsetBlock =view.dom.parentNode.querySelector('#blockInserter');
   const editorContainerRect = editorContainer.getBoundingClientRect();
   const topHalf = event.clientY - elmRect.top < elmRect.height / 2;
-  // const rulsetBlockRect = rulsetBlock.getBoundingClientRect();
+  const rulsetBlockRect = rulsetBlock.getBoundingClientRect();
   if(topHalf) {
       setElementProperties(inserterPointer,{top:`${elmRect.top}px`,display:'block'})
-      // setElementProperties(rulsetBlock,{transform:`translate(${editorContainerRect.left}px,${elmRect.top-(rulsetBlockRect.height/2)}px)`,display:'block'})
+      setElementProperties(rulsetBlock,{transform:`translate(${editorContainerRect.left}px,${elmRect.top-(rulsetBlockRect.height/2)}px)`,display:'block',visibility:"visible"})
   }else {
       setElementProperties(inserterPointer,{top:`${elmRect.bottom}px`,display:'block'})
-      // setElementProperties(rulsetBlock,{transform:`translate(${editorContainerRect.left}px,${elmRect.bottom-(rulsetBlockRect.height/2)}px)`,display:'block'})
+      setElementProperties(rulsetBlock,{transform:`translate(${editorContainerRect.left}px,${elmRect.bottom-(rulsetBlockRect.height/2)}px)`,display:'block',visibility:"visible"})
   }
 }
 export function editorDOMEvents(options) {
@@ -67,5 +68,5 @@ export function editorDOMEvents(options) {
             },          
           },
         }
-      })
+    })
 }

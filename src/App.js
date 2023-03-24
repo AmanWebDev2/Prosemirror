@@ -712,6 +712,16 @@ img.ProseMirror-separator {
     width:400px;
 }
 
+.inserter-container {
+  position: fixed;
+  background-color: white;
+  top: 0;
+  left: -30px;
+  width: min-content;
+  z-index: 2;
+  visibility:hidden
+}
+
           </style>
           <body>
             <div id="mountHere"></div>
