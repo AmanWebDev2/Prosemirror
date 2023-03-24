@@ -8,6 +8,7 @@ import { toggleMark } from "prosemirror-commands";
 import { ATTRIBUTE_SPAN } from "./custom/schema/nodes/Names";
 import RuleSetBlock from "../RuleSetBlock";
 import { attributes } from "../../data/attributes";
+import { DOMSerializer } from "prosemirror-model";
 
 const doc = prosmirrorSchema.nodeFromJSON(  {
   "type": "doc",
@@ -300,6 +301,7 @@ export default function Editor() {
     editorRef.current = new EditorView(editorDom.current, {
       state: EditorState.create({ schema:prosmirrorSchema,doc, plugins }),
       decorations: (state) => tooltipDecoration(state),
+       
     });
     const editorWrapper = editorRef.current.dom;
     editorWrapper.classList.add('kudoshub-prosemirror-composer-editor');
