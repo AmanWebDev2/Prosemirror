@@ -705,6 +705,12 @@ img.ProseMirror-separator {
   -ms-user-select: none;
   user-select: none;
 }
+.prosemirror-composer-inserter-pointer-line {
+    position: fixed;
+    border: 1px dashed red;
+    box-sizing: border-box;
+    width:400px;
+}
 
           </style>
           <body>

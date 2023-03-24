@@ -16,19 +16,18 @@ import applyMark from "../utils/applyMark";
 import lookUpElement from "../utils/lookUpElement";
 import { markActive } from "../utils/markActive";
 
-
 export function editorUpdateObserver(options) {
   return new Plugin({
-    name:'editorUpdateObserver',
+    name: "editorUpdateObserver",
     view(editorView) {
       return new EditorUpdateObserver(editorView, options);
     },
     props: {
       handleDOMEvents: {
-        focus(view,event) {
-          //     
-        }
-      }
+        focus(view, event) {
+          //
+        },
+      },
     },
     // state:{
     //   init(_, state) {
@@ -69,7 +68,7 @@ class EditorUpdateObserver {
     ) {
       // update plugin
       // console.log(state)
- 
+
       const myPlugin = state.plugins.filter((plugin) => {
         if (plugin?.spec?.name === "myPlugin") {
           return false;
@@ -77,7 +76,7 @@ class EditorUpdateObserver {
           return true;
         }
       });
-      
+
       // const sm = selectionMenu({ content: [tooltipMenuItems] });
       // sm.setParent(state.plugins);
 
@@ -89,11 +88,12 @@ class EditorUpdateObserver {
       // ! causes focus issue
       // let newtr = state.tr.scrollIntoView();
       // requestAnimationFrame(() => {
-        //   view.dom.scrollIntoView();
-        // });
-        // view.scrollToSelection();
-        view.updateState(newState);
- 
+      //   view.dom.scrollIntoView();
+      // });
+      // view.scrollToSelection();
+      // state.setPlugin(newState.plugins);
+      console.log(view)
+      view.updateState(newState);
     } else {
       // when only cursor is put over link then show link tooltip
       if (!state || readOnly || state.selection.from == state.selection.to) {

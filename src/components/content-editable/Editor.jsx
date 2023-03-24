@@ -101,13 +101,15 @@ const doc = prosmirrorSchema.nodeFromJSON(  {
       }
   ]
 });
-
+console.log("running")
 let CONFIG = {
   characterData: true,
   attributes: true,
   childList: true,
   subtree: true,
 };
+
+const EDITORWIDTH = 200;
 
 function handleObserver(mutations) {
   let lastAddedBlockNode = null;
@@ -269,6 +271,7 @@ export default function Editor() {
   const editorRef = useRef(null);
   const editorDom = useRef(null); 
   const rulsetRef = useRef(null);
+  const [editorWidth,setEditorWidth] = useState(200);
   
   useEffect(() => {
     if (editorRef.current) return;
@@ -301,10 +304,12 @@ export default function Editor() {
     editorRef.current = new EditorView(editorDom.current, {
       state: EditorState.create({ schema:prosmirrorSchema,doc, plugins }),
       decorations: (state) => tooltipDecoration(state),
-       
     });
     const editorWrapper = editorRef.current.dom;
     editorWrapper.classList.add('kudoshub-prosemirror-composer-editor');
+
+    const editorRect = editorWrapper.getBoundingClientRect()
+    setEditorWidth(editorRect.width)
 
     const observer = new MutationObserver((mutations) => {
       handleObserver(mutations)
@@ -333,13 +338,6 @@ export default function Editor() {
       const node = view.state.schema.nodes[ATTRIBUTE_SPAN].create({}, [view.state.schema.text("My custom text")]);
       const transaction = view.state.tr.replaceSelectionWith(node);
       view.dispatch(transaction);
-
-      // const span = schema.text('Hello World', [schema.mark(view.state.schema.marks[MARK_SPAN])]);
-      // console.log(view.state.schema.marks[MARK_SPAN]);
-      // console.log(span);
-      // const transaction = view.state.tr.insert(from, span);
-      // view.dispatch(view.state.tr.replaceWith(from, to, span));
-      // view.dispatch(transaction);
     }
   }
 
@@ -354,6 +352,13 @@ export default function Editor() {
     <>
      <div id="editor" ref={editorDom} onClick={handleEditorClick}>
       <RuleSetBlock dropdownData={attributes} ref={rulsetRef} />
+      <div className="pe-none prosemirror-composer-inserter-pointer-line"
+      style={{
+        width:editorWidth+"px"
+      }}
+      >
+     </div>
+
      </div>
      <button onClick={handleAddSpan}>ADD SPAN</button>
      <button onClick={()=>{

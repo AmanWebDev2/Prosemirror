@@ -1,4 +1,21 @@
 import {Plugin} from "prosemirror-state"
+import { setElementProperties } from "../utils/setNodeProperties";
+
+function handleHoveringElement(event,element,view) {
+  const inserterPointer =  view.dom.parentNode.querySelector('.prosemirror-composer-inserter-pointer-line');
+  const editorContainer = view.dom
+  const elmRect = element.getBoundingClientRect();
+  const editorContainerRect = editorContainer.getBoundingClientRect();
+  const topHalf = event.clientY - elmRect.top < elmRect.height / 2;
+  // const rulsetBlockRect = rulsetBlock.getBoundingClientRect();
+  if(topHalf) {
+      setElementProperties(inserterPointer,{top:`${elmRect.top}px`,display:'block'})
+      // setElementProperties(rulsetBlock,{transform:`translate(${editorContainerRect.left}px,${elmRect.top-(rulsetBlockRect.height/2)}px)`,display:'block'})
+  }else {
+      setElementProperties(inserterPointer,{top:`${elmRect.bottom}px`,display:'block'})
+      // setElementProperties(rulsetBlock,{transform:`translate(${editorContainerRect.left}px,${elmRect.bottom-(rulsetBlockRect.height/2)}px)`,display:'block'})
+  }
+}
 export function editorDOMEvents(options) {
     return new Plugin({
         props: {
@@ -26,7 +43,8 @@ export function editorDOMEvents(options) {
                     }
                 }
                 if(lastNode && parent){
-                    // console.log(lastNode)
+                    console.log(lastNode)
+                    handleHoveringElement(event,lastNode,view)
                 }
                   return false
             },
