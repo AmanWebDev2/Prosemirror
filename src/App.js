@@ -1,11 +1,12 @@
-import "./App.css";
-import "bootstrap/dist/css/bootstrap.min.css";
-
-import Editor from "./components/content-editable/Editor";
-import Frame from "react-frame-component";
 import { useEffect, useRef } from "react";
-import { useFrame } from "react-frame-component";
+import Frame from "react-frame-component";
+import "bootstrap/dist/css/bootstrap.min.css";
 import { Button } from "react-bootstrap";
+
+import "./App.css";
+import Editor from "./components/content-editable/Editor";
+import RuleSetBlock from "./components/RuleSetBlock";
+import { attributes } from "./data/attributes";
 
 const doc = {
   type: "doc",
@@ -69,19 +70,21 @@ function App() {
         // doc.head.appendChild(link);
       }
     }
-    console.log(iframe);
+    // console.log(iframe);
   }, []);
   return (
     <div className="App">
-      <Button>BOOTSTRAP WORKING</Button>
       <Frame
         ref={iframeRef}
         id="kudoshub-editor-frame"
         style={{
-          width: "700px",
-          height: "400px",
           display: "block",
           margin: "120px auto",
+          height: "100%",
+          width: "100%",
+          position: "fixed",
+          top: "0",
+          left: "0",
         }}
         initialContent='<!DOCTYPE html><html>
           <head>
@@ -98,6 +101,10 @@ function App() {
           body{
             font-family: -apple-system, BlinkMacSystemFont,;
           }
+          #editor{
+            width: 544px;
+            margin: 0 auto;
+          }
           
 .ProseMirror {
   position: relative;
@@ -109,6 +116,8 @@ function App() {
   -webkit-font-variant-ligatures: none;
   font-variant-ligatures: none;
   font-feature-settings: "liga" 0;
+  max-height: 300px;
+  overflow-y: scroll;
 }
           
 .ProseMirror pre {
@@ -631,7 +640,71 @@ img.ProseMirror-separator {
   background-clip: padding-box;
 }
 
+.kh-popup-icon{
+  padding: 1px 0;
+  display: inline-block;
+  vertical-align: bottom;
+  line-height: 20px;
+  background-color:white;
+  border:1px solid black;
+  cursor:pointer;
+}
 
+.kh-popup{
+  position: absolute;
+  max-width: 300px;
+  padding: 1px;
+  box-shadow: 0 4px 14px 0 rgba(0,0,0,.2), 0 0 0 1px rgba(0,0,0,.05);
+  white-space: nowrap;
+  border-radius: 4px;
+  background-clip: padding-box;
+  font-family: system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen,Ubuntu,Cantarell,"Fira Sans","Droid Sans","Helvetica Neue",sans-serif;
+  font-size: 14px;
+  line-height: 22px;
+  z-index: 3;
+  padding:12px;
+}
+
+.kh-popup-tiny{
+  width: 30px;
+  height: 24px;
+}
+
+.kh-popup-scrollable {
+  overflow-y: auto;
+  max-height: 415px;
+}
+.attribute-selector {
+  position: "relative";
+}
+.attribute-items {
+  cursor:pointer;
+}
+.attribute-items:hover {
+  color: blue
+}
+
+.kudoshub-intercom-template {
+  color: #222222;
+  background-color: #f1f1f1;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  padding-left: 4px;
+  padding-right: 4px;
+  line-height: 20px !important;
+  border-radius: 4px;
+  display: inline-block;
+  font-weight: normal;
+  vertical-align: middle;
+  padding: 0 0.4em;
+  cursor: auto;
+  text-transform: none;
+  text-align: center;
+  margin: 2px;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
 
           </style>
           <body>

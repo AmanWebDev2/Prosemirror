@@ -2,6 +2,7 @@ import { Plugin } from "prosemirror-state";
 
 import { renderGrouped } from "prosemirror-menu";
 import { markActive } from "../utils/markActive";
+import lookUpElement from "../utils/lookUpElement";
 
 export function selectionMenu(options) {
   return new Plugin({
@@ -14,7 +15,8 @@ export function selectionMenu(options) {
 
 class SelectionMenu {
   updatePlugin() {}
-
+  showRuleSetItem = false;
+  isEditorFocused = true;
   constructor(editorView, options) {
     this.editorView = editorView;
     this.options = options;
@@ -31,19 +33,43 @@ class SelectionMenu {
 
     editorView.dom.parentNode.appendChild(this.menu);
 
+    // dropdown toggle
+    const ruleSetPosBlockElm =
+      editorView.dom.parentNode.querySelector(".rulset-position");
+
+    // dropown menu
+    // const attributeSelector = editorView.dom.parentNode.querySelector(
+    //   ".attribute-selector"
+    // );
+
+    if (ruleSetPosBlockElm) {
+      this.ruleSetPosBlockElm = ruleSetPosBlockElm;
+      const rulsetElm = this.ruleSetPosBlockElm.firstElementChild;
+      this.rulsetElm = rulsetElm;
+    }
+
+    // if (attributeSelector) {
+    //   this.attributeSelector = attributeSelector;
+    //   this.attributeSelector.style.display = "none";
+    // }
+
+    // if selection then attribute selector remove
+
     this.update(editorView, null);
   }
 
   update(view, lastState) {
     const { state, readOnly } = view;
-    // console.log(this.options.content)
-    // console.log(lastState)
+    const { from, to } = state.selection;
+    const start = view.coordsAtPos(from);
+    const end = view.coordsAtPos(to);
     const tooltipNode = this.menu.querySelector("div.czi-link-tooltip");
     let isLinkToolTip = tooltipNode ? true : false;
     if ((!state || readOnly || state.selection.empty) && !isLinkToolTip) {
       if (this.menu.style.display !== "none") {
         this.menu.style.display = "none";
       }
+      this.handleRulset({ start, view })
       return;
     }
 
@@ -58,11 +84,7 @@ class SelectionMenu {
     // Update the Content state before calculating the position
     this.contentUpdate(this.editorView.state);
 
-    const { from, to } = state.selection;
-
     try {
-      const start = view.coordsAtPos(from);
-      const end = view.coordsAtPos(to);
       let box = this.menu.getBoundingClientRect();
 
       let offsetParentBox = this.menu.offsetParent.getBoundingClientRect();
@@ -85,6 +107,43 @@ class SelectionMenu {
           start.top - offsetParentBox.top - box.height + "px";
       }
     } catch (err) {}
+  }
+
+  handleRulset({ start, view }) {
+    if (this.ruleSetPosBlockElm) {
+      let topPos = +this.ruleSetPosBlockElm.style.top.replace("px", "");
+      if (Math.ceil(topPos) !== Math.ceil(start.top))
+      console.log(view.dom.scrollTop,start.top);
+      // const scrollTop = view.dom.scrollTop;
+        this.ruleSetPosBlockElm.style.top = start.top + "px";
+      this.rulsetElm.style.display = "block";
+    }
+    if (this.attributeSelector) {
+      this.attributeSelector.style.display = "none";
+    }
+  }
+  handleAttributeSelectionPosition() {
+    const { state } = this.editorView;
+    const { from } = state.selection;
+    const start = this.editorView.coordsAtPos(from);
+    if (this.attributeSelector) {
+      const attributeSelectorRect =
+        this.attributeSelector.getBoundingClientRect();
+      if (start.top > attributeSelectorRect.height / 2) {
+        // console.log("change pos");
+        this.attributeSelector.style.position = "absolute";
+        this.attributeSelector.style.top = `-${
+          attributeSelectorRect.height / 2
+        }px`;
+      } else {
+        // condition for rulse
+        // console.log("top pos");
+        this.attributeSelector.style.position = "unset";
+        if (this.attributeSelector.style.display !== "none") {
+          this.ruleSetPosBlockElm.style.top = `0px`;
+        }
+      }
+    }
   }
 
   destroy() {

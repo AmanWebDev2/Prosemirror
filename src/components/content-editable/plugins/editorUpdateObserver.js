@@ -1,4 +1,4 @@
-import { Plugin, TextSelection } from "prosemirror-state";
+import { Plugin, TextSelection, PluginKey } from "prosemirror-state";
 
 import { tooltipMenuItems } from "../custom/menu/menuItems";
 import { selectionMenu } from "./selectionMenu";
@@ -16,11 +16,29 @@ import applyMark from "../utils/applyMark";
 import lookUpElement from "../utils/lookUpElement";
 import { markActive } from "../utils/markActive";
 
+
 export function editorUpdateObserver(options) {
   return new Plugin({
+    name:'editorUpdateObserver',
     view(editorView) {
       return new EditorUpdateObserver(editorView, options);
     },
+    props: {
+      handleDOMEvents: {
+        focus(view,event) {
+          //     
+        }
+      }
+    },
+    // state:{
+    //   init(_, state) {
+    //     return  selectionMenu({ content: [tooltipMenuItems] })
+    //   },
+    //   apply(tr, pluginState) {
+    //     console.log(tr,tr.getMeta("focus$"));
+    //     return selectionMenu({ content: [tooltipMenuItems] })
+    //   },
+    // }
   });
 }
 
@@ -28,6 +46,16 @@ class EditorUpdateObserver {
   constructor(editorView, options) {
     this.editorView = editorView;
     this.options = options;
+  }
+
+  updatePluginState(state, dispatch) {
+    // const pluginState = myPluginKey.getState(state);
+    // const newPluginState = /* modify the plugin state */;
+    // if (dispatch) {
+    //   dispatch(state.tr.setMeta(myPluginKey, newPluginState));
+    // } else {
+    //   return newPluginState;
+    // }
   }
 
   update(view, lastState) {
@@ -40,6 +68,8 @@ class EditorUpdateObserver {
       state.selection.from !== state.selection.to
     ) {
       // update plugin
+      console.log(state)
+ 
       const myPlugin = state.plugins.filter((plugin) => {
         if (plugin?.spec?.name === "myPlugin") {
           return false;
@@ -47,10 +77,23 @@ class EditorUpdateObserver {
           return true;
         }
       });
+      
+      // const sm = selectionMenu({ content: [tooltipMenuItems] });
+      // sm.setParent(state.plugins);
+
       const newState = state.reconfigure({
         plugins: [...myPlugin, selectionMenu({ content: [tooltipMenuItems] })],
       });
-      view.updateState(newState);
+
+      // console.log(view);
+      // ! causes focus issue
+      // let newtr = state.tr.scrollIntoView();
+      // requestAnimationFrame(() => {
+        //   view.dom.scrollIntoView();
+        // });
+        // view.scrollToSelection();
+        view.updateState(newState);
+ 
     } else {
       // when only cursor is put over link then show link tooltip
       if (!state || readOnly || state.selection.from == state.selection.to) {

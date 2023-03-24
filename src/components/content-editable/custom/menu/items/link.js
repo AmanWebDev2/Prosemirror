@@ -64,6 +64,7 @@ export const linkItem = new MenuItem({
       dispatch(trx);
     }
     view && view.focus();
+    
     return true;
   },
   waitForUserInput(state, dispatch, view, event, _popUp) {

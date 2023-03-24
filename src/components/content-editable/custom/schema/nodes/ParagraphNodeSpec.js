@@ -1,5 +1,10 @@
 const ALIGN_PATTERN = /(left|right|center|justify)/;
 
+export const INDENT_MARGIN_PT_SIZE = 36;
+export const MIN_INDENT_LEVEL = 0;
+export const MAX_INDENT_LEVEL = 7;
+export const ATTRIBUTE_INDENT = 'data-indent';
+
 const ParagraphNodeSpec = {
   attrs: {
     align: { default: null },

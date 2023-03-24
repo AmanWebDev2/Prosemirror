@@ -13,3 +13,4 @@ export const MARK_TEXT_SELECTION = 'mark-text-selection';
 export const MARK_UNDERLINE = 'underline';
 export const MARK_SPACER = 'spacer';
 export const HEADING_ONE = 'heading-one'
+export const MARK_SPAN = 'mark-span'

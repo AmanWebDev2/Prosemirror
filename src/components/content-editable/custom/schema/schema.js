@@ -14,8 +14,13 @@ import HeadingNodeSpec from "./nodes/HeadingNodeSpec"
 import DocNodeSpec from "./nodes/DocNodeSpec"
 import TextNodeSpec from "./nodes/TextNodeSpec"
 import HardBreakNodeSpec from "./nodes/HardBreakNodeSpec"
-import { CODE_BLOCK, DOC, HARD_BREAK, HEADING, PARAGRAPH,TEXT } from "./nodes/Names"
+import { ATTRIBUTE_SPAN, BULLET_LIST, CODE_BLOCK, DOC, HARD_BREAK, HEADING, LIST_ITEM, ORDERED_LIST, PARAGRAPH,SPAN,TEXT, } from "./nodes/Names"
 import LinkMarkSpec from "./marks/LinkMarkSpec"
+import { SpanMarkSpec } from "./marks/SpanMarkSpec"
+import AttributeSpanNodeSpec from "./nodes/AttributeSpanNodeSpec"
+import OrderedListNodeSpec from "./nodes/OrderedListNodeSpec"
+import ListItemNodeSpec from "./nodes/ListItemNodeSpec"
+import BulletListNodeSpec from "./nodes/BulletListNodeSpec"
 
 const {
   MARK_CODE,
@@ -23,10 +28,12 @@ const {
   MARK_FONT_SIZE,
   MARK_STRONG,
   HEADING_ONE,
-  MARK_LINK
+  MARK_LINK,
+  MARK_SPAN
 } = MarkNames;
 
 /// [Specs](#model.NodeSpec) for the nodes defined in this schema.
+// input rules 
 export const nodes = {
   /// NodeSpec The top level document node.
   [DOC]: DocNodeSpec ,
@@ -35,29 +42,31 @@ export const nodes = {
   [CODE_BLOCK]: CodeBlockNodeSpec,
   [TEXT]: TextNodeSpec,
   [HARD_BREAK]: HardBreakNodeSpec,
- 
-
+  [ATTRIBUTE_SPAN]: AttributeSpanNodeSpec,
+  [ORDERED_LIST]:OrderedListNodeSpec,
+  [LIST_ITEM]: ListItemNodeSpec,
+  [BULLET_LIST]:BulletListNodeSpec
   /// An inline image (`<img>`) node. Supports `src`,
   /// `alt`, and `href` attributes. The latter two default to the empty
   /// string.
-  image: {
-    inline: true,
-    attrs: {
-      src: {},
-      alt: {default: null},
-      title: {default: null}
-    },
-    group: "inline",
-    draggable: true,
-    parseDOM: [{tag: "img[src]", getAttrs(dom) {
-      return {
-        src: dom.getAttribute("src"),
-        title: dom.getAttribute("title"),
-        alt: dom.getAttribute("alt")
-      }
-    }}],
-    toDOM(node) { let {src, alt, title} = node.attrs; return ["img", {src, alt, title}] }
-  },
+  // image: {
+  //   inline: true,
+  //   attrs: {
+  //     src: {},
+  //     alt: {default: null},
+  //     title: {default: null}
+  //   },
+  //   group: "inline",
+  //   draggable: true,
+  //   parseDOM: [{tag: "img[src]", getAttrs(dom) {
+  //     return {
+  //       src: dom.getAttribute("src"),
+  //       title: dom.getAttribute("title"),
+  //       alt: dom.getAttribute("alt")
+  //     }
+  //   }}],
+  //   toDOM(node) { let {src, alt, title} = node.attrs; return ["img", {src, alt, title}] }
+  // },
 
   /// A hard line break, represented in the DOM as `<br>`.
 }
@@ -73,6 +82,7 @@ const marks = {
   [MARK_EM]: EMMarkSpec,
   [MARK_CODE]: CodeMarkSpec,
   [HEADING_ONE]: headingOneSpec,
+  [MARK_SPAN]: SpanMarkSpec,
   // [MARK_LINK]: LinkMarkSpec,
   // [MARK_NO_BREAK]: TextNoWrapMarkSpec,
   // [MARK_FONT_TYPE]: FontTypeMarkSpec,
@@ -89,4 +99,4 @@ const marks = {
 ///
 /// To reuse elements from this schema, extend or read from its
 /// `spec.nodes` and `spec.marks` [properties](#model.Schema.spec).
-export const schema = new Schema({nodes, marks})
+export const prosmirrorSchema = new Schema({nodes, marks})

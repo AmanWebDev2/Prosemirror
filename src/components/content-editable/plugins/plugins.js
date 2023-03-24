@@ -7,8 +7,11 @@ import { editorUpdateObserver } from "./editorUpdateObserver";
 import { tooltipMenuItems } from "../custom/menu/menuItems";
 import { buildKeymap } from "./keyMap";
 import { prosmirrorSchema } from "../custom/schema/schema";
+import { inputRules, wrappingInputRule, textblockTypeInputRule } from 'prosemirror-inputrules'
+
 import { rulseSetAttribute } from "./rulseSetAttribute";
 import SelectionPlaceholderPlugin from "./SelectionPlaceholderPlugin";
+import { buildInputRules } from "../utils/inputRules";
 
 export const plugins = [
   // new SelectionPlaceholderPlugin(),
@@ -20,4 +23,5 @@ export const plugins = [
   selectionMenu({ content: [tooltipMenuItems] }),
   editorDOMEvents(),
   editorUpdateObserver(),
+  buildInputRules(prosmirrorSchema),
 ];
