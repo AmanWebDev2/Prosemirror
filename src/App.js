@@ -118,6 +118,7 @@ function App() {
   font-feature-settings: "liga" 0;
   max-height: 300px;
   overflow-y: scroll;
+  padding: 0 26px 10px !important;
 }
           
 .ProseMirror pre {
@@ -717,7 +718,7 @@ img.ProseMirror-separator {
   position: fixed;
   background-color: white;
   top: 0;
-  left: -30px;
+  left: -15px;
   width: min-content;
   z-index: 2;
   visibility:hidden;

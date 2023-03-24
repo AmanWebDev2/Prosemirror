@@ -63,7 +63,7 @@ export function editorDOMEvents(options) {
             }
           }
           if (lastNode && parent) {
-            console.log(lastNode);
+            // console.log(lastNode);
             handleHoveringElement(event, lastNode, view);
           }
           return false;
@@ -92,9 +92,22 @@ export function editorDOMEvents(options) {
             ".rulset-position"
           );
 
-          setElementProperties(blockInserter, { visibility: "hidden" });
-          setElementProperties(inserterPointer, { visibility: "hidden" });
-          setElementProperties(rulset, { visibility: "hidden" });
+          if((event.toElement?.id !== "blockInserter-dropdown") && (event.toElement?.id !== "rulset-attribute") ) {
+            setElementProperties(blockInserter, { visibility: "hidden" });
+            setElementProperties(inserterPointer, { visibility: "hidden" });
+            setElementProperties(rulset, { visibility: "hidden" });
+          }else {
+            if(event.toElement && !event.toElement.classList.contains('kudoshub-prosemirror-composer-editor')) {
+              // setElementProperties(blockInserter, { visibility: "hidden" });
+              // setElementProperties(inserterPointer, { visibility: "hidden" });
+              // setElementProperties(rulset, { visibility: "hidden" });
+            }
+          }
+
+          // console.log(event.target)
+          // setElementProperties(blockInserter, { visibility: "hidden" });
+          // setElementProperties(inserterPointer, { visibility: "hidden" });
+          // setElementProperties(rulset, { visibility: "hidden" });
         },
         click(view, event) {
           // console.log('Clicked on editor root element!',event.target);

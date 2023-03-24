@@ -42,7 +42,7 @@ const RuleSetBlock = React.forwardRef(({ dropdownData,isFocused },ref) => {
     if (!window.view) return;
     const dom = window.view.dom;
     const editorRect = dom.getBoundingClientRect();
-    setLeft(editorRect.width + 10);
+    setLeft(editorRect.width-15);
   }, []);
 
   const handleRuleSetClick=(e)=>{
@@ -76,6 +76,7 @@ const RuleSetBlock = React.forwardRef(({ dropdownData,isFocused },ref) => {
           >
             <span
               className="kh-popup kh-popup-icon "
+              id="rulset-attribute"
               onClick={handleRuleSetClick}
               ref={ruleSetRef}
               style={{
