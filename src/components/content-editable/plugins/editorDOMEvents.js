@@ -1,8 +1,5 @@
-import { Plugin, PluginKey, TextSelection } from "prosemirror-state";
-import { ATTRIBUTE_SPAN } from "../custom/schema/nodes/Names";
+import { Plugin } from "prosemirror-state";
 import { setElementProperties } from "../utils/setNodeProperties";
-import { schema } from 'prosemirror-schema-basic';
-import { ResolvedPos } from 'prosemirror-model';
 
 function handleHoveringElement(event, element, view, lastNode) {
   const inserterPointer = view.dom.parentNode.querySelector(

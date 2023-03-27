@@ -5,8 +5,6 @@ import { Button } from "react-bootstrap";
 
 import "./App.css";
 import Editor from "./components/content-editable/Editor";
-import RuleSetBlock from "./components/RuleSetBlock";
-import { attributes } from "./data/attributes";
 
 const doc = {
   type: "doc",

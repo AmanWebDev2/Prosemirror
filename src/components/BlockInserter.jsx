@@ -1,7 +1,6 @@
 import { TextSelection } from "prosemirror-state";
 import React,{useState,useImperativeHandle} from "react";
 import { Dropdown } from "react-bootstrap";
-import { ATTRIBUTE_SPAN } from "./content-editable/custom/schema/nodes/Names";
 import { prosmirrorSchema } from "./content-editable/custom/schema/schema";
 import convertToBase64 from "./content-editable/utils/convert";
 

@@ -8,7 +8,6 @@ import { toggleMark } from "prosemirror-commands";
 import { ATTRIBUTE_SPAN } from "./custom/schema/nodes/Names";
 import RuleSetBlock from "../RuleSetBlock";
 import { attributes } from "../../data/attributes";
-import { DOMSerializer } from "prosemirror-model";
 import BlockInserter from "../BlockInserter";
 
 const doc = prosmirrorSchema.nodeFromJSON(  {
@@ -117,7 +116,7 @@ function handleObserver(mutations) {
   let lastAddedSpan = null;
   mutations.map((mutation, index) => {
     // if any change in childList.
-    if (mutation.type == "childList") {
+    if (mutation.type === "childList") {
       // if change is that -> Any node is added.
       if (mutation.addedNodes.length > 0) {
         let addedNodes = Array.prototype.slice.call(mutation.addedNodes);
@@ -296,7 +295,7 @@ export default function Editor() {
     // Create a decoration that shows the tooltip when the selection is made
     function tooltipDecoration(state) {
       const { from, to } = state.selection;
-      if (from == to) return null;
+      if (from === to) return null;
       const tooltip = Decoration.widget(tooltipContent, { key: "my-tooltip" });
       return DecorationSet.create(state.doc, [tooltip]);
     }
