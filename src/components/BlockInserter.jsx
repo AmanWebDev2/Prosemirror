@@ -114,25 +114,31 @@ const BlockInserter = React.forwardRef((props,ref) => {
 
   const handleInsertBlock = (item) => {
       console.log(window.view);
+      let itemType;
+      let content;
       switch (item.display) {
         case "Insert button":
           break;
         case "Bulleted List":
-          let listType = prosmirrorSchema.nodes.bullet_list;
-          let bulletListContent = listType.createAndFill(null, [
+          itemType = prosmirrorSchema.nodes.bullet_list;
+          content = itemType.createAndFill(null, [
           ]);
-          insertAtPos({insertionPos: window.view.insertionPos,newNode:bulletListContent })
-          window.view.focus()
+          insertAtPos({insertionPos: window.view.insertionPos,newNode:content })
+          window.view.focus();
           break;
         case "Numbered List":
-          let itemType = prosmirrorSchema.nodes.list_item;
-          let listContent = itemType.createAndFill(null, [
+          itemType = prosmirrorSchema.nodes.list_item;
+          content = itemType.createAndFill(null, [
           ]);
-          insertAtPos({insertionPos: window.view.insertionPos,newNode:listContent })
-          window.view.focus()
+          insertAtPos({insertionPos: window.view.insertionPos,newNode:content })
+          window.view.focus();
           break;
         case "Insert code":
-
+          itemType = prosmirrorSchema.nodes.code_block;
+          content = itemType.createAndFill(null, [
+          ]);
+          insertAtPos({insertionPos: window.view.insertionPos,newNode:content })
+          window.view.focus();
           break;
         case "Insert emoji":
            
