@@ -14,13 +14,14 @@ import HeadingNodeSpec from "./nodes/HeadingNodeSpec"
 import DocNodeSpec from "./nodes/DocNodeSpec"
 import TextNodeSpec from "./nodes/TextNodeSpec"
 import HardBreakNodeSpec from "./nodes/HardBreakNodeSpec"
-import { ATTRIBUTE_SPAN, BULLET_LIST, CODE_BLOCK, DOC, HARD_BREAK, HEADING, LIST_ITEM, ORDERED_LIST, PARAGRAPH,SPAN,TEXT, } from "./nodes/Names"
+import { ATTRIBUTE_SPAN, BULLET_LIST, CODE_BLOCK, DOC, HARD_BREAK, HEADING, IMAGE, LIST_ITEM, ORDERED_LIST, PARAGRAPH,SPAN,TEXT, } from "./nodes/Names"
 import LinkMarkSpec from "./marks/LinkMarkSpec"
 import { SpanMarkSpec } from "./marks/SpanMarkSpec"
 import AttributeSpanNodeSpec from "./nodes/AttributeSpanNodeSpec"
 import OrderedListNodeSpec from "./nodes/OrderedListNodeSpec"
 import ListItemNodeSpec from "./nodes/ListItemNodeSpec"
 import BulletListNodeSpec from "./nodes/BulletListNodeSpec"
+import ImageNodeSpec from "./nodes/ImageNodeSpec"
 
 const {
   MARK_CODE,
@@ -43,9 +44,11 @@ export const nodes = {
   [TEXT]: TextNodeSpec,
   [HARD_BREAK]: HardBreakNodeSpec,
   [ATTRIBUTE_SPAN]: AttributeSpanNodeSpec,
-  [ORDERED_LIST]:OrderedListNodeSpec,
+  [ORDERED_LIST]: OrderedListNodeSpec,
   [LIST_ITEM]: ListItemNodeSpec,
-  [BULLET_LIST]:BulletListNodeSpec
+  [BULLET_LIST]: BulletListNodeSpec,
+  [IMAGE]: ImageNodeSpec,
+  div: { content: 'inline*', isolating: true, parseDOM: [{ tag: 'div' }] },
   /// An inline image (`<img>`) node. Supports `src`,
   /// `alt`, and `href` attributes. The latter two default to the empty
   /// string.

@@ -459,6 +459,9 @@ img.ProseMirror-separator {
 .ProseMirror p {
   margin-bottom: 0px;
 }
+.ProseMirror img {
+  max-width: 100%;
+}
 
   .tooltip {
     position: absolute;

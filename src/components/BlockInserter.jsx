@@ -3,6 +3,7 @@ import React,{useState,useImperativeHandle} from "react";
 import { Dropdown } from "react-bootstrap";
 import { ATTRIBUTE_SPAN } from "./content-editable/custom/schema/nodes/Names";
 import { prosmirrorSchema } from "./content-editable/custom/schema/schema";
+import convertToBase64 from "./content-editable/utils/convert";
 
 const ITEM = [
   {
@@ -144,7 +145,22 @@ const BlockInserter = React.forwardRef((props,ref) => {
            
           break;
         case "Insert image":
-           
+           const input = document.createElement("input");
+           input.type = "file";
+           input.click();
+           input.setAttribute("accept", "image/x-png,image/gif,image/jpeg,image/jpg");
+           input.addEventListener("change",async(e)=>{
+            const { target: { files } } = e
+            const base64 = await convertToBase64(files[0])
+            console.log(base64);
+            itemType = prosmirrorSchema.nodes.image;
+            const imageNode = itemType.create({
+              src: base64,
+              alt: "random",
+            });
+            insertAtPos({insertionPos: window.view.insertionPos,newNode:imageNode })
+
+           });
           break;
         case "Attach file":
          
@@ -155,8 +171,8 @@ const BlockInserter = React.forwardRef((props,ref) => {
         case "Embed video":
 
           break;
-          default:
-            return
+        default:
+          return
       }
   };
 
