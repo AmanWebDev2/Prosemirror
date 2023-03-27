@@ -17,9 +17,9 @@ function handleHoveringElement(event, element, view, lastNode) {
 
   blockInserter.addEventListener("click",()=>{
     if(topHalf) {
-      view.insertionPos = lastNode.pmViewDesc.posBefore
+      view.insertionPos = lastNode.pmViewDesc ? lastNode.pmViewDesc.posBefore : 0;
     }else {
-      view.insertionPos = lastNode.pmViewDesc.posAfter
+      view.insertionPos = lastNode.pmViewDesc ? lastNode.pmViewDesc.posAfter : 0;
     }
   })
   if (topHalf) {
