@@ -1,27 +1,30 @@
 import { Plugin } from "prosemirror-state";
 import { setElementProperties } from "../utils/setNodeProperties";
 
-function handleBlockInsterClick({topHalf,view,lastNode}){
-  console.log("clicked block")
-  if(topHalf) {
+function handleBlockInsterClick({ topHalf, view, lastNode }) {
+  console.log("clicked block");
+  if (topHalf) {
     view.insertionPos = lastNode.pmViewDesc ? lastNode.pmViewDesc.posBefore : 0;
-  }else {
+  } else {
     view.insertionPos = lastNode.pmViewDesc ? lastNode.pmViewDesc.posAfter : 0;
   }
 }
-function handleHoveringElement({event, lastNode, view}) {
+function handleHoveringElement({ event, lastNode, view }) {
   const inserterPointer = view.dom.parentNode.querySelector(
     ".prosemirror-composer-inserter-pointer-line"
   );
   const blockInserter = view.dom.parentNode.querySelector("#blockInserter");
-  const blockInserterBtn = view.dom.parentNode.querySelector("#blockInserter-dropdown");
+  const blockInserterBtn = view.dom.parentNode.querySelector(
+    "#blockInserter-dropdown"
+  );
   const editorContainer = view.dom;
   const elmRect = lastNode.getBoundingClientRect();
   const editorContainerRect = editorContainer.getBoundingClientRect();
   const topHalf = event.clientY - elmRect.top < elmRect.height / 2;
-  const blockInserterRect =blockInserter.getBoundingClientRect();
-  if(blockInserterBtn.onClick == null) {
-    blockInserterBtn.onclick =()=>handleBlockInsterClick({topHalf,view,lastNode})
+  const blockInserterRect = blockInserter.getBoundingClientRect();
+  if (blockInserterBtn.onClick == null) {
+    blockInserterBtn.onclick = () =>
+      handleBlockInsterClick({ topHalf, view, lastNode });
   }
   if (topHalf) {
     setElementProperties(inserterPointer, {
@@ -50,16 +53,14 @@ function handleHoveringElement({event, lastNode, view}) {
 }
 
 function resetToDefault(view) {
-  if(!view) return;
+  if (!view) return;
   const { dom } = view;
-  if(!dom) return;
+  if (!dom) return;
   const blockInserter = dom.parentNode.querySelector("#blockInserter");
   const inserterPointer = dom.parentNode.querySelector(
     ".prosemirror-composer-inserter-pointer-line"
   );
   const rulset = dom.parentNode.querySelector(".rulset-position");
-  
-
 }
 
 function handleInserterAndRulsetLeave(view, event) {
@@ -73,13 +74,15 @@ function handleInserterAndRulsetLeave(view, event) {
   if (
     event.toElement?.id !== "blockInserter-dropdown" &&
     event.toElement?.id !== "rulset-attribute" &&
-    (event.toElement && !event.toElement.classList.contains('attributes-item-container')) && !event.toElement.classList.contains('attribute-selector') &&
-    !event.toElement.classList.contains('attribute-items') 
+    event.toElement &&
+    !event.toElement.classList.contains("attributes-item-container") &&
+    !event.toElement.classList.contains("attribute-selector") &&
+    !event.toElement.classList.contains("attribute-items")
   ) {
     // setElementProperties(blockInserterMenu, { display: "none",});
-    setElementProperties(blockInserter, { visibility: "hidden",});
-    setElementProperties(inserterPointer, { visibility: "hidden",  });
-    setElementProperties(rulset, { visibility: "hidden", });
+    setElementProperties(blockInserter, { visibility: "hidden" });
+    setElementProperties(inserterPointer, { visibility: "hidden" });
+    setElementProperties(rulset, { visibility: "hidden" });
     resetToDefault(view);
   } else {
     rulset.addEventListener("mouseleave", (e) => {
@@ -106,36 +109,34 @@ function handleInserterAndRulsetLeave(view, event) {
   }
 }
 
-function handleMousemove(view,event) {
-  {
-    const posAtCoords = view.posAtCoords({
-      left: event.clientX,
-      top: event.clientY,
-    });
+function handleMousemove(view, event) {
+  const posAtCoords = view.posAtCoords({
+    left: event.clientX,
+    top: event.clientY,
+  });
 
-    if (!posAtCoords) {
-      return false;
-    }
-
-    const pos = posAtCoords.pos;
-    let node = view.domAtPos(pos).node;
-
-    // let nodes = []
-    let parent = null;
-    let lastNode = node;
-    if (node && node.pmViewDesc) {
-      parent = node.pmViewDesc.parent;
-      while (parent?.parent) {
-        lastNode = parent.dom;
-        parent = parent.parent;
-      }
-    }
-    if (lastNode && parent) {
-      // console.dir(lastNode);
-      handleHoveringElement({event,lastNode,view});
-    }
+  if (!posAtCoords) {
     return false;
   }
+
+  const pos = posAtCoords.pos;
+  let node = view.domAtPos(pos).node;
+
+  // let nodes = []
+  let parent = null;
+  let lastNode = node;
+  if (node && node.pmViewDesc) {
+    parent = node.pmViewDesc.parent;
+    while (parent?.parent) {
+      lastNode = parent.dom;
+      parent = parent.parent;
+    }
+  }
+  if (lastNode && parent) {
+    // console.dir(lastNode);
+    handleHoveringElement({ event, lastNode, view });
+  }
+  return false;
 }
 
 export function editorDOMEvents(options) {
@@ -143,9 +144,11 @@ export function editorDOMEvents(options) {
     props: {
       handleDOMEvents: {
         mousemove(view, event) {
-          const menu = view.dom.parentNode.querySelector('#blockInserter_menu_wrapper');
-          if(menu && menu.style.display == "none") {
-            handleMousemove(view,event)
+          const menu = view.dom.parentNode.querySelector(
+            "#blockInserter_menu_wrapper"
+          );
+          if (menu && menu.style.display == "none") {
+            handleMousemove(view, event);
           }
         },
         mouseenter(view, event) {
@@ -170,7 +173,6 @@ export function editorDOMEvents(options) {
           // setElementProperties(inserterPointer, { visibility: "hidden" });
           // setElementProperties(rulset, { visibility: "hidden" });
         },
-        
       },
       nodeViews: {
         link(node, view, getPos) {
@@ -187,12 +189,12 @@ export function editorDOMEvents(options) {
         },
       },
     },
-    view(editorView){
-      return  {
+    view(editorView) {
+      return {
         destroy() {
-          editorView.dom.removeEventListener("mousemove",handleMousemove);
-        }
-      }
-    }
+          editorView.dom.removeEventListener("mousemove", handleMousemove);
+        },
+      };
+    },
   });
 }
