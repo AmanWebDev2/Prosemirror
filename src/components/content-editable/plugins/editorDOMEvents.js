@@ -1,7 +1,10 @@
-import { Plugin } from "prosemirror-state";
+import { Plugin, PluginKey, TextSelection } from "prosemirror-state";
+import { ATTRIBUTE_SPAN } from "../custom/schema/nodes/Names";
 import { setElementProperties } from "../utils/setNodeProperties";
+import { schema } from 'prosemirror-schema-basic';
+import { ResolvedPos } from 'prosemirror-model';
 
-function handleHoveringElement(event, element, view) {
+function handleHoveringElement(event, element, view, lastNode) {
   const inserterPointer = view.dom.parentNode.querySelector(
     ".prosemirror-composer-inserter-pointer-line"
   );
@@ -11,6 +14,14 @@ function handleHoveringElement(event, element, view) {
   const editorContainerRect = editorContainer.getBoundingClientRect();
   const topHalf = event.clientY - elmRect.top < elmRect.height / 2;
   const blockInserterRect = blockInserter.getBoundingClientRect();
+
+  blockInserter.addEventListener("click",()=>{
+    if(topHalf) {
+      view.insertionPos = lastNode.pmViewDesc.posBefore
+    }else {
+      view.insertionPos = lastNode.pmViewDesc.posAfter
+    }
+  })
   if (topHalf) {
     setElementProperties(inserterPointer, {
       top: `${elmRect.top}px`,
@@ -91,6 +102,7 @@ export function editorDOMEvents(options) {
 
           const pos = posAtCoords.pos;
           let node = view.domAtPos(pos).node;
+
           // let nodes = []
           let parent = null;
           let lastNode = node;
@@ -102,8 +114,8 @@ export function editorDOMEvents(options) {
             }
           }
           if (lastNode && parent) {
-            // console.log(lastNode);
-            handleHoveringElement(event, lastNode, view);
+            // console.dir(lastNode);
+            handleHoveringElement(event,lastNode,view,lastNode);
           }
           return false;
         },
@@ -148,3 +160,4 @@ export function editorDOMEvents(options) {
     },
   });
 }
+

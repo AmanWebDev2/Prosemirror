@@ -1,5 +1,8 @@
-import React from "react";
+import { TextSelection } from "prosemirror-state";
+import React,{useState,useImperativeHandle} from "react";
 import { Dropdown } from "react-bootstrap";
+import { ATTRIBUTE_SPAN } from "./content-editable/custom/schema/nodes/Names";
+import { prosmirrorSchema } from "./content-editable/custom/schema/schema";
 
 const ITEM = [
   {
@@ -71,75 +74,105 @@ const ITEM = [
   },
 ];
 
-const BlockInserter = () => {
+/**
+ 
+
+const newNode = view.state.schema.nodes[ATTRIBUTE_SPAN].create({
+  "data-template-identifier":"custom"
+}, [view.state.schema.text("custom")]);
+console.log(newNode)
+// Create a new transaction to insert the node
+const tr = view.state.tr.insert(lastNode.pmViewDesc.posAtStart, newNode);
+
+// Apply the transaction to the editor state
+const newState = view.state.apply(tr);
+
+// Set the selection to the end of the inserted text
+const selection = TextSelection.near(newState.doc.resolve(pos));
+view.dispatch(tr.setSelection(selection));
+
+ */
+
+const BlockInserter = React.forwardRef((props,ref) => {
+    const [show,setShow] = useState(false);
+
+    const insertAtPos=({insertionPos,newNode})=>{
+      const { view } = window
+      // const newNode = view.state.schema.nodes[ATTRIBUTE_SPAN].create({
+      //   "data-template-identifier":"custom"
+      // }, [view.state.schema.text("custom")]);
+      console.log(newNode)
+      // Create a new transaction to insert the node
+      const tr = view.state.tr.insert(insertionPos, newNode);
+      
+      // Apply the transaction to the editor state
+      const newState = view.state.apply(tr);
+      // Set the selection to the end of the inserted text
+      const selection = TextSelection.near(newState.doc.resolve(insertionPos));
+      view.dispatch(tr.setSelection(selection));
+    }
+
   const handleInsertBlock = (item) => {
-    // console.log(lastHoveredElementRef);
-    // let hoveredElement = lastHoveredElementRef.current;
-    // const index = quill.getIndex(hoveredElement?.__blot?.blot);
-    // let text = "\n";
-    // if (index !== null || index !== undefined) {
-    //   switch (item.display) {
-    //     case "Insert button":
-    //       break;
-    //     case "Bulleted List":
-    //       // quill.formatLine(index+1, 1, { list: "bullet" });
-    //       // quill.insertEmbed(index, "bullet-list", true);
-    //       quill.insertText(index, text, "list", "bullet");
-    //       break;
-    //     case "Numbered List":
-    //       quill.insertText(index, text, "list", "ordered");
-    //       break;
-    //     case "Insert code":
-    //       quill.insertEmbed(index, "code-block", "Enter code here");
-    //       break;
-    //     case "Insert emoji":
-    //       insertBlockHandler({
-    //         blockElement: null,
-    //         dataAttributes: item.dataAttributes,
-    //         toggleRef: item.toggleRef,
-    //         insertAt: index,
-    //       });
-    //       break;
-    //     case "Insert image":
-    //       insertBlockHandler({
-    //         blockElement: null,
-    //         dataAttributes: item.dataAttributes,
-    //         toggleRef: item.toggleRef,
-    //         insertAt: index,
-    //       });
-    //       break;
-    //     case "Attach file":
-    //       insertBlockHandler({
-    //         blockElement: null,
-    //         dataAttributes: item.dataAttributes,
-    //         toggleRef: item.toggleRef,
-    //       });
-    //       break;
-    //     case "Insert video clip":
-    //       insertBlockHandler({
-    //         blockElement: null,
-    //         dataAttributes: item.dataAttributes,
-    //         toggleRef: item.toggleRef,
-    //         insertAt: index,
-    //       });
-    //       break;
-    //     case "Embed video":
-    //       insertBlockHandler({
-    //         blockElement: null,
-    //         dataAttributes: item.dataAttributes,
-    //         toggleRef: item.toggleRef,
-    //         insertAt: index,
-    //       });
-    //       break;
-    //       default:
-    //         return
-    //   }
-    // }
+      console.log(window.view);
+      switch (item.display) {
+        case "Insert button":
+          break;
+        case "Bulleted List":
+          let listType = prosmirrorSchema.nodes.bullet_list;
+          let bulletListContent = listType.createAndFill(null, [
+          ]);
+          insertAtPos({insertionPos: window.view.insertionPos,newNode:bulletListContent })
+          window.view.focus()
+          break;
+        case "Numbered List":
+          let itemType = prosmirrorSchema.nodes.list_item;
+          let listContent = itemType.createAndFill(null, [
+          ]);
+          insertAtPos({insertionPos: window.view.insertionPos,newNode:listContent })
+          window.view.focus()
+          break;
+        case "Insert code":
+
+          break;
+        case "Insert emoji":
+           
+          break;
+        case "Insert image":
+           
+          break;
+        case "Attach file":
+         
+          break;
+        case "Insert video clip":
+           
+          break;
+        case "Embed video":
+
+          break;
+          default:
+            return
+      }
   };
+
+  useImperativeHandle(ref, () => {
+    return {
+      // ... your methods ...
+      closeInserterMenu() {
+        if(show) {
+          setShow(false);
+        }
+      }
+    };  
+
+  }, [show]);
 
   return (
     <Dropdown className="inserter-container" id="blockInserter">
       <Dropdown.Toggle
+      onClick={()=>setShow(!show)}
+      style={{
+        display:show ? 'none': 'block'
+      }}
         className="attribute-btn"
         variant="success"
         id="blockInserter-dropdown"
@@ -147,23 +180,27 @@ const BlockInserter = () => {
         {/* <img src={} alt="" /> */}
       </Dropdown.Toggle>
 
-      <Dropdown.Menu>
+      <div style={{
+        display:show ? 'block' : 'none'
+      }}
+      id="blockInserter"
+      >
         <div className="attributes-item-container">
           {ITEM.map((data, index) => {
             return (
-              <Dropdown.Item
+              <div
                 className="attribute-items"
                 key={index}
                 onClick={() => handleInsertBlock(data)}
               >
                 {data.display}
-              </Dropdown.Item>
+              </div>
             );
           })}
         </div>
-      </Dropdown.Menu>
+      </div>
     </Dropdown>
   );
-};
+});
 
 export default BlockInserter;

@@ -457,7 +457,7 @@ img.ProseMirror-separator {
 }
 
 .ProseMirror p {
-  margin-bottom: 1em;
+  margin-bottom: 0px;
 }
 
   .tooltip {
@@ -727,6 +727,14 @@ img.ProseMirror-separator {
 .rulset-position {
   visibility:hidden;
 
+}
+
+.attributes-item-container {
+  display: block;
+  min-width: 135px;
+  box-shadow: 2px 2px 9px rgba(0,0,0,.1);
+  padding: 10px 15px;
+  border-radius: 5px;
 }
 
 

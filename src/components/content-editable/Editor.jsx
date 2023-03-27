@@ -110,8 +110,6 @@ let CONFIG = {
   subtree: true,
 };
 
-const EDITORWIDTH = 200;
-
 function handleObserver(mutations) {
   let lastAddedBlockNode = null;
   //Last added input popover node.
@@ -272,6 +270,7 @@ export default function Editor() {
   const editorRef = useRef(null);
   const editorDom = useRef(null); 
   const rulsetRef = useRef(null);
+  const blockInserterRef = useRef(null);
   const [editorWidth,setEditorWidth] = useState(200);
   
   useEffect(() => {
@@ -347,6 +346,9 @@ export default function Editor() {
     if(rulsetRef.current) {
       rulsetRef.current.closeRuleSetMenu()
     }
+    if(blockInserterRef.current) {
+      blockInserterRef.current.closeInserterMenu()
+    }
   }
 
   return(
@@ -359,7 +361,7 @@ export default function Editor() {
       }}
       >
      </div>
-     <BlockInserter/>
+     <BlockInserter ref={blockInserterRef}/>
 
      </div>
      <button onClick={handleAddSpan}>ADD SPAN</button>
