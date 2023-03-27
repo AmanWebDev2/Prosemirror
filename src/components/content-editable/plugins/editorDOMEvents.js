@@ -57,7 +57,7 @@ function handleInserterAndRulsetLeave(view, event) {
   if (
     event.toElement?.id !== "blockInserter-dropdown" &&
     event.toElement?.id !== "rulset-attribute" &&
-    (event.toElement && !event.toElement.classList.contains('attributes-item-container')) 
+    (event.toElement && !event.toElement.classList.contains('attributes-item-container')) && !event.toElement.classList.contains('attribute-selector') 
   ) {
     setElementProperties(blockInserter, { visibility: "hidden" });
     setElementProperties(inserterPointer, { visibility: "hidden" });
