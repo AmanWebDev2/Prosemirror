@@ -2,6 +2,7 @@ import { Plugin } from "prosemirror-state";
 import { setElementProperties } from "../utils/setNodeProperties";
 
 function handleBlockInsterClick({topHalf,view,lastNode}){
+  console.log("clicked block")
   if(topHalf) {
     view.insertionPos = lastNode.pmViewDesc ? lastNode.pmViewDesc.posBefore : 0;
   }else {
@@ -13,14 +14,15 @@ function handleHoveringElement({event, lastNode, view}) {
     ".prosemirror-composer-inserter-pointer-line"
   );
   const blockInserter = view.dom.parentNode.querySelector("#blockInserter");
+  const blockInserterBtn = view.dom.parentNode.querySelector("#blockInserter-dropdown");
   const editorContainer = view.dom;
   const elmRect = lastNode.getBoundingClientRect();
   const editorContainerRect = editorContainer.getBoundingClientRect();
   const topHalf = event.clientY - elmRect.top < elmRect.height / 2;
   const blockInserterRect =blockInserter.getBoundingClientRect();
-
-  blockInserter.addEventListener("click",()=>handleBlockInsterClick({topHalf,view,lastNode}))
-
+  if(blockInserterBtn.onClick == null) {
+    blockInserterBtn.onclick =()=>handleBlockInsterClick({topHalf,view,lastNode})
+  }
   if (topHalf) {
     setElementProperties(inserterPointer, {
       top: `${elmRect.top}px`,
@@ -47,21 +49,38 @@ function handleHoveringElement({event, lastNode, view}) {
   }
 }
 
+function resetToDefault(view) {
+  if(!view) return;
+  const { dom } = view;
+  if(!dom) return;
+  const blockInserter = dom.parentNode.querySelector("#blockInserter");
+  const inserterPointer = dom.parentNode.querySelector(
+    ".prosemirror-composer-inserter-pointer-line"
+  );
+  const rulset = dom.parentNode.querySelector(".rulset-position");
+  
+
+}
+
 function handleInserterAndRulsetLeave(view, event) {
   const blockInserter = view.dom.parentNode.querySelector("#blockInserter");
   const inserterPointer = view.dom.parentNode.querySelector(
     ".prosemirror-composer-inserter-pointer-line"
   );
   const rulset = view.dom.parentNode.querySelector(".rulset-position");
-
+  // const blockInserterMenu = view.dom.parentNode.querySelector("#blockInserter_menu_wrapper");
+  // const blockInserterBtn = view.dom.parentNode.querySelector("blockInserter-dropdown");
   if (
     event.toElement?.id !== "blockInserter-dropdown" &&
     event.toElement?.id !== "rulset-attribute" &&
-    (event.toElement && !event.toElement.classList.contains('attributes-item-container')) && !event.toElement.classList.contains('attribute-selector') 
+    (event.toElement && !event.toElement.classList.contains('attributes-item-container')) && !event.toElement.classList.contains('attribute-selector') &&
+    !event.toElement.classList.contains('attribute-items') 
   ) {
-    setElementProperties(blockInserter, { visibility: "hidden" });
-    setElementProperties(inserterPointer, { visibility: "hidden" });
-    setElementProperties(rulset, { visibility: "hidden" });
+    // setElementProperties(blockInserterMenu, { display: "none",});
+    setElementProperties(blockInserter, { visibility: "hidden",});
+    setElementProperties(inserterPointer, { visibility: "hidden",  });
+    setElementProperties(rulset, { visibility: "hidden", });
+    resetToDefault(view);
   } else {
     rulset.addEventListener("mouseleave", (e) => {
       if (
@@ -71,6 +90,7 @@ function handleInserterAndRulsetLeave(view, event) {
         setElementProperties(blockInserter, { visibility: "hidden" });
         setElementProperties(inserterPointer, { visibility: "hidden" });
         setElementProperties(rulset, { visibility: "hidden" });
+        // reset()
       }
     });
     blockInserter.addEventListener("mouseleave", (e) => {
@@ -135,6 +155,8 @@ export function editorDOMEvents(options) {
             ".prosemirror-composer-inserter-pointer-line"
           );
           const rulset = view.dom.parentNode.querySelector(".rulset-position");
+          // const blockInserterBtn = view.dom.parentNode.querySelector("#blockInserter-dropdown");
+          // const blockInserterMenu = view.dom.parentNode.querySelector("#blockInserter_menu_wrapper");
 
           setElementProperties(blockInserter, { visibility: "visible" });
           setElementProperties(inserterPointer, { visibility: "visible" });
@@ -168,7 +190,7 @@ export function editorDOMEvents(options) {
     view(editorView){
       return  {
         destroy() {
-        editorView.dom.removeEventListener("mousemove",handleMousemove);
+          editorView.dom.removeEventListener("mousemove",handleMousemove);
         }
       }
     }
