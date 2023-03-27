@@ -2,7 +2,6 @@ import { Plugin } from "prosemirror-state";
 
 import { renderGrouped } from "prosemirror-menu";
 import { markActive } from "../utils/markActive";
-import lookUpElement from "../utils/lookUpElement";
 import { ATTRIBUTE_SPAN } from "../custom/schema/nodes/Names";
 
 export function selectionMenu(options) {

@@ -1,24 +1,26 @@
 import { Plugin } from "prosemirror-state";
 import { setElementProperties } from "../utils/setNodeProperties";
 
-function handleHoveringElement(event, element, view, lastNode) {
+function handleBlockInsterClick({topHalf,view,lastNode}){
+  if(topHalf) {
+    view.insertionPos = lastNode.pmViewDesc ? lastNode.pmViewDesc.posBefore : 0;
+  }else {
+    view.insertionPos = lastNode.pmViewDesc ? lastNode.pmViewDesc.posAfter : 0;
+  }
+}
+function handleHoveringElement({event, lastNode, view}) {
   const inserterPointer = view.dom.parentNode.querySelector(
     ".prosemirror-composer-inserter-pointer-line"
   );
-  const editorContainer = view.dom;
-  const elmRect = element.getBoundingClientRect();
   const blockInserter = view.dom.parentNode.querySelector("#blockInserter");
+  const editorContainer = view.dom;
+  const elmRect = lastNode.getBoundingClientRect();
   const editorContainerRect = editorContainer.getBoundingClientRect();
   const topHalf = event.clientY - elmRect.top < elmRect.height / 2;
-  const blockInserterRect = blockInserter.getBoundingClientRect();
+  const blockInserterRect =blockInserter.getBoundingClientRect();
 
-  blockInserter.addEventListener("click",()=>{
-    if(topHalf) {
-      view.insertionPos = lastNode.pmViewDesc ? lastNode.pmViewDesc.posBefore : 0;
-    }else {
-      view.insertionPos = lastNode.pmViewDesc ? lastNode.pmViewDesc.posAfter : 0;
-    }
-  })
+  blockInserter.addEventListener("click",()=>handleBlockInsterClick({topHalf,view,lastNode}))
+
   if (topHalf) {
     setElementProperties(inserterPointer, {
       top: `${elmRect.top}px`,
@@ -54,7 +56,8 @@ function handleInserterAndRulsetLeave(view, event) {
 
   if (
     event.toElement?.id !== "blockInserter-dropdown" &&
-    event.toElement?.id !== "rulset-attribute"
+    event.toElement?.id !== "rulset-attribute" &&
+    (event.toElement && !event.toElement.classList.contains('attributes-item-container')) 
   ) {
     setElementProperties(blockInserter, { visibility: "hidden" });
     setElementProperties(inserterPointer, { visibility: "hidden" });
@@ -83,38 +86,47 @@ function handleInserterAndRulsetLeave(view, event) {
   }
 }
 
+function handleMousemove(view,event) {
+  {
+    const posAtCoords = view.posAtCoords({
+      left: event.clientX,
+      top: event.clientY,
+    });
+
+    if (!posAtCoords) {
+      return false;
+    }
+
+    const pos = posAtCoords.pos;
+    let node = view.domAtPos(pos).node;
+
+    // let nodes = []
+    let parent = null;
+    let lastNode = node;
+    if (node && node.pmViewDesc) {
+      parent = node.pmViewDesc.parent;
+      while (parent?.parent) {
+        lastNode = parent.dom;
+        parent = parent.parent;
+      }
+    }
+    if (lastNode && parent) {
+      // console.dir(lastNode);
+      handleHoveringElement({event,lastNode,view});
+    }
+    return false;
+  }
+}
+
 export function editorDOMEvents(options) {
   return new Plugin({
     props: {
       handleDOMEvents: {
         mousemove(view, event) {
-          const posAtCoords = view.posAtCoords({
-            left: event.clientX,
-            top: event.clientY,
-          });
-
-          if (!posAtCoords) {
-            return false;
+          const menu = view.dom.parentNode.querySelector('#blockInserter_menu_wrapper');
+          if(menu && menu.style.display == "none") {
+            handleMousemove(view,event)
           }
-
-          const pos = posAtCoords.pos;
-          let node = view.domAtPos(pos).node;
-
-          // let nodes = []
-          let parent = null;
-          let lastNode = node;
-          if (node && node.pmViewDesc) {
-            parent = node.pmViewDesc.parent;
-            while (parent?.parent) {
-              lastNode = parent.dom;
-              parent = parent.parent;
-            }
-          }
-          if (lastNode && parent) {
-            // console.dir(lastNode);
-            handleHoveringElement(event,lastNode,view,lastNode);
-          }
-          return false;
         },
         mouseenter(view, event) {
           const blockInserter =
@@ -136,9 +148,7 @@ export function editorDOMEvents(options) {
           // setElementProperties(inserterPointer, { visibility: "hidden" });
           // setElementProperties(rulset, { visibility: "hidden" });
         },
-        click(view, event) {
-          // console.log('Clicked on editor root element!',event.target);
-        },
+        
       },
       nodeViews: {
         link(node, view, getPos) {
@@ -155,6 +165,12 @@ export function editorDOMEvents(options) {
         },
       },
     },
+    view(editorView){
+      return  {
+        destroy() {
+        editorView.dom.removeEventListener("mousemove",handleMousemove);
+        }
+      }
+    }
   });
 }
-

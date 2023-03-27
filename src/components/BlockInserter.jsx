@@ -204,7 +204,7 @@ const BlockInserter = React.forwardRef((props,ref) => {
       <div style={{
         display:show ? 'block' : 'none'
       }}
-      id="blockInserter"
+      id="blockInserter_menu_wrapper"
       >
         <div className="attributes-item-container">
           {ITEM.map((data, index) => {
