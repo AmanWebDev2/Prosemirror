@@ -29,7 +29,6 @@ function handleHoveringElement({ event, lastNode, view }) {
   if (topHalf) {
     setElementProperties(inserterPointer, {
       top: `${elmRect.top}px`,
-      display: "block",
     });
     setElementProperties(blockInserter, {
       transform: `translate(${editorContainerRect.left}px,${
@@ -40,28 +39,16 @@ function handleHoveringElement({ event, lastNode, view }) {
   } else {
     setElementProperties(inserterPointer, {
       top: `${elmRect.bottom}px`,
-      display: "block",
     });
     setElementProperties(blockInserter, {
       transform: `translate(${editorContainerRect.left}px,${
         elmRect.bottom - blockInserterRect.height / 2
       }px)`,
       display: "block",
-      visibility: "visible",
     });
   }
 }
 
-function resetToDefault(view) {
-  if (!view) return;
-  const { dom } = view;
-  if (!dom) return;
-  const blockInserter = dom.parentNode.querySelector("#blockInserter");
-  const inserterPointer = dom.parentNode.querySelector(
-    ".prosemirror-composer-inserter-pointer-line"
-  );
-  const rulset = dom.parentNode.querySelector(".rulset-position");
-}
 
 function handleInserterAndRulsetLeave(view, event) {
   const blockInserter = view.dom.parentNode.querySelector("#blockInserter");
@@ -69,8 +56,7 @@ function handleInserterAndRulsetLeave(view, event) {
     ".prosemirror-composer-inserter-pointer-line"
   );
   const rulset = view.dom.parentNode.querySelector(".rulset-position");
-  // const blockInserterMenu = view.dom.parentNode.querySelector("#blockInserter_menu_wrapper");
-  // const blockInserterBtn = view.dom.parentNode.querySelector("blockInserter-dropdown");
+  const blockInserterBtn = view.dom.parentNode.querySelector("#blockInserter-dropdown");
   if (
     event.toElement?.id !== "blockInserter-dropdown" &&
     event.toElement?.id !== "rulset-attribute" &&
@@ -79,21 +65,32 @@ function handleInserterAndRulsetLeave(view, event) {
     !event.toElement.classList.contains("attribute-selector") &&
     !event.toElement.classList.contains("attribute-items")
   ) {
-    // setElementProperties(blockInserterMenu, { display: "none",});
-    setElementProperties(blockInserter, { visibility: "hidden" });
-    setElementProperties(inserterPointer, { visibility: "hidden" });
-    setElementProperties(rulset, { visibility: "hidden" });
-    resetToDefault(view);
+    if(blockInserterBtn){
+      blockInserterBtn.classList.add('hidden');
+    }
+
+    if(inserterPointer) {
+      inserterPointer.classList.add('hidden');
+    }
+    if(rulset) {
+      rulset.classList.add('hidden');
+    }
   } else {
     rulset.addEventListener("mouseleave", (e) => {
       if (
         e.toElement &&
-        !e.toElement.classList.contains("kudoshub-prosemirror-composer-editor")
+        !e.toElement.classList.contains("kudoshub-prosemirror-composer-editor")&&
+        !e.toElement.pmViewDesc
       ) {
-        setElementProperties(blockInserter, { visibility: "hidden" });
-        setElementProperties(inserterPointer, { visibility: "hidden" });
-        setElementProperties(rulset, { visibility: "hidden" });
-        // reset()
+         if(blockInserterBtn){
+          blockInserterBtn.classList.add('hidden');
+        }
+        if(inserterPointer) {
+          inserterPointer.classList.add('hidden');
+        }
+        if(rulset) {
+          rulset.classList.add('hidden');
+        }
       }
     });
     blockInserter.addEventListener("mouseleave", (e) => {
@@ -101,9 +98,15 @@ function handleInserterAndRulsetLeave(view, event) {
         e.toElement &&
         !e.toElement.classList.contains("kudoshub-prosemirror-composer-editor")
       ) {
-        setElementProperties(blockInserter, { visibility: "hidden" });
-        setElementProperties(inserterPointer, { visibility: "hidden" });
-        setElementProperties(rulset, { visibility: "hidden" });
+        if(blockInserterBtn){
+          blockInserterBtn.classList.add('hidden');
+        }
+        if(inserterPointer) {
+          inserterPointer.classList.add('hidden');
+        }
+        if(rulset) {
+          rulset.classList.add('hidden');
+        }
       }
     });
   }
@@ -133,7 +136,6 @@ function handleMousemove(view, event) {
     }
   }
   if (lastNode && parent) {
-    // console.dir(lastNode);
     handleHoveringElement({ event, lastNode, view });
   }
   return false;
@@ -144,34 +146,27 @@ export function editorDOMEvents(options) {
     props: {
       handleDOMEvents: {
         mousemove(view, event) {
-          const menu = view.dom.parentNode.querySelector(
-            "#blockInserter_menu_wrapper"
-          );
-          if (menu && menu.style.display == "none") {
-            handleMousemove(view, event);
-          }
+          handleMousemove(view, event);
         },
         mouseenter(view, event) {
-          const blockInserter =
-            view.dom.parentNode.querySelector("#blockInserter");
           const inserterPointer = view.dom.parentNode.querySelector(
             ".prosemirror-composer-inserter-pointer-line"
           );
+          const blockInserterBtn = view.dom.parentNode.querySelector("#blockInserter-dropdown");
           const rulset = view.dom.parentNode.querySelector(".rulset-position");
-          // const blockInserterBtn = view.dom.parentNode.querySelector("#blockInserter-dropdown");
-          // const blockInserterMenu = view.dom.parentNode.querySelector("#blockInserter_menu_wrapper");
 
-          setElementProperties(blockInserter, { visibility: "visible" });
-          setElementProperties(inserterPointer, { visibility: "visible" });
-          setElementProperties(rulset, { visibility: "visible" });
+            if(inserterPointer) {
+              inserterPointer.classList.remove('hidden')
+            }
+            if(rulset) {
+              rulset.classList.remove('hidden');
+            }
+            if(blockInserterBtn){
+              blockInserterBtn.classList.remove('hidden');
+            }
         },
         mouseleave(view, event) {
           handleInserterAndRulsetLeave(view, event);
-
-          // console.log(event.target)
-          // setElementProperties(blockInserter, { visibility: "hidden" });
-          // setElementProperties(inserterPointer, { visibility: "hidden" });
-          // setElementProperties(rulset, { visibility: "hidden" });
         },
       },
       nodeViews: {

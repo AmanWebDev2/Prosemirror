@@ -63,7 +63,7 @@ const RuleSetBlock = React.forwardRef(({ dropdownData,isFocused },ref) => {
       <div className="rulesetBlock-container pos">
         <div
           ref={ruleSetPosRef}
-          className="rulset-position"
+          className="rulset-position hidden"
           style={{
             position: "absolute",
             left,

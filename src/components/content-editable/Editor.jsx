@@ -354,7 +354,7 @@ export default function Editor() {
     <>
      <div id="editor" ref={editorDom} onClick={handleEditorClick}>
       <RuleSetBlock dropdownData={attributes} ref={rulsetRef} />
-      <div className="pe-none prosemirror-composer-inserter-pointer-line"
+      <div className="pe-none prosemirror-composer-inserter-pointer-line hidden"
       style={{
         width:editorWidth+"px"
       }}

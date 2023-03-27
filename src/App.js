@@ -712,7 +712,7 @@ img.ProseMirror-separator {
     border: 1px dashed red;
     box-sizing: border-box;
     width:400px;
-    visibility:hidden;
+    // visibility:hidden;
 }
 
 .inserter-container {
@@ -722,12 +722,7 @@ img.ProseMirror-separator {
   left: -15px;
   width: min-content;
   z-index: 2;
-  visibility:hidden;
-}
-
-.rulset-position {
-  visibility:hidden;
-
+  // visibility:hidden;
 }
 
 .attributes-item-container {
@@ -738,6 +733,14 @@ img.ProseMirror-separator {
   border-radius: 5px;
 }
 
+.show {
+  display: block;
+  visibility: visible;
+}
+.hidden {
+  display: none;
+  visibility:hidden;
+}
 
           </style>
           <body>
