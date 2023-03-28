@@ -283,6 +283,9 @@ export function editorDOMEvents(options) {
         },
         scroll(view,event) {
           toggleInserter(view,false);
+        },
+        input(view,event) {
+          toggleInserter(view,false);
         }
       },
       // nodeViews: {
