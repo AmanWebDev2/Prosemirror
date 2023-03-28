@@ -2,7 +2,7 @@ import { Plugin } from "prosemirror-state";
 
 import { renderGrouped } from "prosemirror-menu";
 import { markActive } from "../utils/markActive";
-import { ATTRIBUTE_SPAN } from "../custom/schema/nodes/Names";
+import { ATTRIBUTE_SPAN, IMAGE, VIDEO_CLIP } from "../custom/schema/nodes/Names";
 
 export function selectionMenu(options) {
   return new Plugin({
@@ -66,12 +66,29 @@ class SelectionMenu {
     const tooltipNode = this.menu.querySelector("div.czi-link-tooltip");
     let isLinkToolTip = tooltipNode ? true : false;
 
+    const selectedNodeName = state.selection?.node?.type?.name
     // update plugin, have to show popover when attribute span is selected
     if(state.selection?.node?.type?.name === ATTRIBUTE_SPAN) {
       console.log("fallback popover")
     }
 
-    if ((!state || readOnly || state.selection.empty || state.selection?.node?.type?.name === ATTRIBUTE_SPAN) && !isLinkToolTip) {
+    if(state?.selection?.node?.type?.name === IMAGE) {
+
+    }
+
+    // popoover
+    switch(selectedNodeName) {
+      case ATTRIBUTE_SPAN:
+        break;
+      case IMAGE:
+        break;
+      case VIDEO_CLIP:
+        break;
+      default:
+    }
+
+
+    if ((!state || readOnly || state.selection.empty || selectedNodeName === ATTRIBUTE_SPAN || selectedNodeName == IMAGE || selectedNodeName == VIDEO_CLIP) && !isLinkToolTip) {
       if (this.menu.style.display !== "none") {
         this.menu.style.display = "none";
       }
