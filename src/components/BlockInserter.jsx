@@ -188,11 +188,11 @@ const BlockInserter = React.forwardRef((props,ref) => {
   }, [show]);
 
   return (
-    <Dropdown className="inserter-container" id="blockInserter">
+    <Dropdown className="inserter-container hidden" id="blockInserter">
       <Dropdown.Toggle
-      // onClick={()=>setShow(!show)}
+      onClick={()=>setShow(!show)}
       style={{
-        // display:show ? 'none': 'block'
+        display:show ? 'none': 'block'
       }}
         className="attribute-btn hidden"
         variant="success"
@@ -202,9 +202,8 @@ const BlockInserter = React.forwardRef((props,ref) => {
       </Dropdown.Toggle>
 
       <div style={{
-        // display:show ? 'block' : 'none'
+        display:show ? 'block' : 'none'
       }}
-      className='hidden'
       id="blockInserter_menu_wrapper"
       >
         <div className="attributes-item-container">

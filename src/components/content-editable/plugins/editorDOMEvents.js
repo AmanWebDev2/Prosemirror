@@ -2,13 +2,13 @@ import { Plugin } from "prosemirror-state";
 import { setElementProperties } from "../utils/setNodeProperties";
 
 function handleBlockInsterClick({ topHalf, view, lastNode }) {
-  console.log("clicked block");
   if (topHalf) {
     view.insertionPos = lastNode.pmViewDesc ? lastNode.pmViewDesc.posBefore : 0;
   } else {
     view.insertionPos = lastNode.pmViewDesc ? lastNode.pmViewDesc.posAfter : 0;
   }
 }
+
 function handleHoveringElement({ event, lastNode, view }) {
   const inserterPointer = view.dom.parentNode.querySelector(
     ".prosemirror-composer-inserter-pointer-line"
@@ -34,7 +34,6 @@ function handleHoveringElement({ event, lastNode, view }) {
       transform: `translate(${editorContainerRect.left}px,${
         elmRect.top - blockInserterRect.height / 2
       }px)`,
-      display: "block",
     });
   } else {
     setElementProperties(inserterPointer, {
@@ -44,11 +43,46 @@ function handleHoveringElement({ event, lastNode, view }) {
       transform: `translate(${editorContainerRect.left}px,${
         elmRect.bottom - blockInserterRect.height / 2
       }px)`,
-      display: "block",
     });
   }
 }
 
+function handleblockInserterMouseleave({e,blockInserterBtn,inserterPointer,rulset,blockInserter}) {
+  if (
+    e.toElement &&
+    !e.toElement.classList.contains("kudoshub-prosemirror-composer-editor")&&
+    !e.toElement.pmViewDesc
+  ) {
+     if(blockInserterBtn){
+      blockInserterBtn.classList.add('hidden');
+      blockInserter.classList.add('hidden');
+    }
+    if(inserterPointer) {
+      inserterPointer.classList.add('hidden');
+    }
+    if(rulset) {
+      rulset.classList.add('hidden');
+    }
+  }
+}
+
+function handleRulesetMouseleave({e,blockInserterBtn,inserterPointer,rulset}) {
+  if (
+    e.toElement &&
+    !e.toElement.classList.contains("kudoshub-prosemirror-composer-editor")&&
+    !e.toElement.pmViewDesc
+  ) {
+     if(blockInserterBtn){
+      blockInserterBtn.classList.add('hidden');
+    }
+    if(inserterPointer) {
+      inserterPointer.classList.add('hidden');
+    }
+    if(rulset) {
+      rulset.classList.add('hidden');
+    }
+  }
+}
 
 function handleInserterAndRulsetLeave(view, event) {
   const blockInserter = view.dom.parentNode.querySelector("#blockInserter");
@@ -67,6 +101,7 @@ function handleInserterAndRulsetLeave(view, event) {
   ) {
     if(blockInserterBtn){
       blockInserterBtn.classList.add('hidden');
+      blockInserter.classList.add('hidden');
     }
 
     if(inserterPointer) {
@@ -76,39 +111,16 @@ function handleInserterAndRulsetLeave(view, event) {
       rulset.classList.add('hidden');
     }
   } else {
-    rulset.addEventListener("mouseleave", (e) => {
-      if (
-        e.toElement &&
-        !e.toElement.classList.contains("kudoshub-prosemirror-composer-editor")&&
-        !e.toElement.pmViewDesc
-      ) {
-         if(blockInserterBtn){
-          blockInserterBtn.classList.add('hidden');
-        }
-        if(inserterPointer) {
-          inserterPointer.classList.add('hidden');
-        }
-        if(rulset) {
-          rulset.classList.add('hidden');
-        }
-      }
-    });
-    blockInserter.addEventListener("mouseleave", (e) => {
-      if (
-        e.toElement &&
-        !e.toElement.classList.contains("kudoshub-prosemirror-composer-editor")
-      ) {
-        if(blockInserterBtn){
-          blockInserterBtn.classList.add('hidden');
-        }
-        if(inserterPointer) {
-          inserterPointer.classList.add('hidden');
-        }
-        if(rulset) {
-          rulset.classList.add('hidden');
-        }
-      }
-    });
+    if(blockInserter.onmouseleave == null) {
+      blockInserter.onmouseleave = (e) => {
+        handleblockInserterMouseleave({e,rulset,blockInserterBtn,inserterPointer,blockInserter});
+      } 
+    }
+    if(rulset.onmouseleave == null) {
+      rulset.onmouseleave = (e) => {
+        handleRulesetMouseleave({e,rulset,blockInserterBtn,inserterPointer});
+      } 
+    }
   }
 }
 
@@ -141,32 +153,50 @@ function handleMousemove(view, event) {
   return false;
 }
 
+function handleMouseEnter(view,event) {
+  const inserterPointer = view.dom.parentNode.querySelector(
+    ".prosemirror-composer-inserter-pointer-line"
+  );
+  const blockInserterBtn = view.dom.parentNode.querySelector("#blockInserter-dropdown");
+  const blockInserter = view.dom.parentNode.querySelector("#blockInserter");
+  const rulset = view.dom.parentNode.querySelector(".rulset-position");
+
+    if(inserterPointer) {
+      inserterPointer.classList.remove('hidden')
+    }
+    if(rulset) {
+      rulset.classList.remove('hidden');
+    }
+    if(blockInserterBtn){
+      blockInserterBtn.classList.remove('hidden');
+    }
+    if(blockInserter) {
+      blockInserter.classList.remove('hidden')
+    }
+}
+
 export function editorDOMEvents(options) {
   return new Plugin({
     props: {
       handleDOMEvents: {
         mousemove(view, event) {
-          handleMousemove(view, event);
+          const blockInserterMenu = view.dom.parentNode.querySelector(
+            "#blockInserter_menu_wrapper"
+          );
+          if(blockInserterMenu && blockInserterMenu.style.display !== "block") {
+            handleMousemove(view, event);
+          }
         },
         mouseenter(view, event) {
-          const inserterPointer = view.dom.parentNode.querySelector(
-            ".prosemirror-composer-inserter-pointer-line"
-          );
-          const blockInserterBtn = view.dom.parentNode.querySelector("#blockInserter-dropdown");
-          const rulset = view.dom.parentNode.querySelector(".rulset-position");
-
-            if(inserterPointer) {
-              inserterPointer.classList.remove('hidden')
-            }
-            if(rulset) {
-              rulset.classList.remove('hidden');
-            }
-            if(blockInserterBtn){
-              blockInserterBtn.classList.remove('hidden');
-            }
+          handleMouseEnter(view,event)
         },
         mouseleave(view, event) {
-          handleInserterAndRulsetLeave(view, event);
+          const blockInserterMenu = view.dom.parentNode.querySelector(
+            "#blockInserter_menu_wrapper"
+          );
+          if(blockInserterMenu && blockInserterMenu.style.display !== "block") {
+            handleInserterAndRulsetLeave(view, event);
+          }
         },
       },
       nodeViews: {
