@@ -70,6 +70,41 @@ function handleblockInserterMouseleave({e,blockInserterBtn,inserterPointer,rulse
   }
 }
 
+function toggleInserter(view,show) {
+  if(view) {
+    const inserterPointer = view.dom.parentNode.querySelector(
+      ".prosemirror-composer-inserter-pointer-line"
+    );
+    const rulset = view.dom.parentNode.querySelector(".rulset-position");
+    const blockInserter = view.dom.parentNode.querySelector("#blockInserter");
+    if(!show) {
+      if(blockInserter && !blockInserter.classList.contains("hidden")){
+        blockInserter.classList.add('hidden');
+      }
+  
+      if(inserterPointer && !inserterPointer.classList.contains("hidden")) {
+        inserterPointer.classList.add('hidden');
+      }
+      if(rulset && !rulset.classList.contains("hidden")) {
+        rulset.classList.add('hidden');
+      }
+    }else {
+      if(blockInserter && blockInserter.classList.contains("hidden")){
+        blockInserter.classList.remove('hidden');
+      }
+  
+      if(inserterPointer && inserterPointer.classList.contains("hidden")) {
+        inserterPointer.classList.remove('hidden');
+      }
+      if(rulset && rulset.classList.contains("hidden")) {
+        rulset.classList.remove('hidden');
+      }
+    }
+  }
+}
+
+ 
+
 // function handleRulesetMouseleave({e,blockInserterBtn,inserterPointer,rulset,blockInserterMenu,rulsetMenu}) {
 //   if((blockInserterMenu && blockInserterMenu.style.display == "block") || 
 //   (rulsetMenu && rulsetMenu.style.display == "block")
@@ -209,12 +244,18 @@ export function editorDOMEvents(options) {
           
           if((blockInserterMenu && blockInserterMenu.style.display !== "block") &&
           (rulsetMenu && rulsetMenu.style.display !== "block")) {
+            toggleInserter(view,true);
             handleMousemove(view, event);
           }
         },
         mouseenter(view, event) {
           const blockInserterMenu = view.dom.parentNode.querySelector("#blockInserter_menu_wrapper");
-          if(blockInserterMenu.style.display == "block") return;
+          const rulsetMenu = view.dom.parentNode.querySelector(".attribute-selector");
+
+          if(
+          blockInserterMenu.style.display == "block" ||
+          rulsetMenu && rulsetMenu.style.display == "block"
+          ) return;
           handleMouseEnter(view,event)
         },
         mouseleave(view, event) {
@@ -225,6 +266,7 @@ export function editorDOMEvents(options) {
           );
           if((blockInserterMenu && blockInserterMenu.style.display !== "block") &&
           (rulsetMenu && rulsetMenu.style.display !== "block")) {
+            // toggleInserter(view,false);
             handleInserterAndRulsetLeave(view, event);
           }
         },
@@ -237,6 +279,10 @@ export function editorDOMEvents(options) {
           if(rulsetBtn && rulsetBtn.style.display !== "block") {
             rulsetBtn.style.display = "block";
           }
+          toggleInserter(view,false)
+        },
+        scroll(view,event) {
+          toggleInserter(view,false);
         }
       },
       // nodeViews: {
