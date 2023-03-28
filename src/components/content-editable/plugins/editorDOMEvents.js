@@ -184,6 +184,7 @@ function handleMouseEnter(view,event) {
     if(blockInserterBtn){
       blockInserterBtn.classList.remove('hidden');
     }
+    
     if(blockInserter) {
       blockInserter.classList.remove('hidden')
       const domRect = view.dom.getBoundingClientRect();
@@ -201,7 +202,6 @@ export function editorDOMEvents(options) {
     props: {
       handleDOMEvents: {
         mousemove(view, event) {
-          console.log(view,event)
           const blockInserterMenu = view.dom.parentNode.querySelector(
             "#blockInserter_menu_wrapper"
           );
@@ -213,6 +213,8 @@ export function editorDOMEvents(options) {
           }
         },
         mouseenter(view, event) {
+          const blockInserterMenu = view.dom.parentNode.querySelector("#blockInserter_menu_wrapper");
+          if(blockInserterMenu.style.display == "block") return;
           handleMouseEnter(view,event)
         },
         mouseleave(view, event) {
