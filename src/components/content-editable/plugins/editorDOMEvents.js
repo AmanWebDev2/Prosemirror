@@ -47,7 +47,11 @@ function handleHoveringElement({ event, lastNode, view }) {
   }
 }
 
-function handleblockInserterMouseleave({e,blockInserterBtn,inserterPointer,rulset,blockInserter}) {
+function handleblockInserterMouseleave({e,blockInserterBtn,inserterPointer,rulset,blockInserter,blockInserterMenu,rulsetMenu}) {
+  if((blockInserterMenu && blockInserterMenu.style.display == "block") || 
+  (rulsetMenu && rulsetMenu.style.display == "block")
+  ) return
+
   if (
     e.toElement &&
     !e.toElement.classList.contains("kudoshub-prosemirror-composer-editor")&&
@@ -66,30 +70,38 @@ function handleblockInserterMouseleave({e,blockInserterBtn,inserterPointer,rulse
   }
 }
 
-function handleRulesetMouseleave({e,blockInserterBtn,inserterPointer,rulset}) {
-  if (
-    e.toElement &&
-    !e.toElement.classList.contains("kudoshub-prosemirror-composer-editor")&&
-    !e.toElement.pmViewDesc
-  ) {
-     if(blockInserterBtn){
-      blockInserterBtn.classList.add('hidden');
-    }
-    if(inserterPointer) {
-      inserterPointer.classList.add('hidden');
-    }
-    if(rulset) {
-      rulset.classList.add('hidden');
-    }
-  }
-}
+// function handleRulesetMouseleave({e,blockInserterBtn,inserterPointer,rulset,blockInserterMenu,rulsetMenu}) {
+//   if((blockInserterMenu && blockInserterMenu.style.display == "block") || 
+//   (rulsetMenu && rulsetMenu.style.display == "block")
+//   ) return
+
+//   if (
+//     e.toElement &&
+//     !e.toElement.classList.contains("kudoshub-prosemirror-composer-editor")&&
+//     !e.toElement.pmViewDesc
+//   ) {
+//      if(blockInserterBtn){
+//       blockInserterBtn.classList.add('hidden');
+//     }
+//     if(inserterPointer) {
+//       inserterPointer.classList.add('hidden');
+//     }
+//     if(rulset) {
+//       rulset.classList.add('hidden');
+//     }
+//   }
+// }
 
 function handleInserterAndRulsetLeave(view, event) {
   const blockInserter = view.dom.parentNode.querySelector("#blockInserter");
   const inserterPointer = view.dom.parentNode.querySelector(
     ".prosemirror-composer-inserter-pointer-line"
   );
+  const blockInserterMenu = view.dom.parentNode.querySelector(
+    "#blockInserter_menu_wrapper"
+  );
   const rulset = view.dom.parentNode.querySelector(".rulset-position");
+  const rulsetMenu = view.dom.parentNode.querySelector(".attribute-selector");
   const blockInserterBtn = view.dom.parentNode.querySelector("#blockInserter-dropdown");
   if (
     event.toElement?.id !== "blockInserter-dropdown" &&
@@ -113,12 +125,13 @@ function handleInserterAndRulsetLeave(view, event) {
   } else {
     if(blockInserter.onmouseleave == null) {
       blockInserter.onmouseleave = (e) => {
-        handleblockInserterMouseleave({e,rulset,blockInserterBtn,inserterPointer,blockInserter});
+        handleblockInserterMouseleave({e,rulset,blockInserterBtn,inserterPointer,blockInserter,blockInserterMenu,rulsetMenu});
       } 
     }
     if(rulset.onmouseleave == null) {
       rulset.onmouseleave = (e) => {
-        handleRulesetMouseleave({e,rulset,blockInserterBtn,inserterPointer});
+        // handleRulesetMouseleave({e,rulset,blockInserterBtn,inserterPointer,blockInserterMenu,rulsetMenu});
+        handleblockInserterMouseleave({e,rulset,blockInserterBtn,inserterPointer,blockInserter,blockInserterMenu,rulsetMenu});
       } 
     }
   }
@@ -183,7 +196,10 @@ export function editorDOMEvents(options) {
           const blockInserterMenu = view.dom.parentNode.querySelector(
             "#blockInserter_menu_wrapper"
           );
-          if(blockInserterMenu && blockInserterMenu.style.display !== "block") {
+          const rulsetMenu = view.dom.parentNode.querySelector(".attribute-selector");
+          
+          if((blockInserterMenu && blockInserterMenu.style.display !== "block") &&
+          (rulsetMenu && rulsetMenu.style.display !== "block")) {
             handleMousemove(view, event);
           }
         },
@@ -191,10 +207,13 @@ export function editorDOMEvents(options) {
           handleMouseEnter(view,event)
         },
         mouseleave(view, event) {
+          const rulsetMenu = view.dom.parentNode.querySelector(".attribute-selector");
+
           const blockInserterMenu = view.dom.parentNode.querySelector(
             "#blockInserter_menu_wrapper"
           );
-          if(blockInserterMenu && blockInserterMenu.style.display !== "block") {
+          if((blockInserterMenu && blockInserterMenu.style.display !== "block") &&
+          (rulsetMenu && rulsetMenu.style.display !== "block")) {
             handleInserterAndRulsetLeave(view, event);
           }
         },
