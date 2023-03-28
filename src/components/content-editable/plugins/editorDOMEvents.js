@@ -175,7 +175,8 @@ function handleMouseEnter(view,event) {
   const rulset = view.dom.parentNode.querySelector(".rulset-position");
 
     if(inserterPointer) {
-      inserterPointer.classList.remove('hidden')
+      inserterPointer.classList.remove('hidden');
+      inserterPointer.style.top = `${event.y}px`
     }
     if(rulset) {
       rulset.classList.remove('hidden');
@@ -185,6 +186,13 @@ function handleMouseEnter(view,event) {
     }
     if(blockInserter) {
       blockInserter.classList.remove('hidden')
+      const domRect = view.dom.getBoundingClientRect();
+      const blockInserterRect = blockInserter.getBoundingClientRect();
+      blockInserter.style.left = `-15px`
+      blockInserter.style.transform = `translate(${domRect.left}px,${
+        event.y - blockInserterRect.height / 2
+      }px)`
+      
     }
 }
 
@@ -193,6 +201,7 @@ export function editorDOMEvents(options) {
     props: {
       handleDOMEvents: {
         mousemove(view, event) {
+          console.log(view,event)
           const blockInserterMenu = view.dom.parentNode.querySelector(
             "#blockInserter_menu_wrapper"
           );
@@ -216,9 +225,6 @@ export function editorDOMEvents(options) {
           (rulsetMenu && rulsetMenu.style.display !== "block")) {
             handleInserterAndRulsetLeave(view, event);
           }
-        },
-        click(view,event) {
-          console.log("clicked")
         },
         focus(view,event) {
           const rulsetMenu = view.dom.parentNode.querySelector(".attribute-selector");

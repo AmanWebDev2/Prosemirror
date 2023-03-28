@@ -722,7 +722,6 @@ img.ProseMirror-separator {
   left: -15px;
   width: min-content;
   z-index: 2;
-  // visibility:hidden;
 }
 
 .attributes-item-container {

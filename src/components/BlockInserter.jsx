@@ -74,9 +74,8 @@ const ITEM = [
   },
 ];
 
-/**
+/*
  
-
 const newNode = view.state.schema.nodes[ATTRIBUTE_SPAN].create({
   "data-template-identifier":"custom"
 }, [view.state.schema.text("custom")]);
