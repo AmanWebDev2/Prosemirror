@@ -217,21 +217,34 @@ export function editorDOMEvents(options) {
             handleInserterAndRulsetLeave(view, event);
           }
         },
-      },
-      nodeViews: {
-        link(node, view, getPos) {
-          const dom = document.createElement("a");
-          dom.href = node.attrs.href;
-          dom.textContent = node.textContent;
-          dom.addEventListener("click", (event) => {
-            event.preventDefault();
-            console.log("Link clicked:", node.attrs.href);
-          });
-          return {
-            dom,
-          };
+        click(view,event) {
+          console.log("clicked")
         },
+        focus(view,event) {
+          const rulsetMenu = view.dom.parentNode.querySelector(".attribute-selector");
+          const rulsetBtn = view.dom.parentNode.querySelector("#rulesetBtn");
+          if(rulsetMenu && rulsetMenu.style.display !== "none") {
+            rulsetMenu.style.display = "none";
+          }
+          if(rulsetBtn && rulsetBtn.style.display !== "block") {
+            rulsetBtn.style.display = "block";
+          }
+        }
       },
+      // nodeViews: {
+      //   link(node, view, getPos) {
+      //     const dom = document.createElement("a");
+      //     dom.href = node.attrs.href;
+      //     dom.textContent = node.textContent;
+      //     dom.addEventListener("click", (event) => {
+      //       event.preventDefault();
+      //       console.log("Link clicked:", node.attrs.href);
+      //     });
+      //     return {
+      //       dom,
+      //     };
+      //   },
+      // },
     },
     view(editorView) {
       return {
