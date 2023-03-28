@@ -2,7 +2,11 @@ import { Plugin } from "prosemirror-state";
 
 import { renderGrouped } from "prosemirror-menu";
 import { markActive } from "../utils/markActive";
-import { ATTRIBUTE_SPAN, IMAGE, VIDEO_CLIP } from "../custom/schema/nodes/Names";
+import {
+  ATTRIBUTE_SPAN,
+  IMAGE,
+  VIDEO_CLIP,
+} from "../custom/schema/nodes/Names";
 
 export function selectionMenu(options) {
   return new Plugin({
@@ -37,24 +41,11 @@ class SelectionMenu {
     const ruleSetPosBlockElm =
       editorView.dom.parentNode.querySelector(".rulset-position");
 
-    // dropown menu
-    // const attributeSelector = editorView.dom.parentNode.querySelector(
-    //   ".attribute-selector"
-    // );
-
     if (ruleSetPosBlockElm) {
       this.ruleSetPosBlockElm = ruleSetPosBlockElm;
       const rulsetElm = this.ruleSetPosBlockElm.firstElementChild;
       this.rulsetElm = rulsetElm;
     }
-
-    // if (attributeSelector) {
-    //   this.attributeSelector = attributeSelector;
-    //   this.attributeSelector.style.display = "none";
-    // }
-
-    // if selection then attribute selector remove
-
     this.update(editorView, null);
   }
 
@@ -66,18 +57,17 @@ class SelectionMenu {
     const tooltipNode = this.menu.querySelector("div.czi-link-tooltip");
     let isLinkToolTip = tooltipNode ? true : false;
 
-    const selectedNodeName = state.selection?.node?.type?.name
+    const selectedNodeName = state.selection?.node?.type?.name;
     // update plugin, have to show popover when attribute span is selected
-    if(state.selection?.node?.type?.name === ATTRIBUTE_SPAN) {
-      console.log("fallback popover")
+    if (state.selection?.node?.type?.name === ATTRIBUTE_SPAN) {
+      console.log("fallback popover");
     }
 
-    if(state?.selection?.node?.type?.name === IMAGE) {
-
+    if (state?.selection?.node?.type?.name === IMAGE) {
     }
 
     // popoover
-    switch(selectedNodeName) {
+    switch (selectedNodeName) {
       case ATTRIBUTE_SPAN:
         break;
       case IMAGE:
@@ -87,19 +77,25 @@ class SelectionMenu {
       default:
     }
 
-
-    if ((!state || readOnly || state.selection.empty || selectedNodeName === ATTRIBUTE_SPAN || selectedNodeName == IMAGE || selectedNodeName == VIDEO_CLIP) && !isLinkToolTip) {
+    // hide selection menut
+    if (
+      (!state ||
+        readOnly ||
+        state.selection.empty ||
+        selectedNodeName === ATTRIBUTE_SPAN ||
+        selectedNodeName == IMAGE ||
+        selectedNodeName == VIDEO_CLIP) &&
+      !isLinkToolTip
+    ) {
       if (this.menu.style.display !== "none") {
         this.menu.style.display = "none";
       }
-      this.handleRulset({ start, view })
+      this.handleRulset({ start, view });
       return;
     }
 
-
-
+    // show selection menu
     this.menu.style.display = "block";
-
     if (!this.menu.offsetParent) {
       if (this.menu.style.display !== "none") {
         this.menu.style.display = "none";
@@ -115,13 +111,10 @@ class SelectionMenu {
       let offsetParentBox = this.menu.offsetParent.getBoundingClientRect();
       let left =
         (start.left + end.left) / 2 - box.width / 2 - offsetParentBox.left;
-
       if (left < 5) {
         left = 5;
       }
-
       this.menu.style.left = left + "px";
-
       if (
         markActive(state, state.schema.marks.link) &&
         !(!state || readOnly || state.selection.from !== state.selection.to)
@@ -131,15 +124,15 @@ class SelectionMenu {
         this.menu.style.top =
           start.top - offsetParentBox.top - box.height + "px";
       }
-    } catch (err) { }
+    } catch (err) {}
   }
 
   handleRulset({ start, view }) {
     if (this.ruleSetPosBlockElm) {
       let topPos = +this.ruleSetPosBlockElm.style.top.replace("px", "");
       if (Math.ceil(topPos) !== Math.ceil(start.top))
-      // console.log(view.dom.scrollTop,start.top);
-      // const scrollTop = view.dom.scrollTop;
+        // console.log(view.dom.scrollTop,start.top);
+        // const scrollTop = view.dom.scrollTop;
         this.ruleSetPosBlockElm.style.top = start.top + "px";
       this.rulsetElm.style.display = "block";
     }
