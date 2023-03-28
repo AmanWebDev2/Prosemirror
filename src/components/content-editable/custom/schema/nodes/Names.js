@@ -19,3 +19,4 @@ export const TABLE_ROW = 'table_row';
 export const TEXT = 'text';
 export const UNDERLINE = 'underline';
 export const ATTRIBUTE_SPAN = 'attribute_span';
+export const VIDEO_CLIP = 'video_clip';

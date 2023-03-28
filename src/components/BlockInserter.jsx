@@ -110,11 +110,19 @@ const BlockInserter = React.forwardRef((props,ref) => {
       const selection = TextSelection.near(newState.doc.resolve(insertionPos));
       view.dispatch(tr.setSelection(selection));
     }
+    const handleChange = async(file) => {
+      // const formData = new FormData();
+      // formData.append('file',file);
+      // console.log(formData)
+      const base64 = await convertToBase64(file)
+      return base64
+  };
 
   const handleInsertBlock = (item) => {
       console.log(window.view);
       let itemType;
       let content;
+      const input = document.createElement("input");
       switch (item.display) {
         case "Insert button":
           break;
@@ -143,7 +151,6 @@ const BlockInserter = React.forwardRef((props,ref) => {
            
           break;
         case "Insert image":
-           const input = document.createElement("input");
            input.type = "file";
            input.click();
            input.setAttribute("accept", "image/x-png,image/gif,image/jpeg,image/jpg");
@@ -164,10 +171,21 @@ const BlockInserter = React.forwardRef((props,ref) => {
          
           break;
         case "Insert video clip":
-           
+          input.type = "file";
+          input.click();
+          input.addEventListener("change",async(e)=>{
+            const { target: { files } } = e
+            const url = await handleChange(files[0])
+            console.log(url);
+            itemType = prosmirrorSchema.nodes.video_clip;
+            content = itemType.create(
+              { src: url }
+            )
+            insertAtPos({insertionPos: window.view.insertionPos,newNode:content })   
+          })
           break;
         case "Embed video":
-
+        
           break;
         default:
           return
