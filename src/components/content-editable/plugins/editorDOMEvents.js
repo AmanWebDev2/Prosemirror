@@ -81,7 +81,6 @@ function toggleInserter(view,show) {
       if(blockInserter && !blockInserter.classList.contains("hidden")){
         blockInserter.classList.add('hidden');
       }
-  
       if(inserterPointer && !inserterPointer.classList.contains("hidden")) {
         inserterPointer.classList.add('hidden');
       }
@@ -286,7 +285,7 @@ export function editorDOMEvents(options) {
         },
         input(view,event) {
           toggleInserter(view,false);
-        }
+        },
       },
       // nodeViews: {
       //   link(node, view, getPos) {

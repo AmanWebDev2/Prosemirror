@@ -37,6 +37,8 @@ class SelectionMenu {
 
     editorView.dom.parentNode.appendChild(this.menu);
 
+    this.editorRect = this.editorView.dom?.parentNode ? this.editorView.dom.parentNode.getBoundingClientRect(): null;
+
     // dropdown toggle
     const ruleSetPosBlockElm =
       editorView.dom.parentNode.querySelector(".rulset-position");
@@ -130,11 +132,11 @@ class SelectionMenu {
   handleRulset({ start, view }) {
     if (this.ruleSetPosBlockElm) {
       let topPos = +this.ruleSetPosBlockElm.style.top.replace("px", "");
-      if (Math.ceil(topPos) !== Math.ceil(start.top))
-        // console.log(view.dom.scrollTop,start.top);
-        // const scrollTop = view.dom.scrollTop;
-        this.ruleSetPosBlockElm.style.top = start.top + "px";
-      this.rulsetElm.style.display = "block";
+      let editorRectTop = this.editorRect.top ? this.editorRect.top : 0;
+      if (Math.ceil(topPos) !== Math.ceil(start.top)) {
+        this.ruleSetPosBlockElm.style.top = (Math.abs(editorRectTop - start.top)) + "px";
+      }
+        this.rulsetElm.style.display = "block";
     }
     if (this.attributeSelector) {
       this.attributeSelector.style.display = "none";

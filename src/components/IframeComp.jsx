@@ -1,12 +1,105 @@
-.App {
-  height: 100vh;
-}
+import React, { useEffect, useRef } from 'react'
+import Frame from "react-frame-component";
+import { Button } from 'react-bootstrap'
+import "bootstrap/dist/css/bootstrap.min.css";
 
-#editor{
-  width: 544px;
-  margin: 0 auto;
-}
+import Editor from './content-editable/Editor'
+const doc = {
+    type: "doc",
+    content: [
+      {
+        type: "paragraph",
+        content: [
+          {
+            type: "text",
+            text: "line one",
+          },
+        ],
+      },
+      {
+        type: "paragraph",
+        content: [
+          {
+            type: "text",
+            text: "line two",
+          },
+        ],
+      },
+      {
+        type: "paragraph",
+        content: [
+          {
+            type: "text",
+            text: "line three",
+          },
+        ],
+      },
+      {
+        type: "paragraph",
+        content: [
+          {
+            type: "text",
+            text: "🤞",
+          },
+        ],
+      },
+    ],
+  };
+const IframeComp = () => {
+    const iframeRef = useRef();
 
+    useEffect(() => {
+      const iframe = document.getElementById("kudoshub-editor-frame");
+      if (iframe) {
+        const iframeDoc = iframe.contentWindow
+          ? iframe.contentWindow.document
+          : null;
+        if (iframeDoc) {
+          // how to access css from a build folder,if it is accessable then we can directly append that css into iframe
+          // we have to only run build command everytime we changes in our css
+          // var link = document.createElement("link");
+          // link.href = `${BASE_URL}:5555/static/css/a.css`;
+          // link.rel = "stylesheet";
+          // link.type = "text/css";
+          // if (doc && doc.head) {
+          // doc.head.appendChild(link);
+        }
+      }
+      // console.log(iframe);
+    }, []);
+  return (
+    <Frame
+    ref={iframeRef}
+    id="kudoshub-editor-frame"
+    style={{
+      display: "block",
+      margin: "120px auto",
+      height: "100%",
+      width: "100%",
+      position: "fixed",
+      top: "0",
+      left: "0",
+    }}
+    initialContent='<!DOCTYPE html><html>
+      <head>
+        <link rel="stylesheet" href="./App.css"></link>
+        <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"
+        integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65"
+        crossorigin="anonymous"
+        />
+      </head>
+      <style>
+
+      body{
+        font-family: -apple-system, BlinkMacSystemFont,;
+      }
+      #editor{
+        width: 544px;
+        margin: 0 auto;
+      }
+      
 .ProseMirror {
 position: relative;
 }
@@ -21,7 +114,7 @@ max-height: 300px;
 overflow-y: scroll;
 padding: 0 26px 10px !important;
 }
-
+      
 .ProseMirror pre {
 white-space: pre-wrap;
 }
@@ -615,6 +708,7 @@ position: fixed;
 border: 1px dashed red;
 box-sizing: border-box;
 width:400px;
+// visibility:hidden;
 }
 
 .inserter-container {
@@ -642,3 +736,17 @@ visibility: visible;
 display: none;
 visibility:hidden;
 }
+
+      </style>
+      <body>
+        <div id="mountHere"></div>
+      </body>
+      </html>'
+  >
+    <Editor doc={doc} />
+    <Button>BOOTSTRAP WORKING INSIDE FRAME</Button>
+  </Frame>
+  )
+}
+
+export default IframeComp

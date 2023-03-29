@@ -1,17 +1,22 @@
-import React from 'react'
-// import { Link } from "react-router-dom";
+import React from "react";
+import { NavLink } from "react-router-dom";
 
 const Navbar = () => {
   return (
     <>
-    <nav>
-        <ul>
-            {/* <Link to='/'>ProseMirror</Link> */}
-            {/* <Link to='/slate-editor'>Slate</Link> */}
-        </ul>
-    </nav>
+      kdlnsfslkdnf
+      <nav>
+        <div className="d-flex justify-content-between w-25 mx-auto">
+          <div className="link">
+            <NavLink to="/">Home</NavLink>
+          </div>
+          <div className="link">
+            <NavLink to="/iframe">iframe</NavLink>
+          </div>
+        </div>
+      </nav>
     </>
-  )
-}
+  );
+};
 
-export default Navbar
+export default Navbar;
