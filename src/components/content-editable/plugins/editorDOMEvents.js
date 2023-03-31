@@ -124,9 +124,6 @@ function toggleInserter(view,show,iframe) {
   }
 }
 
-
- 
-
 // function handleRulesetMouseleave({e,blockInserterBtn,inserterPointer,rulset,blockInserterMenu,rulsetMenu}) {
 //   if((blockInserterMenu && blockInserterMenu.style.display == "block") || 
 //   (rulsetMenu && rulsetMenu.style.display == "block")

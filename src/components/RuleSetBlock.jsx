@@ -67,6 +67,7 @@ const RuleSetBlock = React.forwardRef(({ dropdownData,isFocused },ref) => {
           style={{
             position: "absolute",
             left,
+            top:0
           }}
         >
           <div className={`light-theme kh-popup-tiny rulesetBtn`}

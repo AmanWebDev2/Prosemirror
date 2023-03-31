@@ -25,14 +25,14 @@ export const handleMenuPosition=({view,isLinkActive,iframe,menu})=> {
             menu.style.top = start.bottom + "px"
             menu.style.left = left + "px"
         }else {
-            menu.style.transform = `translate(${left}px,${start.bottom}px)`; 
         }
+        menu.style.transform = `translate(${left}px,${start.bottom}px)`; 
       } else {
         if(iframe) {
-            menu.style.top = (start.top - offsetParentBox.top - box.height + view.dom.parentNode.scrollTop)+ "px";
-            menu.style.left = left + "px";
+          menu.style.top = (start.top - offsetParentBox.top - box.height + view.dom.parentNode.parentNode.scrollTop)+ "px";
+          menu.style.left = left + "px";
         }else {
-            menu.style.transform = `translate(${left}px,${(start.top - offsetParentBox.top - box.height)}px)`;
+          menu.style.transform = `translate(${left}px,${(start.top - offsetParentBox.top - box.height + view.dom.parentNode.scrollTop)}px)`;
         }
       }
     } catch (err) {

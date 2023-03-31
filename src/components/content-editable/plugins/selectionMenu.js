@@ -57,9 +57,8 @@ class SelectionMenu {
         menu: this.menu
       });
     }
-    console.log(this.isIframe)
     this.isIframe
-      ? editorView.dom.parentNode.appendChild(this.menu)
+      ? this.iframeDoc.getElementById("editor").parentNode.appendChild(this.menu)
       : document.body.appendChild(this.menu);
 
       let ruleSetPosBlockElm;
@@ -74,10 +73,10 @@ class SelectionMenu {
         const rulsetElm = this.ruleSetPosBlockElm.firstElementChild;
         this.rulsetElm = rulsetElm;
       }
-    this.update(editorView, null,this.isIframe);
+    this.update(editorView, null);
   }
 
-  update(view, lastState,isIframe) {
+  update(view, lastState) {
     const { state, readOnly } = view;
     const { from, to } = state.selection;
     const start = view.coordsAtPos(from);
@@ -93,7 +92,6 @@ class SelectionMenu {
 
     if (state?.selection?.node?.type?.name === IMAGE) {
     }
-
     // popoover
     switch (selectedNodeName) {
       case ATTRIBUTE_SPAN:
@@ -118,7 +116,7 @@ class SelectionMenu {
       if (this.menu.style.display !== "none") {
         this.menu.style.display = "none";
       }
-      this.handleRulset({ start, view });
+      this.handleRulset({ start, view, iframe:this.isIframe });
       return;
     }
 
@@ -137,10 +135,19 @@ class SelectionMenu {
 
   }
 
-  handleRulset({ start, view }) {
+  handleRulset({ start, view,iframe }) {
     if (this.ruleSetPosBlockElm) {
+      console.log(iframe);
+
+      if (iframe) {
       let editorRectTop = this.editorRect.top ? this.editorRect.top : 0;
-      this.ruleSetPosBlockElm.style.top = (Math.abs(editorRectTop - start.top)) + "px";
+        this.ruleSetPosBlockElm.style.top = (Math.abs(editorRectTop - start.top)) + "px";
+        this.ruleSetPosBlockElm.style.left =  (this.editorRect.right - 15) + "px";
+      }else {
+        this.ruleSetPosBlockElm.style.transform = `translate(${
+          this.editorRect.right - 15 + window.scrollX
+        }px, ${Math.abs(this.editorView.dom.scrollTop - start.top)}px)`;
+      }
       this.rulsetElm.style.display = "block";
     }
     if (this.attributeSelector) {
