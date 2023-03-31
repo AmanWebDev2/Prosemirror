@@ -9,6 +9,7 @@ import {
 import applyMark from "../../../utils/applyMark";
 import createPopup from "../../../utils/createPopup";
 import findNodesWithSameMark from "../../../utils/findNodeWithSameMark";
+import { handleMenuPosition } from "../../../utils/handleMenuPosition";
 import { markActive } from "../../../utils/markActive";
 import { MARK_LINK } from "../../schema/marks/Names";
 
@@ -84,6 +85,23 @@ export const linkItem = new MenuItem({
     const { from, to } = selection;
     const result = findNodesWithSameMark(doc, from, to, markType);
     const href = result ? result.mark.attrs.href : null;
+    const iframe = document.getElementById("kudoshub-editor-frame");
+    if(iframe) {
+      const iframeDoc = iframe.contentWindow.document;
+      if(!iframeDoc) return;
+      const smartLinkNode = iframeDoc.querySelector(".pm-selectionmenu");
+      const menu = iframeDoc.querySelector('.pm-selectionmenu');
+      if(smartLinkNode) {
+        handleMenuPosition({view:window.view,isLinkActive:true,menu,iframe:true})
+      }
+    }else {
+      const smartLinkNode = document.querySelector(".pm-selectionmenu");
+      const menu = document.querySelector('.pm-selectionmenu');
+      if(smartLinkNode && menu) {
+        handleMenuPosition({view:window.view,isLinkActive:true,menu,iframe:false})
+      }
+    }
+
     return new Promise((resolve) => {
       this._popUp = createPopup(
         LinkUrlEditor,
