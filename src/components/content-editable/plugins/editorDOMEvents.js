@@ -63,6 +63,7 @@ function handleblockInserterMouseleave({e,blockInserterBtn,inserterPointer,rulse
 
   if (
     e.toElement &&
+    e.toElement?.id !=="editor" &&
     !e.toElement.classList.contains("kudoshub-prosemirror-composer-editor")&&
     !e.toElement.pmViewDesc
   ) {
