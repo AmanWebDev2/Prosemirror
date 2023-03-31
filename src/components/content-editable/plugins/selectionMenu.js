@@ -121,7 +121,7 @@ class SelectionMenu {
     }
 
     // show selection menu
-    this.menu.style.display = "block";
+    this.menu.style.display = "inline-table";
     if (!this.menu.offsetParent) {
       if (this.menu.style.display !== "none") {
         this.menu.style.display = "none";

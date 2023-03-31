@@ -66,8 +66,8 @@ const RuleSetBlock = React.forwardRef(({ dropdownData,isFocused },ref) => {
           className="rulset-position hidden"
           style={{
             position: "absolute",
-            left,
-            top:0
+            inset:0,
+            display:'inline-table'
           }}
         >
           <div className={`light-theme kh-popup-tiny rulesetBtn`}

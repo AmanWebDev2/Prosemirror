@@ -81,7 +81,7 @@ class EditorUpdateObserver {
       // sm.setParent(state.plugins);
 
       const newState = state.reconfigure({
-        plugins: [...myPlugin, selectionMenu({ content: [tooltipMenuItems], iframe:true,elementClassNameToHandlingMenuPositionOnScroll:'scroll' })],
+        plugins: [...myPlugin, selectionMenu({ content: [tooltipMenuItems], iframe:false,elementClassNameToHandlingMenuPositionOnScroll:'scroll' })],
       });
 
       // console.log(view);
