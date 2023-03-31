@@ -1,10 +1,13 @@
 .App {
   height: 100vh;
+
 }
 
 #editor{
   width: 544px;
   margin: 0 auto;
+  max-height: 300px;
+  overflow-y: scroll;
 }
 
 .ProseMirror {
@@ -17,8 +20,6 @@ white-space: break-spaces;
 -webkit-font-variant-ligatures: none;
 font-variant-ligatures: none;
 font-feature-settings: "liga" 0;
-max-height: 300px;
-overflow-y: scroll;
 padding: 0 26px 10px !important;
 }
 

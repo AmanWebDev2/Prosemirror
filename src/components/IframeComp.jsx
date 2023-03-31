@@ -98,6 +98,8 @@ const IframeComp = () => {
       #editor{
         width: 544px;
         margin: 0 auto;
+        max-height: 300px;
+        overflow-y: scroll;
       }
       
 .ProseMirror {
@@ -110,8 +112,6 @@ white-space: break-spaces;
 -webkit-font-variant-ligatures: none;
 font-variant-ligatures: none;
 font-feature-settings: "liga" 0;
-max-height: 300px;
-overflow-y: scroll;
 padding: 0 26px 10px !important;
 }
       
@@ -743,7 +743,7 @@ visibility:hidden;
       </body>
       </html>'
   >
-    <Editor doc={doc} />
+    <Editor iframe={true} />
     <Button>BOOTSTRAP WORKING INSIDE FRAME</Button>
   </Frame>
   )

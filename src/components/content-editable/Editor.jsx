@@ -9,6 +9,7 @@ import { ATTRIBUTE_SPAN } from "./custom/schema/nodes/Names";
 import RuleSetBlock from "../RuleSetBlock";
 import { attributes } from "../../data/attributes";
 import BlockInserter from "../BlockInserter";
+import { createPortal } from "react-dom";
 
 const doc = prosmirrorSchema.nodeFromJSON(  {
   "type": "doc",
@@ -265,7 +266,7 @@ function handleObserver(mutations) {
   }
 }
 
-export default function Editor() {
+export default function Editor({iframe}) {
   const editorRef = useRef(null);
   const editorDom = useRef(null); 
   const rulsetRef = useRef(null);
@@ -352,15 +353,31 @@ export default function Editor() {
 
   return(
     <>
-     <div id="editor" ref={editorDom} onClick={handleEditorClick}>
-      <RuleSetBlock dropdownData={attributes} ref={rulsetRef} />
+     <div id="editor" className="scroll" ref={editorDom} onClick={handleEditorClick}>
+
+     {!iframe ?createPortal(
+        <RuleSetBlock dropdownData={attributes} ref={rulsetRef} />,
+        document.body
+      ):
+      editorDom.current &&
+      createPortal(
+        <RuleSetBlock dropdownData={attributes} ref={rulsetRef} />,
+        editorDom.current.parentNode
+      )
+    }
       <div className="pe-none prosemirror-composer-inserter-pointer-line hidden"
       style={{
         width:editorWidth+"px"
       }}
       >
      </div>
+
+     {!iframe ? createPortal(
+       <BlockInserter ref={blockInserterRef}/>,
+       document.body
+     ):
      <BlockInserter ref={blockInserterRef}/>
+    }
 
      </div>
      <button onClick={handleAddSpan}>ADD SPAN</button>

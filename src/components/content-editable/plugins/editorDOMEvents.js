@@ -9,14 +9,23 @@ function handleBlockInsterClick({ topHalf, view, lastNode }) {
   }
 }
 
-function handleHoveringElement({ event, lastNode, view }) {
+function handleHoveringElement({ event, lastNode, view, iframe,iframeDoc }) {
   const inserterPointer = view.dom.parentNode.querySelector(
     ".prosemirror-composer-inserter-pointer-line"
   );
-  const blockInserter = view.dom.parentNode.querySelector("#blockInserter");
-  const blockInserterBtn = view.dom.parentNode.querySelector(
-    "#blockInserter-dropdown"
-  );
+  let blockInserter;
+  let blockInserterBtn;
+  if(iframe) {
+    blockInserter = iframeDoc.querySelector("#blockInserter");
+    blockInserterBtn = iframeDoc.querySelector(
+      "#blockInserter-dropdown"
+    );
+  }else {
+    blockInserter = document.querySelector("#blockInserter");
+    blockInserterBtn = document.querySelector(
+      "#blockInserter-dropdown"
+    );
+  }
   const editorContainer = view.dom;
   const elmRect = lastNode.getBoundingClientRect();
   const editorContainerRect = editorContainer.getBoundingClientRect();
@@ -70,13 +79,27 @@ function handleblockInserterMouseleave({e,blockInserterBtn,inserterPointer,rulse
   }
 }
 
-function toggleInserter(view,show) {
+function toggleInserter(view,show,iframe) {
   if(view) {
+    let rulset;
+    let blockInserter;
+    if(iframe){
+      const iframe = document.getElementById("kudoshub-editor-frame");
+      if(!iframe) return; 
+      const iframeDoc = iframe.contentWindow
+          ? iframe.contentWindow.document
+          : null;
+      if (!iframeDoc) return;
+      rulset = iframeDoc.querySelector(".rulset-position");
+      blockInserter = iframeDoc.querySelector("#blockInserter");
+    }else {
+      blockInserter = document.querySelector("#blockInserter");
+      rulset = document.querySelector(".rulset-position");
+    }
     const inserterPointer = view.dom.parentNode.querySelector(
       ".prosemirror-composer-inserter-pointer-line"
     );
-    const rulset = view.dom.parentNode.querySelector(".rulset-position");
-    const blockInserter = view.dom.parentNode.querySelector("#blockInserter");
+
     if(!show) {
       if(blockInserter && !blockInserter.classList.contains("hidden")){
         blockInserter.classList.add('hidden');
@@ -91,7 +114,6 @@ function toggleInserter(view,show) {
       if(blockInserter && blockInserter.classList.contains("hidden")){
         blockInserter.classList.remove('hidden');
       }
-  
       if(inserterPointer && inserterPointer.classList.contains("hidden")) {
         inserterPointer.classList.remove('hidden');
       }
@@ -101,6 +123,7 @@ function toggleInserter(view,show) {
     }
   }
 }
+
 
  
 
@@ -126,17 +149,35 @@ function toggleInserter(view,show) {
 //   }
 // }
 
-function handleInserterAndRulsetLeave(view, event) {
-  const blockInserter = view.dom.parentNode.querySelector("#blockInserter");
+function handleInserterAndRulsetLeave(view, event,iframe,iframeDoc) {
   const inserterPointer = view.dom.parentNode.querySelector(
     ".prosemirror-composer-inserter-pointer-line"
   );
-  const blockInserterMenu = view.dom.parentNode.querySelector(
-    "#blockInserter_menu_wrapper"
-  );
-  const rulset = view.dom.parentNode.querySelector(".rulset-position");
-  const rulsetMenu = view.dom.parentNode.querySelector(".attribute-selector");
-  const blockInserterBtn = view.dom.parentNode.querySelector("#blockInserter-dropdown");
+  let blockInserter;
+  let blockInserterMenu;
+  let rulset;
+  let rulsetMenu;
+  let blockInserterBtn;
+
+  
+  if(iframe) {
+    blockInserter = iframeDoc.querySelector("#blockInserter");
+    blockInserterMenu = iframeDoc.querySelector(
+      "#blockInserter_menu_wrapper"
+    );
+    rulset = iframeDoc.querySelector(".rulset-position");
+    rulsetMenu = iframeDoc.querySelector(".attribute-selector");
+    blockInserterBtn = iframeDoc.querySelector("#blockInserter-dropdown");
+  }else {
+    blockInserter = document.querySelector("#blockInserter");
+    blockInserterMenu = document.querySelector(
+      "#blockInserter_menu_wrapper"
+    );
+    rulset = document.querySelector(".rulset-position");
+    rulsetMenu = document.querySelector(".attribute-selector");
+    blockInserterBtn = document.querySelector("#blockInserter-dropdown");
+  }
+
   if (
     event.toElement?.id !== "blockInserter-dropdown" &&
     event.toElement?.id !== "rulset-attribute" &&
@@ -171,7 +212,7 @@ function handleInserterAndRulsetLeave(view, event) {
   }
 }
 
-function handleMousemove(view, event) {
+function handleMousemove(view, event,iframe,iframeDoc) {
   const posAtCoords = view.posAtCoords({
     left: event.clientX,
     top: event.clientY,
@@ -195,18 +236,29 @@ function handleMousemove(view, event) {
     }
   }
   if (lastNode && parent) {
-    handleHoveringElement({ event, lastNode, view });
+    handleHoveringElement({ event, lastNode, view, iframe,iframeDoc });
   }
   return false;
 }
 
-function handleMouseEnter(view,event) {
+function handleMouseEnter(view,event,iframe,iframeDoc) {
   const inserterPointer = view.dom.parentNode.querySelector(
     ".prosemirror-composer-inserter-pointer-line"
   );
-  const blockInserterBtn = view.dom.parentNode.querySelector("#blockInserter-dropdown");
-  const blockInserter = view.dom.parentNode.querySelector("#blockInserter");
-  const rulset = view.dom.parentNode.querySelector(".rulset-position");
+ 
+  let blockInserterBtn;
+  let blockInserter;
+  let rulset;
+  if(iframe) {
+    blockInserter = iframeDoc.querySelector("#blockInserter");
+    blockInserterBtn = iframeDoc.querySelector("#blockInserter-dropdown");
+    rulset = iframeDoc.querySelector(".rulset-position");
+  }else {
+    blockInserter = document.querySelector("#blockInserter");
+    blockInserterBtn = document.querySelector("#blockInserter-dropdown");
+    rulset = document.querySelector(".rulset-position");
+
+  }
 
     if(inserterPointer) {
       inserterPointer.classList.remove('hidden');
@@ -236,55 +288,131 @@ export function editorDOMEvents(options) {
     props: {
       handleDOMEvents: {
         mousemove(view, event) {
-          const blockInserterMenu = view.dom.parentNode.querySelector(
-            "#blockInserter_menu_wrapper"
-          );
-          const rulsetMenu = view.dom.parentNode.querySelector(".attribute-selector");
+          const { iframe } = options;
+          let blockInserterMenu;
+          let rulsetMenu;
+          let iframeDoc;
+          if(iframe) {
+            const iframe = document.getElementById("kudoshub-editor-frame");
+            if(!iframe) return; 
+            iframeDoc = iframe.contentWindow
+                ? iframe.contentWindow.document
+                : null;
+            if (!iframeDoc) return;
+        
+            blockInserterMenu = iframeDoc.querySelector(
+              "#blockInserter_menu_wrapper"
+            );
+            rulsetMenu = iframeDoc.querySelector(".attribute-selector");
+          }else {
+            blockInserterMenu = document.querySelector("#blockInserter_menu_wrapper");
+            rulsetMenu = document.querySelector(".attribute-selector");
+          }
           
           if((blockInserterMenu && blockInserterMenu.style.display !== "block") &&
           (rulsetMenu && rulsetMenu.style.display !== "block")) {
-            toggleInserter(view,true);
-            handleMousemove(view, event);
+             // view, show,iframe
+             toggleInserter(view,true,iframe);
+            handleMousemove(view, event, iframe,iframeDoc);
           }
         },
         mouseenter(view, event) {
-          const blockInserterMenu = view.dom.parentNode.querySelector("#blockInserter_menu_wrapper");
-          const rulsetMenu = view.dom.parentNode.querySelector(".attribute-selector");
+          const { iframe } = options;
+          let blockInserterMenu;
+          let rulsetMenu;
+          let iframeDoc
+          if(iframe) {
+            const iframe = document.getElementById("kudoshub-editor-frame");
+            if(!iframe) return; 
+            iframeDoc = iframe.contentWindow
+                ? iframe.contentWindow.document
+                : null;
+            if (!iframeDoc) return;
+            
+            blockInserterMenu = iframeDoc.querySelector(
+              "#blockInserter_menu_wrapper"
+            );
+            rulsetMenu = iframeDoc.querySelector(".attribute-selector");
+          }else {
+            blockInserterMenu = document.querySelector("#blockInserter_menu_wrapper");
+            rulsetMenu = document.querySelector(".attribute-selector");
+          }
 
           if(
-          blockInserterMenu.style.display == "block" ||
+            blockInserterMenu && blockInserterMenu.style.display == "block" ||
           rulsetMenu && rulsetMenu.style.display == "block"
           ) return;
-          handleMouseEnter(view,event)
+          handleMouseEnter(view,event,iframe,iframeDoc)
         },
         mouseleave(view, event) {
-          const rulsetMenu = view.dom.parentNode.querySelector(".attribute-selector");
+          const { iframe } = options;
+          let blockInserterMenu;
+          let rulsetMenu;
+          let iframeDoc;
+          if(iframe) {
+            const iframe = document.getElementById("kudoshub-editor-frame");
+            if(!iframe) return; 
+            iframeDoc = iframe.contentWindow
+                ? iframe.contentWindow.document
+                : null;
+            if (!iframeDoc) return;
+            
+            blockInserterMenu = iframeDoc.querySelector(
+              "#blockInserter_menu_wrapper"
+            );
+            rulsetMenu = iframeDoc.querySelector(".attribute-selector");
+          }else {
+            blockInserterMenu = document.querySelector("#blockInserter_menu_wrapper");
+            rulsetMenu = document.querySelector(".attribute-selector");
+          }
 
-          const blockInserterMenu = view.dom.parentNode.querySelector(
-            "#blockInserter_menu_wrapper"
-          );
           if((blockInserterMenu && blockInserterMenu.style.display !== "block") &&
           (rulsetMenu && rulsetMenu.style.display !== "block")) {
             // toggleInserter(view,false);
-            handleInserterAndRulsetLeave(view, event);
+            handleInserterAndRulsetLeave(view, event,iframe,iframeDoc);
           }
         },
         focus(view,event) {
-          const rulsetMenu = view.dom.parentNode.querySelector(".attribute-selector");
-          const rulsetBtn = view.dom.parentNode.querySelector("#rulesetBtn");
+           const { iframe } = options;
+          let rulsetBtn;
+          let rulsetMenu;
+          let iframeDoc;
+          if(iframe) {
+            const iframe = document.getElementById("kudoshub-editor-frame");
+            if(!iframe) return; 
+            iframeDoc = iframe.contentWindow
+                ? iframe.contentWindow.document
+                : null;
+            if (!iframeDoc) return;
+
+            rulsetBtn = iframeDoc.querySelector(
+              "#rulesetBtn"
+            );
+            rulsetMenu = iframeDoc.querySelector(".attribute-selector");
+          }else {
+            rulsetBtn = document.querySelector("#rulesetBtn");
+            rulsetMenu = document.querySelector(".attribute-selector");
+          }
+
           if(rulsetMenu && rulsetMenu.style.display !== "none") {
             rulsetMenu.style.display = "none";
           }
           if(rulsetBtn && rulsetBtn.style.display !== "block") {
             rulsetBtn.style.display = "block";
           }
-          toggleInserter(view,false)
+          // view, show,iframe
+          toggleInserter(view,true,iframe);
         },
         scroll(view,event) {
-          toggleInserter(view,false);
+          const { iframe } = options;
+          
+          // view, show,iframe
+          toggleInserter(view,true,iframe);
         },
         input(view,event) {
-          toggleInserter(view,false);
+          const { iframe } = options;
+          // view, show,iframe
+          toggleInserter(view,true,iframe);
         },
       },
       // nodeViews: {
