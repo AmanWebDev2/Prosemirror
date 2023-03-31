@@ -20,7 +20,7 @@ export const plugins = [
   keymap({ "Mod-z": undo, "Mod-y": redo }),
   keymap(buildKeymap(prosmirrorSchema)),
   keymap(baseKeymap),
-  selectionMenu({ content: [tooltipMenuItems] }),
+  selectionMenu({ content: [tooltipMenuItems],iframe:false }),
   editorDOMEvents(),
   editorUpdateObserver(),
   buildInputRules(prosmirrorSchema),

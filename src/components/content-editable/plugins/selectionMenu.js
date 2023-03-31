@@ -7,6 +7,7 @@ import {
   IMAGE,
   VIDEO_CLIP,
 } from "../custom/schema/nodes/Names";
+import { handleMenuPosition } from "../utils/handleMenuPosition";
 
 export function selectionMenu(options) {
   return new Plugin({
@@ -18,9 +19,7 @@ export function selectionMenu(options) {
 }
 
 class SelectionMenu {
-  updatePlugin() {}
-  showRuleSetItem = false;
-  isEditorFocused = true;
+
   constructor(editorView, options) {
     this.editorView = editorView;
     this.options = options;
@@ -33,11 +32,24 @@ class SelectionMenu {
     let { dom, update } = renderGrouped(this.editorView, this.options.content);
 
     this.contentUpdate = update;
-    this.menu.appendChild(dom);
-
-    editorView.dom.parentNode.appendChild(this.menu);
+    this.menu.appendChild(dom);    
+    this.isIframe = this.options.iframe;
 
     this.editorRect = this.editorView.dom?.parentNode ? this.editorView.dom.parentNode.getBoundingClientRect(): null;
+
+    // update editorView everyTime
+    // update menu positioning on scroll
+    if (this.options.elementClassNameToHandlingMenuPositionOnScroll) {
+      this.menuPosition({
+        className: this.options.elementClassNameToHandlingMenuPositionOnScroll,
+        view: editorView,
+        iframe: this.isIframe,
+      });
+    }
+
+    this.isIframe
+      ? editorView.dom.parentNode.appendChild(this.menu)
+      : document.body.appendChild(this.menu);
 
     // dropdown toggle
     const ruleSetPosBlockElm =
@@ -48,10 +60,10 @@ class SelectionMenu {
       const rulsetElm = this.ruleSetPosBlockElm.firstElementChild;
       this.rulsetElm = rulsetElm;
     }
-    this.update(editorView, null);
+    this.update(editorView, null,this.isIframe);
   }
 
-  update(view, lastState) {
+  update(view, lastState,isIframe) {
     const { state, readOnly } = view;
     const { from, to } = state.selection;
     const start = view.coordsAtPos(from);
@@ -107,41 +119,21 @@ class SelectionMenu {
     // Update the Content state before calculating the position
     this.contentUpdate(this.editorView.state);
 
-    try {
-      let box = this.menu.getBoundingClientRect();
+    handleMenuPosition({ view, iframe:isIframe});
 
-      let offsetParentBox = this.menu.offsetParent.getBoundingClientRect();
-      let left =
-        (start.left + end.left) / 2 - box.width / 2 - offsetParentBox.left;
-      if (left < 5) {
-        left = 5;
-      }
-      this.menu.style.left = left + "px";
-      if (
-        markActive(state, state.schema.marks.link) &&
-        !(!state || readOnly || state.selection.from !== state.selection.to)
-      ) {
-        this.menu.style.top = start.bottom + "px";
-      } else {
-        this.menu.style.top =
-          start.top - offsetParentBox.top - box.height + "px";
-      }
-    } catch (err) {}
   }
 
   handleRulset({ start, view }) {
     if (this.ruleSetPosBlockElm) {
-      let topPos = +this.ruleSetPosBlockElm.style.top.replace("px", "");
       let editorRectTop = this.editorRect.top ? this.editorRect.top : 0;
-      if (Math.ceil(topPos) !== Math.ceil(start.top)) {
-        this.ruleSetPosBlockElm.style.top = (Math.abs(editorRectTop - start.top)) + "px";
-      }
-        this.rulsetElm.style.display = "block";
+      this.ruleSetPosBlockElm.style.top = (Math.abs(editorRectTop - start.top)) + "px";
+      this.rulsetElm.style.display = "block";
     }
     if (this.attributeSelector) {
       this.attributeSelector.style.display = "none";
     }
   }
+
   handleAttributeSelectionPosition() {
     const { state } = this.editorView;
     const { from } = state.selection;
@@ -165,6 +157,28 @@ class SelectionMenu {
       }
     }
   }
+
+  menuPosition({className,view,iframe}) {
+    if(className) {
+      let elements;
+      if(iframe){
+        const iframe = document.getElementById("kudoshub-editor-frame");
+        if(!iframe) return;
+        const iframeDoc = iframe.contentWindow.document;
+        if(!iframeDoc) return;
+        elements = iframeDoc.getElementsByClassName(className);
+      }else {
+        elements = document.getElementsByClassName(className);
+      }
+      if(elements && elements.length > 0) {
+        Array.from(elements).forEach(element => {
+          element.onscroll = () => handleMenuPosition({view,iframe})            
+        });
+      }
+    }
+
+  }
+
 
   destroy() {
     if (this.menu) {
