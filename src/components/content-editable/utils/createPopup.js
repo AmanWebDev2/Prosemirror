@@ -26,8 +26,13 @@ function renderPopUp(
   popUpParams
 ) {
   // const rootNode = getRootElement(rootId, true, popUpParams);
-  const iframe = document.getElementById('kudoshub-editor-frame');
-  const tooltip = iframe.contentWindow.document.querySelector('.pm-selectionmenu');
+  let tooltip;
+  if(popUpParams.isIframe) {
+    const iframe = document.getElementById('kudoshub-editor-frame');
+    tooltip = iframe.contentWindow.document.querySelector('.pm-selectionmenu');
+  }else {
+    tooltip = document.querySelector('.pm-selectionmenu');
+  }
   const component = (
     <Popup
       View={View}
