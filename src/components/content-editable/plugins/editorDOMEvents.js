@@ -417,7 +417,7 @@ export function editorDOMEvents(options) {
             rulsetBtn.style.display = "block";
           }
           // view, show,iframe
-          toggleInserter(view,true,iframe);
+          toggleInserter(view,false,iframe);
         },
         scroll(view,event) {
           const { iframe } = options;
