@@ -410,7 +410,7 @@ export function editorDOMEvents(options) {
         input(view,event) {
           const { iframe } = options;
           // view, show,iframe
-          toggleInserter(view,true,iframe);
+          toggleInserter(view,false,iframe);
         },
       },
       // nodeViews: {
