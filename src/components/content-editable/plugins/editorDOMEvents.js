@@ -80,7 +80,7 @@ function handleblockInserterMouseleave({e,blockInserterBtn,inserterPointer,rulse
   }
 }
 
-function toggleInserter(view,show,iframe) {
+export function toggleInserter(view,show,iframe) {
   if(view) {
     let rulset;
     let blockInserter;
@@ -324,6 +324,12 @@ export function editorDOMEvents(options) {
              // view, show,iframe
              toggleInserter(view,true,iframe);
             handleMousemove(view, event, iframe,iframeDoc);
+          }
+          const { state, } = view;
+          if (
+            !state.selection.empty 
+          ) {
+            toggleInserter(view,false,iframe);
           }
         },
         mouseenter(view, event) {

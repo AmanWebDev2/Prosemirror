@@ -8,6 +8,7 @@ import {
   VIDEO_CLIP,
 } from "../custom/schema/nodes/Names";
 import { handleMenuPosition } from "../utils/handleMenuPosition";
+import { toggleInserter } from "./editorDOMEvents";
 
 export function selectionMenu(options) {
   return new Plugin({
@@ -122,6 +123,7 @@ class SelectionMenu {
 
     // show selection menu
     this.menu.style.display = "inline-table";
+    toggleInserter(view,false,this.isIframe);
     if (!this.menu.offsetParent) {
       if (this.menu.style.display !== "none") {
         this.menu.style.display = "none";
