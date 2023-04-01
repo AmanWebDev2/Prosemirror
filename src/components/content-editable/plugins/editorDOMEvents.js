@@ -238,7 +238,14 @@ function handleMousemove(view, event,iframe,iframeDoc) {
   }
   return false;
 }
-
+function getTranslateXY(element) {
+  const style = window.getComputedStyle(element)
+  const matrix = new DOMMatrixReadOnly(style.transform)
+  return {
+      translateX: matrix.m41,
+      translateY: matrix.m42
+  }
+}
 function handleMouseEnter(view,event,iframe,iframeDoc) {
   const inserterPointer = view.dom.parentNode.querySelector(
     ".prosemirror-composer-inserter-pointer-line"
@@ -256,7 +263,9 @@ function handleMouseEnter(view,event,iframe,iframeDoc) {
     blockInserterBtn = document.querySelector("#blockInserter-dropdown");
     rulset = document.querySelector(".rulset-position");
 
-  }
+  } 
+  const domRect = view.dom.getBoundingClientRect();
+  const blockInserterRect = blockInserter.getBoundingClientRect();
 
     if(inserterPointer) {
       inserterPointer.classList.remove('hidden');
@@ -264,6 +273,10 @@ function handleMouseEnter(view,event,iframe,iframeDoc) {
     }
     if(rulset) {
       rulset.classList.remove('hidden');
+      const transform = getTranslateXY(rulset);
+      rulset.style.transform = `translate(${
+        domRect.right - 15 + window.scrollX
+      }px, ${transform.translateY}px)`;
     }
     if(blockInserterBtn){
       blockInserterBtn.classList.remove('hidden');
@@ -271,8 +284,7 @@ function handleMouseEnter(view,event,iframe,iframeDoc) {
     
     if(blockInserter) {
       blockInserter.classList.remove('hidden')
-      const domRect = view.dom.getBoundingClientRect();
-      const blockInserterRect = blockInserter.getBoundingClientRect();
+   
       blockInserter.style.left = `-15px`
       blockInserter.style.transform = `translate(${domRect.left}px,${
         event.y - blockInserterRect.height / 2
