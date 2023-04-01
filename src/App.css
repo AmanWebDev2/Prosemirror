@@ -666,3 +666,8 @@ img.ProseMirror-separator {
   display: none;
   visibility: hidden;
 }
+
+.attech-button svg {
+  height: 22px;
+  width: min-content;
+}

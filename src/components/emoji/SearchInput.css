@@ -1,0 +1,12 @@
+.kudosHub-emoji-search-input {
+  width: 90%;
+  margin: 15px auto;
+  padding-bottom: 8px;
+  border: none;
+  border-bottom: 1px solid rgb(238,238,238);
+  outline: none;
+  display: block;
+}
+.kudosHub-emoji-search-input::placeholder {
+  color: lightgray;
+}

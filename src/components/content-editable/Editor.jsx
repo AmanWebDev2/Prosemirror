@@ -10,6 +10,7 @@ import RuleSetBlock from "../RuleSetBlock";
 import { attributes } from "../../data/attributes";
 import BlockInserter from "../BlockInserter";
 import { createPortal } from "react-dom";
+import MessageBarInsert from "../MessageBarInserter";
 
 const doc = prosmirrorSchema.nodeFromJSON(  {
   "type": "doc",
@@ -384,6 +385,7 @@ export default function Editor({iframe}) {
     }
 
      </div>
+     {/* <MessageBarInsert/> */}
      <button onClick={handleAddSpan}>ADD SPAN</button>
      <button onClick={()=>{
         const view = editorRef.current;
