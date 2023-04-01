@@ -114,6 +114,7 @@ export const linkItem = new MenuItem({
               resolve(val);
             }
           },
+          isIframe: iframe ? true : false
         }
       );
     });
