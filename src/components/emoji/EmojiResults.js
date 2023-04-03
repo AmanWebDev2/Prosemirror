@@ -5,7 +5,7 @@ import { useEffect } from "react";
 
 const EmojiResults=(props)=>{
     const [isLoading,setIsLoading] = useState(true);
-    const [arrayss,setArrayss] = useState([]);
+    const [emoji,setEmoji] = useState([]);
 
     const groupBy = (list, key) => {
       let groups = list.reduce(
@@ -37,7 +37,7 @@ const EmojiResults=(props)=>{
             ))
           );
         }
-        setArrayss(array);
+        setEmoji(array);
       }
     },[]);
 
@@ -45,7 +45,7 @@ const EmojiResults=(props)=>{
       <div className="component-emoji-results">
         <div>
           {isLoading}
-          {arrayss}
+          {emoji}
         </div>
       </div>
     );
