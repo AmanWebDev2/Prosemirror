@@ -141,7 +141,7 @@ class SelectionMenu {
     if (this.ruleSetPosBlockElm) {
       console.log(iframe);
 
-      if (iframe) {
+      if (!iframe) {
       let editorRectTop = this.editorRect.top ? this.editorRect.top : 0;
         this.ruleSetPosBlockElm.style.top = (Math.abs(editorRectTop - start.top)) + "px";
         this.ruleSetPosBlockElm.style.left =  (this.editorRect.right - 15) + "px";
