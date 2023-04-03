@@ -1,67 +1,59 @@
-import React, { createRef, Component } from "react";
+import React, { useState,useRef,useEffect } from "react";
+import Tenor from "react-tenor";
+
 import SearchInput from "./SearchInput";
 import EmojiResults from "./EmojiResults";
 import filterEmoji from "./filterEmoji";
-import Tenor from "react-tenor";
-import "./Emoji.css";
 import isEmpty from "../../utils/isEmpty";
-export default class Emoji extends Component {
-  constructor(props) {
-    super();
-    this.state = {
-      filteredEmoji: filterEmoji(""),
-    };
-    this.node = React.createRef();
-    this.inputRef = React.createRef();
-  }
-  getEmoji(e) {
-    this.props.getEmoji(e);
+import "./Emoji.css";
+
+const Emoji =(props)=> {
+  const inputRef = useRef();
+  const node = useRef();
+  const [filteredEmoji,setFilteredEmoji] = useState(()=>filterEmoji(''));
+
+  const getEmoji=(e)=> {
+    props.getEmoji(e);
   }
 
-  // handleNewUserMessage(e, message) {
-  //   console.log("emoji.js");
-  //   this.props.handleNewUserMessage(e, message, "gif");
-  // }
-  componentDidMount() {
-    if(this.inputRef.current) {
-      this.inputRef.current.focus();
+  useEffect(()=>{
+    if(inputRef.current) {
+      inputRef.current.focus();
     }
-    // document.removeEventListener('mouseup', this.handleMouseDown)
-  }
+  },[]);
 
-  componentDidUpdate(prevProps, prevState) {
+  useEffect(()=>{
     if (
-      this.props.showPopoverOf === "showEmoji" ||
-      this.props.showPopoverOf === "showGIF"
+      props.showPopoverOf === "showEmoji" ||
+      props.showPopoverOf === "showGIF"
     ) {
-      document.addEventListener("click", this.handleMouseDown);
-      this.inputRef.current.focus();
+      document.addEventListener("click", handleMouseDown);
+      inputRef.current.focus();
     }
-    if (this.props.showPopoverOf === "") {
-      document.removeEventListener("click", this.handleMouseDown);
+    if (props.showPopoverOf === "") {
+      document.removeEventListener("click", handleMouseDown);
     }
-  }
+  },[props.showPopoverOf]);
 
-  handleMouseDown = (e) => {
-    if (!this.node.current.contains(e.target)) {
-      if (this.props.showPopoverOf === "showEmoji") {
-        // this.props.emojiHide();
+  
+  const handleMouseDown = (e) => {
+    if (!node.current.contains(e.target)) {
+      if (props.showPopoverOf === "showEmoji") {
+        // props.emojiHide();
       }
-      if (this.props.showPopoverOf === "showGIF") {
-        this.props.gifHide();
+      if (props.showPopoverOf === "showGIF") {
+        // props.gifHide();
       }
     }
   };
 
-  handleSearchChange = (event) => {
-    this.setState({
-      filteredEmoji: filterEmoji(event.target.value),
-    });
+  const handleSearchChange = (event) => {
+    setFilteredEmoji(filterEmoji(event.target.value));
   };
 
-  handleSelectedGif = (result) => {
-    if (this.props.handleNewUserMessage) {
-        this.props.handleNewUserMessage(
+  const handleSelectedGif = (result) => {
+    if (props.handleNewUserMessage) {
+        props.handleNewUserMessage(
           null,
           {
             text: result.media[0].gif.url,
@@ -73,7 +65,7 @@ export default class Emoji extends Component {
           "gif"
         );  
     } else {
-        this.props.handleNewUserNote(
+        props.handleNewUserNote(
           null,
           {
             text: result.media[0].gif.url,
@@ -84,54 +76,56 @@ export default class Emoji extends Component {
           },
           "gif"
         );
-      }
+    }
   };
 
-  render() {
-    const emojiStyle = {
-      fontFamily: `Apple Color Emoji,Segoe UI Emoji,NotoColorEmoji, Segoe UI Symbol,Android Emoji, EmojiSymbols,sans-serif`,
-      fontSize: `30px`,
-    };
-    const emojiResults = (
+  const emojiResults = (
       <EmojiResults
-        emojiData={this.state.filteredEmoji}
-        getEmoji={this.props.getEmoji}
+        emojiData={filteredEmoji}
+        getEmoji={props.getEmoji}
       />
     );
-    return ( this.props.showPopoverOf !== '' ? 
-    <div id="popoverWrapper" className="position-relative" ref={this.node}>
-      <div className="popover" role="tooltip">
-        <div className="popover-content">
-            {this.props.showPopoverOf === "showEmoji" ? (
-              <div>
-                <SearchInput textChange={this.handleSearchChange} inputRef={this.inputRef}/>
-                <div className="kudosHub-emoji-container">
-                  { !isEmpty(emojiResults.props.emojiData)
-                      ? emojiResults
-                      : <div className="position-absolute" style={{top: '50%',left: '50%',transform: 'translate(-50%, 0%)', width: 'fit-content'}}>No emoji could be found</div>
-                  }
-                </div>
+
+  return(
+    <>
+    {
+      props.showPopoverOf !== '' ? 
+        <div id="popoverWrapper" className="position-relative" ref={node}>
+          <div className="popover" role="tooltip">
+            <div className="popover-content">
+                {props.showPopoverOf === "showEmoji" ? (
+                  <div>
+                    <SearchInput textChange={handleSearchChange} inputRef={inputRef}/>
+                    <div className="kudosHub-emoji-container">
+                      { !isEmpty(emojiResults.props.emojiData)
+                          ? emojiResults
+                          : <div className="position-absolute" style={{top: '50%',left: '50%',transform: 'translate(-50%, 0%)', width: 'fit-content'}}>No emoji could be found</div>
+                      }
+                    </div>
+                  </div>
+                ) : (
+                  ""
+                )}
+                {props.showPopoverOf === "showGIF" ? (
+                  <div style={{minHeight: '297px'}}>
+                    <Tenor
+                      token="4DMAAOTF6Q0C"
+                      onSelect={(result) => handleSelectedGif(result)}
+                      defaultResults={true}
+                      searchPlaceholder="Search GIFs"
+                      ref={inputRef}
+                    />
+                  </div>
+                ) : (
+                  ""
+                )}
               </div>
-            ) : (
-              ""
-            )}
-            {this.props.showPopoverOf === "showGIF" ? (
-              <div style={{minHeight: '297px'}}>
-                <Tenor
-                  token="4DMAAOTF6Q0C"
-                  onSelect={(result) => this.handleSelectedGif(result)}
-                  defaultResults={true}
-                  searchPlaceholder="Search GIFs"
-                  ref={this.inputRef}
-                />
-              </div>
-            ) : (
-              ""
-            )}
+            </div>
           </div>
-        </div>
-      </div>
-      : ''
-    )
-  }
+          : ''
+        }
+    </>
+  )
 }
+
+export default Emoji;
