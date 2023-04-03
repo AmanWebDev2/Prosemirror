@@ -703,3 +703,33 @@ img.ProseMirror-separator {
     border-radius: 8px;
     background-clip: padding-box;
 }
+
+.kudoshub-prosemirror-composer-icon-btn{
+  font-size: 14px;
+  line-height: 18px;
+  font-weight: 500;
+  border: none;
+  border-radius: 8px;
+  padding: 7px 8px 7px;
+  display: inline-block;
+  text-decoration: none;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+  box-sizing: border-box;
+  transition: box-shadow linear 40ms;
+  vertical-align: bottom;
+  background-color: transparent;
+  background-clip: padding-box;
+}
+
+.attribute-btn{
+  background-color: #fefefe;
+  box-shadow: 0 4px 14px 0 rgba(0,0,0,.3);
+  white-space: nowrap;
+  border-radius: 8px;
+  background-clip: padding-box;
+  padding: 10px;
+  z-index: 10000;
+}

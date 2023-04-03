@@ -270,17 +270,18 @@ const BlockInserter = React.forwardRef((props,ref) => {
   return (
     <>
     <Dropdown className="inserter-container hidden" id="blockInserter">
-      <Dropdown.Toggle
+      <button
       onClick={()=>setShow(!show)}
       style={{
         display:show ? 'none': 'block'
       }}
-        className="attribute-btn hidden"
+        className="attribute-btn kudoshub-prosemirror-composer-icon-btn hidden"
         variant="success"
         id="blockInserter-dropdown"
       >
+        click
         {/* <img src={} alt="" /> */}
-      </Dropdown.Toggle>
+      </button>
 
       <div style={{
         display:show ? 'block' : 'none'
