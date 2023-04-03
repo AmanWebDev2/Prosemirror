@@ -128,6 +128,7 @@ const BlockInserter = React.forwardRef((props,ref) => {
           ]);
           insertAtPos({insertionPos: window.view.insertionPos,newNode:content })
           window.view.focus();
+          setShow(false);
           break;
         case "Numbered List":
           itemType = prosmirrorSchema.nodes.list_item;
@@ -135,6 +136,7 @@ const BlockInserter = React.forwardRef((props,ref) => {
           ]);
           insertAtPos({insertionPos: window.view.insertionPos,newNode:content })
           window.view.focus();
+          setShow(false);
           break;
         case "Insert code":
           itemType = prosmirrorSchema.nodes.code_block;
@@ -142,6 +144,7 @@ const BlockInserter = React.forwardRef((props,ref) => {
           ]);
           insertAtPos({insertionPos: window.view.insertionPos,newNode:content })
           window.view.focus();
+          setShow(false);
           break;
         case "Insert emoji":
           setShowEmoji(true);
@@ -161,6 +164,7 @@ const BlockInserter = React.forwardRef((props,ref) => {
             });
             insertAtPos({ insertionPos: window.view.insertionPos,newNode:imageNode })
            });
+           setShow(false);
           break;
         case "Attach file":
          
@@ -178,6 +182,7 @@ const BlockInserter = React.forwardRef((props,ref) => {
             )
             insertAtPos({insertionPos: window.view.insertionPos,newNode:content })   
           })
+          setShow(false);
           break;
         case "Embed video":
         
