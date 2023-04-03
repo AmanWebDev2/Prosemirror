@@ -3,6 +3,10 @@ import React,{useState,useImperativeHandle} from "react";
 import { Dropdown } from "react-bootstrap";
 import { prosmirrorSchema } from "./content-editable/custom/schema/schema";
 import convertToBase64 from "./content-editable/utils/convert";
+import Emoji from "./emoji/Emoji";
+import EmojiUploader from "./EmojiUploader";
+import data from '@emoji-mart/data'
+import Picker from '@emoji-mart/react'
 
 const ITEM = [
   {
@@ -94,32 +98,26 @@ view.dispatch(tr.setSelection(selection));
 
 const BlockInserter = React.forwardRef((props,ref) => {
     const [show,setShow] = useState(false);
+    const [showEmoji,setShowEmoji] = useState(false);
+  const [showPopoverOf, setShowPopoverOf] = useState("");
 
-    const insertAtPos=({insertionPos,newNode})=>{
-      const { view } = window
-      // const newNode = view.state.schema.nodes[ATTRIBUTE_SPAN].create({
-      //   "data-template-identifier":"custom"
-      // }, [view.state.schema.text("custom")]);
-      console.log(newNode)
-      // Create a new transaction to insert the node
-      const tr = view.state.tr.insert(insertionPos, newNode);
-      
-      // Apply the transaction to the editor state
-      const newState = view.state.apply(tr);
-      // Set the selection to the end of the inserted text
-      const selection = TextSelection.near(newState.doc.resolve(insertionPos));
-      view.dispatch(tr.setSelection(selection));
-    }
-    const handleChange = async(file) => {
-      // const formData = new FormData();
-      // formData.append('file',file);
-      // console.log(formData)
-      const base64 = await convertToBase64(file)
-      return base64
+  const insertAtPos=({insertionPos,newNode})=>{
+    const { view } = window
+    // Create a new transaction to insert the node
+    const tr = view.state.tr.insert(insertionPos, newNode);
+    // Apply the transaction to the editor state
+    const newState = view.state.apply(tr);
+    // Set the selection to the end of the inserted text
+    const selection = TextSelection.near(newState.doc.resolve(insertionPos));
+    view.dispatch(tr.setSelection(selection));
+  }
+
+  const handleChange = async(file) => {
+    const base64 = await convertToBase64(file)
+    return base64
   };
 
   const handleInsertBlock = (item) => {
-      console.log(window.view);
       let itemType;
       let content;
       const input = document.createElement("input");
@@ -148,7 +146,7 @@ const BlockInserter = React.forwardRef((props,ref) => {
           window.view.focus();
           break;
         case "Insert emoji":
-           
+          setShowEmoji(true);
           break;
         case "Insert image":
            input.type = "file";
@@ -157,14 +155,12 @@ const BlockInserter = React.forwardRef((props,ref) => {
            input.addEventListener("change",async(e)=>{
             const { target: { files } } = e
             const base64 = await convertToBase64(files[0])
-            console.log(base64);
             itemType = prosmirrorSchema.nodes.image;
             const imageNode = itemType.create({
               src: base64,
               alt: "random",
             });
-            insertAtPos({insertionPos: window.view.insertionPos,newNode:imageNode })
-
+            insertAtPos({ insertionPos: window.view.insertionPos,newNode:imageNode })
            });
           break;
         case "Attach file":
@@ -204,7 +200,17 @@ const BlockInserter = React.forwardRef((props,ref) => {
 
   }, [show]);
 
+  const handleEmoji=(e)=>{
+    if(!(e || e.target || e.target.innerText)) return;
+    // get cursor pos
+    const { state, dispatch } = window.view;
+    const { from } = state.selection;
+    dispatch(state.tr.insertText(e.target.innerText, from, from));
+
+  }
+
   return (
+    <>
     <Dropdown className="inserter-container hidden" id="blockInserter">
       <Dropdown.Toggle
       onClick={()=>setShow(!show)}
@@ -223,6 +229,8 @@ const BlockInserter = React.forwardRef((props,ref) => {
       }}
       id="blockInserter_menu_wrapper"
       >
+        {
+        !showEmoji ?
         <div className="attributes-item-container">
           {ITEM.map((data, index) => {
             return (
@@ -235,9 +243,17 @@ const BlockInserter = React.forwardRef((props,ref) => {
               </div>
             );
           })}
-        </div>
+        </div> :
+          // <Picker data={data} onEmojiSelect={handleEmojiSelect} theme="light" />
+          <Emoji 
+          showPopoverOf="showEmoji" 
+          getEmoji={handleEmoji}
+          // handleNewUserMessage={handleGIF}
+         />
+        }
       </div>
     </Dropdown>
+    </>
   );
 });
 

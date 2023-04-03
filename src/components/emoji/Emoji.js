@@ -12,10 +12,6 @@ const Emoji =(props)=> {
   const node = useRef();
   const [filteredEmoji,setFilteredEmoji] = useState(()=>filterEmoji(''));
 
-  const getEmoji=(e)=> {
-    props.getEmoji(e);
-  }
-
   useEffect(()=>{
     if(inputRef.current) {
       inputRef.current.focus();
