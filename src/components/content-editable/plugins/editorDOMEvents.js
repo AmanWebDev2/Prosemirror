@@ -265,8 +265,6 @@ function handleMouseEnter(view,event,iframe,iframeDoc) {
 
   } 
   const domRect = view.dom.getBoundingClientRect();
-  const blockInserterRect = blockInserter.getBoundingClientRect();
-
     if(inserterPointer) {
       inserterPointer.classList.remove('hidden');
       inserterPointer.style.top = `${event.y}px`
@@ -291,8 +289,8 @@ function handleMouseEnter(view,event,iframe,iframeDoc) {
     
     if(blockInserter) {
       blockInserter.classList.remove('hidden')
-   
-      blockInserter.style.left = `-15px`
+     const blockInserterRect = blockInserter.getBoundingClientRect();
+      blockInserter.style.left = `-30px`
       blockInserter.style.transform = `translate(${domRect.left}px,${
         event.y - blockInserterRect.height / 2
       }px)`
