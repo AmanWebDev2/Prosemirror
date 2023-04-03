@@ -344,6 +344,7 @@ export default function Editor({iframe}) {
 
 
   const handleEditorClick=(e)=>{
+    e.stopPropagation();
     if(rulsetRef.current) {
       rulsetRef.current.closeRuleSetMenu()
     }
@@ -354,7 +355,7 @@ export default function Editor({iframe}) {
 
   return(
     <>
-     <div id="editor" className="scroll" ref={editorDom} onClick={handleEditorClick}>
+     <div id="editor" className="scroll" ref={editorDom} >
 
      {!iframe ?createPortal(
         <RuleSetBlock dropdownData={attributes} ref={rulsetRef} />,
@@ -395,4 +396,4 @@ export default function Editor({iframe}) {
      }}>GET DATA</button>
     </>
   );
-}
+} 
