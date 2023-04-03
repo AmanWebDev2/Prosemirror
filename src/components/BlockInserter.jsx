@@ -145,6 +145,7 @@ const BlockInserter = React.forwardRef((props,ref) => {
           break;
         case "Insert emoji":
           setShowEmoji(true);
+          
           break;
         case "Insert image":
            input.type = "file";
@@ -210,6 +211,19 @@ const BlockInserter = React.forwardRef((props,ref) => {
     window.view.focus();
   }
 
+  const handleGIF=(e,message,type)=>{
+    // insert image  
+    // console.log(e,message,type);
+    let itemType = prosmirrorSchema.nodes.image;
+    const imageNode = itemType.create({
+      src: message.text,
+      alt: "random",
+    });
+    insertAtPos({ insertionPos: window.view.insertionPos,newNode:imageNode })
+    toggleInserter(window.view,false,false);
+    window.view.focus();
+  }
+
   return (
     <>
     <Dropdown className="inserter-container hidden" id="blockInserter">
@@ -247,9 +261,9 @@ const BlockInserter = React.forwardRef((props,ref) => {
         </div> :
           // <Picker data={data} onEmojiSelect={handleEmojiSelect} theme="light" />
           <Emoji 
-          showPopoverOf="showEmoji" 
+          showPopoverOf={showPopoverOf} 
           getEmoji={handleEmoji}
-          // handleNewUserMessage={handleGIF}
+          handleNewUserMessage={handleGIF}
          />
         }
       </div>
