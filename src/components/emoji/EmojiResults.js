@@ -1,77 +1,54 @@
-import React, { Component } from "react";
-import PropTypes from "prop-types";
+import React from "react";
 import EmojiResultRow from "./EmojiResultRow";
-export default class EmojiResults extends Component {
-  constructor(props) {
-    super(props);
-    this.state = { isLoading: true };
-  }
-  static propTypes = {
-    emojiData: PropTypes.array
-  };
-  componentDidMount() {}
+import { useState } from "react";
+import { useEffect } from "react";
 
-  componentWillUnmount() {}
+const EmojiResults=(props)=>{
+    const [isLoading,setIsLoading] = useState(true);
+    const [arrayss,setArrayss] = useState([]);
 
-  groupBy = (list, key) => {
-    var groups = list.reduce(
-      (result, item) => ({
-        ...result,
-        [item[key]]: [
-          ...(result[item[key]] || []),
-          item,
-        ]
-    }),{},);
-    return groups;
-  }
-
-  render() {
-    const emojiGroup = this.groupBy(this.props.emojiData, "group");
-    const arrayss = [];
-    for (var key in emojiGroup) {
-      if (emojiGroup.hasOwnProperty(key)) {
-        arrayss.push(<div key={key}>{key}</div>);
-        arrayss.push(
-          emojiGroup[key].map((emojiData, index) => (
-            <EmojiResultRow
-              key={index}
-              symbol={emojiData.symbol}
-              title={emojiData.title}
-              getEmoji={this.props.getEmoji}
-              group={emojiData.group}
-            />
-          ))
-        );
-      }
+    const groupBy = (list, key) => {
+      let groups = list.reduce(
+        (result, item) => ({
+          ...result,
+          [item[key]]: [
+            ...(result[item[key]] || []),
+            item,
+          ]
+      }),{},);
+      return groups;
     }
+
+    useEffect(()=>{
+      const emojiGroup = groupBy(props.emojiData, "group");
+      const array = [];
+      for (let key in emojiGroup) {
+        if (emojiGroup.hasOwnProperty(key)) {
+          array.push(<div key={key}>{key}</div>);
+          array.push(
+            emojiGroup[key].map((emojiData, index) => (
+              <EmojiResultRow
+                key={index}
+                symbol={emojiData.symbol}
+                title={emojiData.title}
+                getEmoji={props.getEmoji}
+                group={emojiData.group}
+              />
+            ))
+          );
+        }
+        setArrayss(array);
+      }
+    },[]);
+
     return (
       <div className="component-emoji-results">
-        {/* {people.first.map(emojiData => (
-          <EmojiResultRow
-            key={emojiData.title}
-            symbol={emojiData.symbol}
-            title={emojiData.title}
-            getEmoji={this.props.getEmoji}
-            group={emojiData.group}
-          />
-        ))} */}
-
-        {/* {Object.entries(people).forEach(([key, value]) => {
-          people.keys.map(emojiData => (
-            <EmojiResultRow
-              key={emojiData.title}
-              symbol={emojiData.symbol}
-              title={emojiData.title}
-              getEmoji={this.props.getEmoji}
-              group={emojiData.group}
-            />
-          ));
-        })} */}
         <div>
-          {this.state.isLoading}
+          {isLoading}
           {arrayss}
         </div>
       </div>
     );
-  }
 }
+export default EmojiResults;
+ 
