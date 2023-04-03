@@ -4,9 +4,7 @@ import { Dropdown } from "react-bootstrap";
 import { prosmirrorSchema } from "./content-editable/custom/schema/schema";
 import convertToBase64 from "./content-editable/utils/convert";
 import Emoji from "./emoji/Emoji";
-import EmojiUploader from "./EmojiUploader";
-import data from '@emoji-mart/data'
-import Picker from '@emoji-mart/react'
+import { toggleInserter } from "./content-editable/plugins/editorDOMEvents";
 
 const ITEM = [
   {
@@ -97,9 +95,9 @@ view.dispatch(tr.setSelection(selection));
  */
 
 const BlockInserter = React.forwardRef((props,ref) => {
-    const [show,setShow] = useState(false);
-    const [showEmoji,setShowEmoji] = useState(false);
-  const [showPopoverOf, setShowPopoverOf] = useState("");
+  const [show,setShow] = useState(false);
+  const [showEmoji,setShowEmoji] = useState(false);
+  const [showPopoverOf, setShowPopoverOf] = useState("showEmoji");
 
   const insertAtPos=({insertionPos,newNode})=>{
     const { view } = window
@@ -206,7 +204,10 @@ const BlockInserter = React.forwardRef((props,ref) => {
     const { state, dispatch } = window.view;
     const { from } = state.selection;
     dispatch(state.tr.insertText(e.target.innerText, from, from));
-
+    setShowPopoverOf("");
+    setShowEmoji(false);
+    toggleInserter(window.view,false,false);
+    window.view.focus();
   }
 
   return (
