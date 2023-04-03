@@ -271,12 +271,19 @@ function handleMouseEnter(view,event,iframe,iframeDoc) {
       inserterPointer.classList.remove('hidden');
       inserterPointer.style.top = `${event.y}px`
     }
-    if(rulset) {
+    if(rulset && !iframe) {
       rulset.classList.remove('hidden');
       const transform = getTranslateXY(rulset);
       rulset.style.transform = `translate(${
         domRect.right - 15 + window.scrollX
       }px, ${transform.translateY}px)`;
+    }else {
+      const { state } = view;
+      const { from } = state.selection;
+      const start = view.coordsAtPos(from);
+      rulset.classList.remove('hidden');
+      rulset.style.top = (Math.abs(domRect - start.top)) + "px";
+      rulset.style.left =  (domRect.right - 15) + "px";
     }
     if(blockInserterBtn){
       blockInserterBtn.classList.remove('hidden');
