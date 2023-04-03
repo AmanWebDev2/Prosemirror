@@ -198,11 +198,14 @@ const BlockInserter = React.forwardRef((props,ref) => {
       closeInserterMenu() {
         if(show) {
           setShow(false);
+          if(showEmoji) {
+            setShowEmoji(false);
+          }
         }
       }
     };  
 
-  }, [show]);
+  }, [show,showEmoji]);
 
   const handleEmoji=(e)=>{
     if(!(e || e.target || e.target.innerText)) return;
