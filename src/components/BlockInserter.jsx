@@ -205,8 +205,8 @@ const BlockInserter = React.forwardRef((props,ref) => {
     const { state, dispatch } = window.view;
     const { from } = state.selection;
     dispatch(state.tr.insertText(e.target.innerText, from, from));
-    setShowPopoverOf("");
     setShowEmoji(false);
+    // view show isIframe
     toggleInserter(window.view,false,false);
     window.view.focus();
   }
