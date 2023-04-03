@@ -315,6 +315,7 @@ export default function Editor({iframe}) {
     const observer = new MutationObserver((mutations) => {
       handleObserver(mutations)
     });
+    editorRef.current.dom.focus();
     window.view = editorRef.current;
     observer.observe(editorWrapper.parentNode, CONFIG);
 
