@@ -4,6 +4,7 @@ import { renderGrouped } from "prosemirror-menu";
 import { markActive } from "../utils/markActive";
 import {
   ATTRIBUTE_SPAN,
+  EMBED_VIDEO,
   IMAGE,
   VIDEO_CLIP,
 } from "../custom/schema/nodes/Names";
@@ -110,8 +111,9 @@ class SelectionMenu {
         readOnly ||
         state.selection.empty ||
         selectedNodeName === ATTRIBUTE_SPAN ||
-        selectedNodeName == IMAGE ||
-        selectedNodeName == VIDEO_CLIP) &&
+        selectedNodeName === IMAGE ||
+        selectedNodeName === EMBED_VIDEO ||
+        selectedNodeName === VIDEO_CLIP) &&
       !isLinkToolTip
     ) {
       if (this.menu.style.display !== "none") {
