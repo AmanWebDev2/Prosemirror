@@ -20,3 +20,4 @@ export const TEXT = 'text';
 export const UNDERLINE = 'underline';
 export const ATTRIBUTE_SPAN = 'attribute_span';
 export const VIDEO_CLIP = 'video_clip';
+export const EMBED_VIDEO = 'embed_video';

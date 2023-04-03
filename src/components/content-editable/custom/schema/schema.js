@@ -14,7 +14,7 @@ import HeadingNodeSpec from "./nodes/HeadingNodeSpec"
 import DocNodeSpec from "./nodes/DocNodeSpec"
 import TextNodeSpec from "./nodes/TextNodeSpec"
 import HardBreakNodeSpec from "./nodes/HardBreakNodeSpec"
-import { ATTRIBUTE_SPAN, BULLET_LIST, CODE_BLOCK, DOC, HARD_BREAK, HEADING, IMAGE, LIST_ITEM, ORDERED_LIST, PARAGRAPH,TEXT, VIDEO_CLIP, } from "./nodes/Names"
+import { ATTRIBUTE_SPAN, BULLET_LIST, CODE_BLOCK, DOC, EMBED_VIDEO, HARD_BREAK, HEADING, IMAGE, LIST_ITEM, ORDERED_LIST, PARAGRAPH,TEXT, VIDEO_CLIP, } from "./nodes/Names"
 import LinkMarkSpec from "./marks/LinkMarkSpec"
 import { SpanMarkSpec } from "./marks/SpanMarkSpec"
 import AttributeSpanNodeSpec from "./nodes/AttributeSpanNodeSpec"
@@ -23,6 +23,7 @@ import ListItemNodeSpec from "./nodes/ListItemNodeSpec"
 import BulletListNodeSpec from "./nodes/BulletListNodeSpec"
 import ImageNodeSpec from "./nodes/ImageNodeSpec"
 import VideoClipNodeSpec from "./nodes/VideoClipNodeSpec"
+import EmbedVideoNodeSpec from "./nodes/EmbedVideoNodeSpec"
 
 const {
   MARK_CODE,
@@ -50,6 +51,7 @@ export const nodes = {
   [BULLET_LIST]: BulletListNodeSpec,
   [IMAGE]: ImageNodeSpec,
   [VIDEO_CLIP]: VideoClipNodeSpec,
+  [EMBED_VIDEO]: EmbedVideoNodeSpec,
   div: { content: 'inline*', isolating: true, parseDOM: [{ tag: 'div' }] },
   /// An inline image (`<img>`) node. Supports `src`,
   /// `alt`, and `href` attributes. The latter two default to the empty
