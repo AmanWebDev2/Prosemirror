@@ -1,5 +1,4 @@
 const EmbedVideoNodeSpec = {
-    inline: true,
     attrs: {
       style: {default: 'width:100%; pointer-events:none;'},
       contenteditable: {default: false},
@@ -7,7 +6,9 @@ const EmbedVideoNodeSpec = {
       allowFullscreen: {default: true},
       allow: {default: "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"},
     },
-    group: 'inline',
+    // to remove trailing spaces in prosemirror add inline:true and group:block 
+    inline: false,
+    group: 'block',
     draggable: true,
     parseDOM: [{tag: 'iframe[src]', getAttrs}],
     toDOM(node) {
