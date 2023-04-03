@@ -1,5 +1,5 @@
 const checkForIframe =()=> {
-    return true
+    return false
     // let iframe = document.querySelector('iframe');
     // if(!iframe) return false;
     // iframe = document.getElementById('kudoshub-editor-frame');

@@ -5,6 +5,8 @@ import { prosmirrorSchema } from "./content-editable/custom/schema/schema";
 import convertToBase64 from "./content-editable/utils/convert";
 import Emoji from "./emoji/Emoji";
 import { toggleInserter } from "./content-editable/plugins/editorDOMEvents";
+import EmbedVideo from "./EmbedVideo";
+import { useEffect } from "react";
 
 const ITEM = [
   {
@@ -94,26 +96,41 @@ view.dispatch(tr.setSelection(selection));
 
  */
 
+export const insertAtPos=({insertionPos,newNode})=>{
+  const { view } = window
+  // Create a new transaction to insert the node
+  const tr = view.state.tr.insert(insertionPos, newNode);
+  // Apply the transaction to the editor state
+  const newState = view.state.apply(tr);
+  // Set the selection to the end of the inserted text
+  const selection = TextSelection.near(newState.doc.resolve(insertionPos));
+  view.dispatch(tr.setSelection(selection));
+}
+
+const handleChange = async(file) => {
+  const base64 = await convertToBase64(file)
+  return base64
+};
+
 const BlockInserter = React.forwardRef((props,ref) => {
   const [show,setShow] = useState(false);
   const [showEmoji,setShowEmoji] = useState(false);
+  const [showEmbedVideo,setShowEmbedVideo] = useState(false);
   const [showPopoverOf, setShowPopoverOf] = useState("showEmoji");
+  const [currentlyRenderedMenu,setCurrentlyRenderedMenu] = useState("");
 
-  const insertAtPos=({insertionPos,newNode})=>{
-    const { view } = window
-    // Create a new transaction to insert the node
-    const tr = view.state.tr.insert(insertionPos, newNode);
-    // Apply the transaction to the editor state
-    const newState = view.state.apply(tr);
-    // Set the selection to the end of the inserted text
-    const selection = TextSelection.near(newState.doc.resolve(insertionPos));
-    view.dispatch(tr.setSelection(selection));
-  }
 
-  const handleChange = async(file) => {
-    const base64 = await convertToBase64(file)
-    return base64
-  };
+
+  useEffect(()=>{ 
+    if(showEmbedVideo) {
+      setCurrentlyRenderedMenu("embedVideo");
+    }else if(showEmoji) {
+      setCurrentlyRenderedMenu("emoji");
+    }else {
+      setCurrentlyRenderedMenu("");
+    }
+
+  },[showEmbedVideo,showEmoji]);
 
   const handleInsertBlock = (item) => {
       let itemType;
@@ -185,7 +202,7 @@ const BlockInserter = React.forwardRef((props,ref) => {
           setShow(false);
           break;
         case "Embed video":
-        
+          setShowEmbedVideo(true);
           break;
         default:
           return
@@ -201,11 +218,14 @@ const BlockInserter = React.forwardRef((props,ref) => {
           if(showEmoji) {
             setShowEmoji(false);
           }
+          if(showEmbedVideo){
+            setShowEmbedVideo(false);
+          }
         }
       }
     };  
 
-  }, [show,showEmoji]);
+  }, [show,showEmoji,showEmbedVideo]);
 
   const handleEmoji=(e)=>{
     if(!(e || e.target || e.target.innerText)) return;
@@ -232,6 +252,21 @@ const BlockInserter = React.forwardRef((props,ref) => {
     window.view.focus();
   }
 
+  const components=(comp)=> {
+    switch (comp) {
+      case "emoji":
+        return  <Emoji 
+        showPopoverOf={showPopoverOf} 
+        getEmoji={handleEmoji}
+        handleNewUserMessage={handleGIF}
+       />
+      case "embedVideo":
+        return <EmbedVideo/>
+      default:
+        return <BlockInserterMenu handleInsertBlock={handleInsertBlock} />;
+    }
+  }
+
   return (
     <>
     <Dropdown className="inserter-container hidden" id="blockInserter">
@@ -253,31 +288,31 @@ const BlockInserter = React.forwardRef((props,ref) => {
       id="blockInserter_menu_wrapper"
       >
         {
-        !showEmoji ?
-        <div className="attributes-item-container">
-          {ITEM.map((data, index) => {
-            return (
-              <div
-                className="attribute-items"
-                key={index}
-                onClick={() => handleInsertBlock(data)}
-              >
-                {data.display}
-              </div>
-            );
-          })}
-        </div> :
-          // <Picker data={data} onEmojiSelect={handleEmojiSelect} theme="light" />
-          <Emoji 
-          showPopoverOf={showPopoverOf} 
-          getEmoji={handleEmoji}
-          handleNewUserMessage={handleGIF}
-         />
+          components(currentlyRenderedMenu)
         }
       </div>
     </Dropdown>
     </>
   );
 });
+
+const BlockInserterMenu=(props)=>{
+  const { handleInsertBlock } = props;
+  return (
+    <div className="attributes-item-container">
+    {ITEM.map((data, index) => {
+      return (
+        <div
+          className="attribute-items"
+          key={index}
+          onClick={() => handleInsertBlock(data)}
+        >
+          {data.display}
+        </div>
+      );
+    })}
+    </div>
+  )
+}
 
 export default BlockInserter;

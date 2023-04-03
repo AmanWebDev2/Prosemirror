@@ -10,7 +10,6 @@ import RuleSetBlock from "../RuleSetBlock";
 import { attributes } from "../../data/attributes";
 import BlockInserter from "../BlockInserter";
 import { createPortal } from "react-dom";
-import MessageBarInsert from "../MessageBarInserter";
 
 const doc = prosmirrorSchema.nodeFromJSON(  {
   "type": "doc",
