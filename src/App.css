@@ -601,6 +601,7 @@ img.ProseMirror-separator {
 
 .kh-popup-scrollable {
   overflow-y: auto;
+  overflow-x: hidden;
   max-height: 415px;
 }
 .attribute-selector {
