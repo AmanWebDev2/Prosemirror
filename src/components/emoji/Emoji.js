@@ -33,14 +33,14 @@ const Emoji =(props)=> {
 
   
   const handleMouseDown = (e) => {
-    if (!node.current.contains(e.target)) {
-      if (props.showPopoverOf === "showEmoji") {
-        // props.emojiHide();
-      }
-      if (props.showPopoverOf === "showGIF") {
-        // props.gifHide();
-      }
-    }
+    // if (!node.current.contains(e.target)) {
+    //   if (props.showPopoverOf === "showEmoji") {
+    //     // props.emojiHide();
+    //   }
+    //   if (props.showPopoverOf === "showGIF") {
+    //     // props.gifHide();
+    //   }
+    // }
   };
 
   const handleSearchChange = (event) => {
