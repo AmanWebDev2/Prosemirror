@@ -1,5 +1,4 @@
 const ImageNodeSpec = {
-    inline: true,
     attrs: {
       align: {default: null},
       alt: {default: ''},
@@ -10,7 +9,8 @@ const ImageNodeSpec = {
       title: {default: ''},
     },
     isolating:true,
-    group: 'inline',
+    inline: false,
+    group: 'block',
     draggable: true,
     parseDOM: [{tag: 'img[src]', getAttrs}],
     toDOM(node) {
