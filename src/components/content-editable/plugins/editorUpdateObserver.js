@@ -15,6 +15,7 @@ import { atAnchorTopCenter } from "../utils/PopupPosition";
 import applyMark from "../utils/applyMark";
 import lookUpElement from "../utils/lookUpElement";
 import { markActive } from "../utils/markActive";
+import { isIframe } from "../utils/isFrame";
 
 export function editorUpdateObserver(options) {
   return new Plugin({
@@ -81,7 +82,7 @@ class EditorUpdateObserver {
       // sm.setParent(state.plugins);
 
       const newState = state.reconfigure({
-        plugins: [...myPlugin, selectionMenu({ content: [tooltipMenuItems], iframe:false,elementClassNameToHandlingMenuPositionOnScroll:'scroll' })],
+        plugins: [...myPlugin, selectionMenu({ content: [tooltipMenuItems], iframe:isIframe,elementClassNameToHandlingMenuPositionOnScroll:'scroll' })],
       });
 
       // console.log(view);

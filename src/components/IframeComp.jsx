@@ -4,6 +4,7 @@ import { Button } from 'react-bootstrap'
 import "bootstrap/dist/css/bootstrap.min.css";
 
 import Editor from './content-editable/Editor'
+import { isIframe } from './content-editable/utils/isFrame';
 const doc = {
     type: "doc",
     content: [
@@ -756,7 +757,7 @@ visibility:hidden;
       </body>
       </html>'
   >
-    <Editor iframe={true} />
+    <Editor iframe={isIframe} />
     <Button>BOOTSTRAP WORKING INSIDE FRAME</Button>
   </Frame>
   )

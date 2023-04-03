@@ -6,6 +6,7 @@ import { Button } from "react-bootstrap";
 import "./App.css";
 import Editor from "./components/content-editable/Editor";
 import Navbar from "./components/Navbar";
+import { isIframe } from "./components/content-editable/utils/isFrame";
 
 const doc = {
   type: "doc",
@@ -54,7 +55,7 @@ function App() {
   return (
     <div className="App">
       <Navbar/>
-      <Editor/>
+      <Editor iframe={isIframe}/>
     </div>
   );
 }

@@ -12,6 +12,7 @@ import { inputRules, wrappingInputRule, textblockTypeInputRule } from 'prosemirr
 import { rulseSetAttribute } from "./rulseSetAttribute";
 import SelectionPlaceholderPlugin from "./SelectionPlaceholderPlugin";
 import { buildInputRules } from "../utils/inputRules";
+import { isIframe } from "../utils/isFrame";
 
 export const plugins = [
   // new SelectionPlaceholderPlugin(),
@@ -20,8 +21,8 @@ export const plugins = [
   keymap({ "Mod-z": undo, "Mod-y": redo }),
   keymap(buildKeymap(prosmirrorSchema)),
   keymap(baseKeymap),
-  selectionMenu({ content: [tooltipMenuItems],iframe:false,elementClassNameToHandlingMenuPositionOnScroll:'scroll' }),
-  editorDOMEvents({ iframe: false }),
+  selectionMenu({ content: [tooltipMenuItems],iframe:isIframe,elementClassNameToHandlingMenuPositionOnScroll:'scroll' }),
+  editorDOMEvents({ iframe: isIframe }),
   editorUpdateObserver(),
   buildInputRules(prosmirrorSchema),
 ];
