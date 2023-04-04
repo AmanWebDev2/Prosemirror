@@ -1,0 +1,258 @@
+.kudosHub-emoji-container {
+  overflow-y: scroll;
+  height: 250px;
+  margin: 0px 10px;
+  overflow-x: hidden;
+}
+
+.kudosHub-emoji-picker {
+  margin: 1px 8px;
+  transition: 0.2s linear;
+  cursor: pointer;
+}
+.kudosHub-emoji-picker:hover{
+  transform: scale(1.2);
+}
+
+.react-tenor {
+  background-color: #f7f7f7;
+  border: 1px solid #ccc;
+  max-width: 480px;
+}
+
+.react-tenor--search-bar {
+  position: relative;
+}
+
+.react-tenor--search {
+  background-color: white;
+  width: 90%;
+  margin: 15px auto;
+  padding-bottom: 8px;
+  border: none;
+  border-bottom: 1px solid rgb(238,238,238);
+  outline: none;
+  display: block;
+}
+
+.react-tenor--search::placeholder {
+  color: lightgray;
+}
+
+.react-tenor--search:focus {
+  box-shadow: none;
+  outline: 0;
+}
+
+.react-tenor--autocomplete {
+  box-sizing: border-box;
+  color: #aaa;
+  font-family: Arial;
+  font-size: 1em;
+  line-height: 1.3;
+  left: 0;
+  padding: 0.25em 0.5em;
+  pointer-events: none;
+  position: absolute;
+  top: 1px;
+}
+
+.react-tenor--autocomplete span {
+  visibility: hidden;
+}
+
+.react-tenor--spinner {
+  animation: react-tenor-spin 1s linear infinite;
+  height: 22px;
+  position: absolute;
+  right: 16px;
+  top: 3px;
+  width: 22px;
+}
+
+.react-tenor--spinner path {
+  fill: #999;
+}
+
+.react-tenor--suggestions {
+  overflow-x: auto;
+  padding: 0.5em 0.5em;
+  white-space: nowrap;
+}
+
+.react-tenor--suggestions button {
+  background: #6a89af;
+  border: 1px solid #f7f7f7;
+  border-radius: 5px;
+  color: white;
+  cursor: pointer;
+  display: inline-block;
+  font-size: 1em;
+  padding: 3px 5px;
+}
+
+.react-tenor--suggestions button:focus {
+  box-shadow: 0 0 2px 2px #6a89af;
+  outline: none;
+}
+
+.react-tenor--suggestions button + button {
+  margin-left: 0.5em;
+}
+
+.react-tenor--results {
+  display: flex;
+  flex-wrap: wrap;
+  position: relative;
+}
+
+.react-tenor--result {
+  background: #6a89af;
+  background-image: repeating-linear-gradient(
+    45deg,
+    rgba(255, 255, 255, 0.1),
+    rgba(255, 255, 255, 0.1) 15px,
+    transparent 0,
+    transparent 30px
+  );
+  border: 0;
+  cursor: pointer;
+  display: inline-block;
+  flex-basis: 25%;
+  height: 120px;
+  opacity: 1;
+  padding: 0;
+  transition: opacity 0.3s;
+  width: 120px;
+}
+
+.react-tenor--result span {
+  animation: react-tenor-fade-in 0.2s;
+  background-size: cover;
+  display: block;
+  height: 100%;
+  width: 100%;
+}
+
+.react-tenor--result:focus {
+  box-shadow: 0 0 2px 2px #6a89af;
+  border: 1px solid #f7f7f7;
+  outline: none;
+  z-index: 1;
+}
+
+.react-tenor--result:hover {
+  opacity: 0.5;
+}
+
+@media screen and (max-width: 480px) {
+  .react-tenor--result {
+    flex-basis: 33%;
+  }
+}
+
+.react-tenor--page-left,
+.react-tenor--page-right {
+  background: #6a89af;
+  border: 0;
+  cursor: pointer;
+  height: 1.8em;
+  position: absolute;
+  top: calc(50% - 0.9em);
+  opacity: 0.5;
+  position: absolute;
+  transition: opacity 0.2s, left 0.2s, right 0.2s;
+  width: 1.8em;
+  z-index: -1;
+}
+
+.react-tenor--results:hover .react-tenor--page-left,
+.react-tenor--results:hover .react-tenor--page-right {
+  opacity: 1;
+  z-index: 1;
+}
+
+.react-tenor--results:hover .react-tenor--page-left {
+  left: -1em;
+}
+
+.react-tenor--results:hover .react-tenor--page-right {
+  right: -1em;
+}
+
+.react-tenor--page-left div,
+.react-tenor--page-right div {
+  background: inherit;
+  height: 1.6em;
+  transform: rotate(45deg);
+  top: 0.1em;
+  position: absolute;
+  width: 1.6em;
+}
+
+.react-tenor--page-left {
+  left: -0.3em;
+}
+
+.react-tenor--page-left div {
+  left: -0.7em;
+}
+
+.react-tenor--page-right {
+  right: -0.3em;
+}
+
+.react-tenor--page-right div {
+  right: -0.7em;
+}
+
+@keyframes react-tenor-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes react-tenor-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.react-tenor--suggestions {
+  display: none;
+}
+
+.react-tenor--results {
+  display: flex;
+  flex-wrap: wrap;
+  position: relative;
+  overflow-y: scroll;
+  height: 253px;
+  margin: 0px 10px;
+  overflow-x: hidden;
+}
+
+.react-tenor {
+  background-color: white;
+  border: none;
+}
+
+.react-tenor--autocomplete {
+  display: none;
+}
+
+#popoverWrapper .popover{
+  display: block;
+  top: -330px;
+  border: 1px solid rgba(0,0,0,.2);
+  border-radius: .3rem;
+  min-width: 64%;
+  padding-bottom: 10px;
+  width:230px;
+}
