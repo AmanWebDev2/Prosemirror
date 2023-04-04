@@ -446,7 +446,6 @@ display: none;
   border: 2px solid rgba(0, 0, 0, 0.2);
   padding: 5px 0;
   margin-bottom: 23px;
-  overflow: visible;
 }
 
 .ProseMirror p:first-child,
