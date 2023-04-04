@@ -9,12 +9,18 @@ function handleBlockInsterClick({ topHalf, view, lastNode }) {
   }
 }
 
+function findAncestor (el, prop) {
+  while ((el = el.parentElement) && !el[prop]);
+  return el;
+}
+
 function handleHoveringElement({ event, lastNode, view, iframe,iframeDoc }) {
   const inserterPointer = view.dom.parentNode.querySelector(
     ".prosemirror-composer-inserter-pointer-line"
   );
   let blockInserter;
   let blockInserterBtn;
+  // console.log(findAncestor(event.target,"pmViewDesc"))
   if(iframe) {
     blockInserter = iframeDoc.querySelector("#blockInserter");
     blockInserterBtn = iframeDoc.querySelector(
@@ -265,10 +271,10 @@ function handleMouseEnter(view,event,iframe,iframeDoc) {
 
   } 
   const domRect = view.dom.getBoundingClientRect();
-    if(inserterPointer) {
-      inserterPointer.classList.remove('hidden');
-      inserterPointer.style.top = `${event.y}px`
-    }
+    // if(inserterPointer) {
+    //   inserterPointer.classList.remove('hidden');
+    //   inserterPointer.style.top = `${event.y}px`
+    // }
     if(rulset && !iframe) {
       rulset.classList.remove('hidden');
       const transform = getTranslateXY(rulset);
@@ -287,14 +293,14 @@ function handleMouseEnter(view,event,iframe,iframeDoc) {
       blockInserterBtn.classList.remove('hidden');
     }
     
-    if(blockInserter && !iframe) {
-      blockInserter.classList.remove('hidden')
-     const blockInserterRect = blockInserter.getBoundingClientRect();
-      // blockInserter.style.left = `-30px`
-      blockInserter.style.transform = `translate(-${domRect.right}px,${
-        event.y - blockInserterRect.height / 2
-      }px)`
-    }
+    // if(blockInserter) {
+    //   blockInserter.classList.remove('hidden')
+    //  const blockInserterRect = blockInserter.getBoundingClientRect();
+    //   // blockInserter.style.left = `-30px`
+    //   blockInserter.style.transform = `translate(-${domRect.right}px,${
+    //     event.y - blockInserterRect.height / 2
+    //   }px)`
+    // }
 }
 
 export function editorDOMEvents(options) {
