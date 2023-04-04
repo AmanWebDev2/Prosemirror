@@ -762,6 +762,59 @@ cursor:pointer;
   width: 60px;
 }
 
+
+.kudoshub-prosemirror-composer-editor-box-input {
+  box-sizing: border-box;
+  background-color: transparent;
+  height: 31px;
+  font-size: 14px;
+  font-weight: 400;
+  outline: 0;
+  border: 0;
+  padding-left: 10px;
+  padding-right: 10px;
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 0;
+  color: #222;
+}
+
+.kudoshub-prosemirror-composer-video-inserter {
+  padding: 4px;
+  min-width: 700px;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  transition: border-color linear .1s;
+}
+
+#blockInserter_menu_wrapper {
+  background-color: #fefefe;
+    box-shadow: 0 4px 14px 0 rgba(0,0,0,.3);
+    white-space: nowrap;
+    border-radius: 8px;
+    background-clip: padding-box;
+}
+
+.kudoshub-prosemirror-composer-icon-btn {
+  font-size: 14px;
+  line-height: 18px;
+  font-weight: 500;
+  border-radius: 8px;
+  padding: 7px 8px 7px;
+  display: inline-block;
+  -webkit-user-select: none;
+  transition: box-shadow linear 40ms;
+  background-color: transparent;
+  background-clip: padding-box;
+  text-decoration: none;
+  box-sizing: border-box;
+  vertical-align: bottom;
+  -moz-user-select: none;
+  user-select: none;
+  cursor: pointer;
+  border: none;
+}
+
       </style>
       <body>
         <div id="mountHere"></div>
