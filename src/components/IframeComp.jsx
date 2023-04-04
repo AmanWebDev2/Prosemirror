@@ -615,7 +615,11 @@ background-color: #fff;
 white-space: nowrap;
 border-radius: 4px;
 background-clip: padding-box;
+<<<<<<< HEAD
 padding: 4px;
+=======
+padding: 14px;
+>>>>>>> b9880cb8e05b17cd14f7ceab8aa77474c74d5652
 z-index: 10000;
 }
 
