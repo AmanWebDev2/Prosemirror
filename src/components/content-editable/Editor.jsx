@@ -378,11 +378,7 @@ export default function Editor({iframe}) {
        <BlockInserter ref={blockInserterRef}/>,
        document.body
      ):
-     editorDom.current &&
-      createPortal(
-        <BlockInserter ref={blockInserterRef}/>,
-        editorDom.current.parentNode
-      )
+     <BlockInserter ref={blockInserterRef}/>
     }
 
      </div>

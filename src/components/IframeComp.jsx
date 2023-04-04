@@ -437,15 +437,16 @@ min-width: 10em;
 margin-top: 5px;
 display: none;
 }
-#editor,
-.editor {
-background: white;
-color: black;
-background-clip: padding-box;
-border-radius: 4px;
-border: 2px solid rgba(0, 0, 0, 0.2);
-padding: 5px 0;
-margin-bottom: 23px;
+  #editor,
+  .editor {
+  background: white;
+  color: black;
+  background-clip: padding-box;
+  border-radius: 4px;
+  border: 2px solid rgba(0, 0, 0, 0.2);
+  padding: 5px 0;
+  margin-bottom: 23px;
+  overflow: visible;
 }
 
 .ProseMirror p:first-child,
@@ -663,92 +664,102 @@ cursor:pointer;
 }
 
 .kh-popup{
-position: absolute;
-max-width: 300px;
-padding: 1px;
-box-shadow: 0 4px 14px 0 rgba(0,0,0,.2), 0 0 0 1px rgba(0,0,0,.05);
-white-space: nowrap;
-border-radius: 4px;
-background-clip: padding-box;
-font-family: system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen,Ubuntu,Cantarell,"Fira Sans","Droid Sans","Helvetica Neue",sans-serif;
-font-size: 14px;
-line-height: 22px;
-z-index: 3;
-padding:12px;
+  position: absolute;
+  max-width: 300px;
+  padding: 1px;
+  box-shadow: 0 4px 14px 0 rgba(0,0,0,.2), 0 0 0 1px rgba(0,0,0,.05);
+  white-space: nowrap;
+  border-radius: 4px;
+  background-clip: padding-box;
+  font-family: system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen,Ubuntu,Cantarell,"Fira Sans","Droid Sans","Helvetica Neue",sans-serif;
+  font-size: 14px;
+  line-height: 22px;
+  z-index: 3;
+  padding:12px;
 }
 
 .kh-popup-tiny{
-width: 30px;
-height: 24px;
+  width: 30px;
+  height: 24px;
 }
 
 .kh-popup-scrollable {
-overflow-y: auto;
-max-height: 415px;
+  overflow-y: auto;
+  max-height: 415px;
 }
 .attribute-selector {
-position: "relative";
+  position: "relative";
 }
 .attribute-items {
-cursor:pointer;
+  cursor:pointer;
 }
 .attribute-items:hover {
-color: blue
+  color: blue
 }
 
 .kudoshub-intercom-template {
-color: #222222;
-background-color: #f1f1f1;
-border: 1px solid rgba(0, 0, 0, 0.1);
-padding-left: 4px;
-padding-right: 4px;
-line-height: 20px !important;
-border-radius: 4px;
-display: inline-block;
-font-weight: normal;
-vertical-align: middle;
-padding: 0 0.4em;
-cursor: auto;
-text-transform: none;
-text-align: center;
-margin: 2px;
--moz-user-select: none;
--webkit-user-select: none;
--ms-user-select: none;
-user-select: none;
+  color: #222222;
+  background-color: #f1f1f1;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  padding-left: 4px;
+  padding-right: 4px;
+  line-height: 20px !important;
+  border-radius: 4px;
+  display: inline-block;
+  font-weight: normal;
+  vertical-align: middle;
+  padding: 0 0.4em;
+  cursor: auto;
+  text-transform: none;
+  text-align: center;
+  margin: 2px;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 .prosemirror-composer-inserter-pointer-line {
-position: fixed;
-border: 1px dashed red;
-box-sizing: border-box;
-width:400px;
-// visibility:hidden;
+  position: fixed;
+  border: 1px dashed red;
+  box-sizing: border-box;
+  width:400px;
 }
 
 .inserter-container {
-position: fixed;
-background-color: white;
-top: 0;
-left: -15px;
-width: min-content;
-z-index: 2;
+  position: absolute;
+  background-color: white;
+  top: 0;
+  width: min-content;
+  z-index: 2;
 }
 
 .attributes-item-container {
-display: block;
-min-width: 135px;
-box-shadow: 2px 2px 9px rgba(0,0,0,.1);
-padding: 10px 15px;
-border-radius: 5px;
+  display: block;
+  min-width: 135px;
+  box-shadow: 2px 2px 9px rgba(0,0,0,.1);
+  padding: 10px 15px;
+  border-radius: 5px;
 }
 
 .show {
-display: block;
-visibility: visible;
+  display: block;
+  visibility: visible;
 }
 .hidden {
-display: none;
-visibility:hidden;
+  display: none;
+  visibility:hidden;
+}
+
+.attribute-btn {
+  box-shadow: 0 4px 14px 0 rgba(0,0,0,.3);
+  background-clip: padding-box;
+  background-color: #fefefe;
+  white-space: nowrap;
+  border-radius: 8px;
+  margin-left: auto;
+  z-index: 10000;
+  padding: 10px;
+  width: 60px;
 }
 
       </style>

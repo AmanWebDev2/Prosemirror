@@ -134,15 +134,12 @@ class SelectionMenu {
     }
     // Update the Content state before calculating the position
     this.contentUpdate(this.editorView.state);
-
     handleMenuPosition({ view, iframe:this.options.iframe, menu:this.menu});
 
   }
 
   handleRulset({ start, view,iframe }) {
     if (this.ruleSetPosBlockElm) {
-      console.log(iframe);
-
       if (iframe) {
       let editorRectTop = this.editorRect.top ? this.editorRect.top : 0;
         this.ruleSetPosBlockElm.style.top = (Math.abs(editorRectTop - start.top)) + "px";

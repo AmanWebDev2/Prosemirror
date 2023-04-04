@@ -40,7 +40,7 @@ function handleHoveringElement({ event, lastNode, view, iframe,iframeDoc }) {
       top: `${elmRect.top}px`,
     });
     setElementProperties(blockInserter, {
-      transform: `translate(${editorContainerRect.left}px,${
+      transform: `translate(-${editorContainerRect.right}px,${
         elmRect.top - blockInserterRect.height / 2
       }px)`,
     });
@@ -49,7 +49,7 @@ function handleHoveringElement({ event, lastNode, view, iframe,iframeDoc }) {
       top: `${elmRect.bottom}px`,
     });
     setElementProperties(blockInserter, {
-      transform: `translate(${editorContainerRect.left}px,${
+      transform: `translate(-${editorContainerRect.right}px,${
         elmRect.bottom - blockInserterRect.height / 2
       }px)`,
     });
@@ -175,7 +175,7 @@ function handleInserterAndRulsetLeave(view, event,iframe,iframeDoc) {
     rulsetMenu = document.querySelector(".attribute-selector");
     blockInserterBtn = document.querySelector("#blockInserter-dropdown");
   }
-
+  //! toEement is not available in firefox
   if (
     event.toElement?.id !== "blockInserter-dropdown" &&
     event.toElement?.id !== "rulset-attribute" &&
@@ -287,14 +287,13 @@ function handleMouseEnter(view,event,iframe,iframeDoc) {
       blockInserterBtn.classList.remove('hidden');
     }
     
-    if(blockInserter) {
+    if(blockInserter && !iframe) {
       blockInserter.classList.remove('hidden')
      const blockInserterRect = blockInserter.getBoundingClientRect();
-      blockInserter.style.left = `-30px`
-      blockInserter.style.transform = `translate(${domRect.left}px,${
+      // blockInserter.style.left = `-30px`
+      blockInserter.style.transform = `translate(-${domRect.right}px,${
         event.y - blockInserterRect.height / 2
       }px)`
-      
     }
 }
 
@@ -394,7 +393,7 @@ export function editorDOMEvents(options) {
           }
         },
         focus(view,event) {
-           const { iframe } = options;
+          const { iframe } = options;
           let rulsetBtn;
           let rulsetMenu;
           let iframeDoc;
@@ -426,7 +425,6 @@ export function editorDOMEvents(options) {
         },
         scroll(view,event) {
           const { iframe } = options;
-          
           // view, show,iframe
           toggleInserter(view,true,iframe);
         },

@@ -643,10 +643,11 @@ img.ProseMirror-separator {
 }
 
 .inserter-container {
-  position: fixed;
+  /* position: fixed; */
+  /* left: -15px; */
+  position: absolute;
+  inset: 0px 0px auto auto;
   background-color: white;
-  top: 0;
-  left: -15px;
   width: min-content;
   z-index: 2;
 }
@@ -705,32 +706,34 @@ img.ProseMirror-separator {
     background-clip: padding-box;
 }
 
-.kudoshub-prosemirror-composer-icon-btn{
+.kudoshub-prosemirror-composer-icon-btn {
   font-size: 14px;
   line-height: 18px;
   font-weight: 500;
-  border: none;
   border-radius: 8px;
   padding: 7px 8px 7px;
   display: inline-block;
-  text-decoration: none;
-  cursor: pointer;
   -webkit-user-select: none;
-  -moz-user-select: none;
-  user-select: none;
-  box-sizing: border-box;
   transition: box-shadow linear 40ms;
-  vertical-align: bottom;
   background-color: transparent;
   background-clip: padding-box;
+  text-decoration: none;
+  box-sizing: border-box;
+  vertical-align: bottom;
+  -moz-user-select: none;
+  user-select: none;
+  cursor: pointer;
+  border: none;
 }
 
-.attribute-btn{
-  background-color: #fefefe;
+.attribute-btn {
   box-shadow: 0 4px 14px 0 rgba(0,0,0,.3);
+  background-clip: padding-box;
+  background-color: #fefefe;
   white-space: nowrap;
   border-radius: 8px;
-  background-clip: padding-box;
-  padding: 10px;
+  margin-left: auto;
   z-index: 10000;
+  padding: 10px;
+  width: 60px;
 }
