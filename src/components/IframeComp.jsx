@@ -727,10 +727,11 @@ cursor:pointer;
 
 .inserter-container {
   position: absolute;
+  inset: 0px 0px auto auto;
   background-color: white;
-  top: 0;
   width: min-content;
   z-index: 2;
+  top: 0;
 }
 
 .attributes-item-container {
