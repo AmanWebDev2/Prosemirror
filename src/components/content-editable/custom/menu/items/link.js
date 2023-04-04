@@ -115,7 +115,7 @@ export const linkItem = new MenuItem({
             }
           },
           isIframe: iframe ? true : false
-        }
+        },
       );
     });
   },

@@ -53,10 +53,11 @@ function renderPopUp(
 export default function createPopup(
   View,
   viewProps,
-  popUpParams
+  popUpParams,
+  params
 ) {
-  const rootId = uuid();
 
+  const rootId = uuid();
   let handle = null;
   let currentViewProps = viewProps;
 
@@ -98,7 +99,6 @@ export default function createPopup(
       render(currentViewProps || emptyObj, popUpParams || emptyObj);
     },
   };
-
   render(currentViewProps || emptyObj, popUpParams || emptyObj);
   return handle;
 }

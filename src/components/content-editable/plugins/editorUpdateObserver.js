@@ -153,6 +153,7 @@ class EditorUpdateObserver {
             autoDismiss: false,
             onClose: this._onClose,
             position: atAnchorTopCenter,
+            isIframe
           });
         }
       }
