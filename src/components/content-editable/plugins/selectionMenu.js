@@ -97,7 +97,9 @@ class SelectionMenu {
         {
           modal: true,
           onClose: (val) => {
-            resolve(val);
+            if(val) {
+              resolve(val);
+            }
           },
           isIframe: this.isIframe
         },
@@ -150,7 +152,6 @@ class SelectionMenu {
         break;
       case IMAGE:
         this.waitForUserInput({view,from,to}).then(val=>{
-          console.log(val);
           this.executeWithUserInput(state,view.dispatch,view,from,val);
         })
         break;
