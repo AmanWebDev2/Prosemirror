@@ -14,8 +14,11 @@ const EmbedVideo = () => {
         if(urlDetails) {
             const params = urlDetails.searchParams;
             let value = params.get('v');
-            let embedUrl = 'https://www.youtube.com' + `/embed/${value}`
-            return embedUrl
+            if(value) {
+              let embedUrl = 'https://www.youtube.com' + `/embed/${value}`
+              return embedUrl
+            }
+            return url;
         }
     }
     

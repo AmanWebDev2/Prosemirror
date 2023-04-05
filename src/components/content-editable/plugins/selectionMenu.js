@@ -18,6 +18,7 @@ import { schema } from "prosemirror-schema-basic";
 import { hideSelectionPlaceholder } from "./SelectionPlaceholderPlugin";
 import { MARK_LINK } from "../custom/schema/marks/Names";
 import applyMark from "../utils/applyMark";
+import EmbedVideoPopover from "../popover/EmbedVideoPopover";
 
 export function selectionMenu(options) {
   return new Plugin({
@@ -86,13 +87,12 @@ class SelectionMenu {
     this.update(editorView, null);
   }
 
-  waitForUserInput({view,from,to}){
+  waitForUserInput({view,from,to,component,attribute}){
     const node = view.state.doc.nodeAt(from);
-    const url = node ? node.attrs['data-link-url'] : null;
-
+    const url = node ? node.attrs[attribute] : null;
     return new Promise((resolve) => {
       this._popUp = createPopup(
-        ImagePopover,
+        component,
         { url },
         {
           modal: true,
@@ -107,7 +107,7 @@ class SelectionMenu {
     });
   }
 
-  executeWithUserInput(state, dispatch, view, from,href) {
+  executeWithUserInput({state, dispatch, view, from,href,attribute}) {
     if (dispatch) {
       const { selection, schema } = state;
       let { tr } = state;
@@ -115,7 +115,7 @@ class SelectionMenu {
       trx = view ? hideSelectionPlaceholder(view.state) : tr;
       trx = trx.setSelection(selection);
       if (href !== undefined) {
-        const attributes = { "data-link-url": href };
+        const attributes = { [attribute] : href };
         const node = state.doc.nodeAt(from);
         trx = state.tr.setNodeMarkup(from, null, { ...node.attrs, ...attributes });
         // trx = applyMark(trx, schema, markType, attrs);
@@ -151,11 +151,14 @@ class SelectionMenu {
       case ATTRIBUTE_SPAN:
         break;
       case IMAGE:
-        this.waitForUserInput({view,from,to}).then(val=>{
-          this.executeWithUserInput(state,view.dispatch,view,from,val);
+        this.waitForUserInput({view,from,to,component:ImagePopover,attribute:'data-link-url'}).then(href=>{
+          this.executeWithUserInput({state,dispatch:view.dispatch,view,from,href,attribute:'data-link-url'});
         })
         break;
-      case VIDEO_CLIP:
+      case EMBED_VIDEO:
+        this.waitForUserInput({view,from,to,component:EmbedVideoPopover,attribute:'src'}).then(href=>{
+          this.executeWithUserInput({state,dispatch:view.dispatch,view,from,href,attribute:'src'});
+        })
         break;
       default:
     }
@@ -166,7 +169,6 @@ class SelectionMenu {
         readOnly ||
         state.selection.empty ||
         selectedNodeName === ATTRIBUTE_SPAN ||
-        selectedNodeName === EMBED_VIDEO ||
         selectedNodeName === VIDEO_CLIP) &&
       !isLinkToolTip
     ) {
