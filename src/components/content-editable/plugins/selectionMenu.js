@@ -7,7 +7,7 @@ import {
   IMAGE,
   VIDEO_CLIP,
 } from "../custom/schema/nodes/Names";
-import ImagePopover from "../popover/ImagePopover";
+import ImagePopover from "../popover/ImgPopover";
 
 import { handleMenuPosition } from "../utils/handleMenuPosition";
 import { toggleInserter } from "./editorDOMEvents";

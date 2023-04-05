@@ -3,7 +3,7 @@ import { attributes } from "../../../../../data/attributes";
 const AttributeSpanNodeSpec = {
   attrs: {
     // define attributes for the span node
-    class: { default: "kudoshub-intercom-template" },
+    class: { default: "kudoshub-template" },
     style: { default: " " },
     contenteditable: { default: "false" },
     "data-template-fallback": {default: ""},

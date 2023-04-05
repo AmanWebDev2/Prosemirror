@@ -700,7 +700,7 @@ cursor:pointer;
   color: blue
 }
 
-.kudoshub-intercom-template {
+.kudoshub-template {
   color: #222222;
   background-color: #f1f1f1;
   border: 1px solid rgba(0, 0, 0, 0.1);
