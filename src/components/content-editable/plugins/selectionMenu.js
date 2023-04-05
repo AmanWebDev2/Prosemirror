@@ -105,7 +105,7 @@ class SelectionMenu {
 
   executeWithUserInput({state, dispatch, view, from,value,attribute}) {
     if (dispatch) {
-      const { selection, schema } = state;
+      const { selection } = state;
       let { tr } = state;
       let trx = tr;
       trx = view ? hideSelectionPlaceholder(view.state) : tr;
@@ -130,7 +130,7 @@ class SelectionMenu {
     const { state, readOnly } = view;
     const { from, to } = state.selection;
     const start = view.coordsAtPos(from);
-    const end = view.coordsAtPos(to);
+    // const end = view.coordsAtPos(to);
     const tooltipNode = this.menu.querySelector("div.czi-link-tooltip");
     let isLinkToolTip = tooltipNode ? true : false;
 

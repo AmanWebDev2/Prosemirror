@@ -18,9 +18,9 @@ const LinkUrlEditor = (props) => {
     setUrl(url);
   };
 
-  const cancel = () => {
-    props.closeCallback();
-  };
+  // const cancel = () => {
+  //   props.closeCallback();
+  // };
 
   const apply = () => {
     if (!BAD_CHARACTER_PATTER.test(url)) {

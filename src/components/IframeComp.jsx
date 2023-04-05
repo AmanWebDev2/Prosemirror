@@ -5,47 +5,47 @@ import "bootstrap/dist/css/bootstrap.min.css";
 
 import Editor from './content-editable/Editor'
 import { isIframe } from './content-editable/utils/isFrame';
-const doc = {
-    type: "doc",
-    content: [
-      {
-        type: "paragraph",
-        content: [
-          {
-            type: "text",
-            text: "line one",
-          },
-        ],
-      },
-      {
-        type: "paragraph",
-        content: [
-          {
-            type: "text",
-            text: "line two",
-          },
-        ],
-      },
-      {
-        type: "paragraph",
-        content: [
-          {
-            type: "text",
-            text: "line three",
-          },
-        ],
-      },
-      {
-        type: "paragraph",
-        content: [
-          {
-            type: "text",
-            text: "🤞",
-          },
-        ],
-      },
-    ],
-  };
+// const doc = {
+//     type: "doc",
+//     content: [
+//       {
+//         type: "paragraph",
+//         content: [
+//           {
+//             type: "text",
+//             text: "line one",
+//           },
+//         ],
+//       },
+//       {
+//         type: "paragraph",
+//         content: [
+//           {
+//             type: "text",
+//             text: "line two",
+//           },
+//         ],
+//       },
+//       {
+//         type: "paragraph",
+//         content: [
+//           {
+//             type: "text",
+//             text: "line three",
+//           },
+//         ],
+//       },
+//       {
+//         type: "paragraph",
+//         content: [
+//           {
+//             type: "text",
+//             text: "🤞",
+//           },
+//         ],
+//       },
+//     ],
+//   };
 const IframeComp = () => {
     const iframeRef = useRef();
 

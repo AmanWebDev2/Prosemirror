@@ -1,5 +1,3 @@
-import { getProsemirrorMenu } from "../../../utils/getMenu";
-
 const ImageNodeSpec = {
     attrs: {
       align: {default: null},
