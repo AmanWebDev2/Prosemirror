@@ -48,7 +48,7 @@ const ImagePopover = (props) => {
   };
 
   const apply = () => {
-    if (url && !BAD_CHARACTER_PATTER.test(url)) {
+    if (!BAD_CHARACTER_PATTER.test(url)) {
       // console.log(props)
       props.close(sanitizeURL(inputRef.current.value), applyMark);
     }
