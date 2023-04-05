@@ -1,7 +1,6 @@
 import { Plugin, TextSelection } from "prosemirror-state";
 
 import { renderGrouped } from "prosemirror-menu";
-import { markActive } from "../utils/markActive";
 import {
   ATTRIBUTE_SPAN,
   EMBED_VIDEO,
@@ -13,12 +12,9 @@ import ImagePopover from "../popover/ImagePopover";
 import { handleMenuPosition } from "../utils/handleMenuPosition";
 import { toggleInserter } from "./editorDOMEvents";
 import createPopup from "../utils/createPopup";
-import findNodesWithSameMark from "../utils/findNodeWithSameMark";
-import { schema } from "prosemirror-schema-basic";
 import { hideSelectionPlaceholder } from "./SelectionPlaceholderPlugin";
-import { MARK_LINK } from "../custom/schema/marks/Names";
-import applyMark from "../utils/applyMark";
 import EmbedVideoPopover from "../popover/EmbedVideoPopover";
+import AttributePopover from "../popover/AttributePopover";
 
 export function selectionMenu(options) {
   return new Plugin({
@@ -149,6 +145,9 @@ class SelectionMenu {
     // popoover
     switch (selectedNodeName) {
       case ATTRIBUTE_SPAN:
+        this.waitForUserInput({view,from,to,component:AttributePopover,attribute:'data-link-url'}).then(href=>{
+          this.executeWithUserInput({state,dispatch:view.dispatch,view,from,href,attribute:'data-link-url'});
+        })
         break;
       case IMAGE:
         this.waitForUserInput({view,from,to,component:ImagePopover,attribute:'data-link-url'}).then(href=>{
@@ -168,7 +167,6 @@ class SelectionMenu {
       (!state ||
         readOnly ||
         state.selection.empty ||
-        selectedNodeName === ATTRIBUTE_SPAN ||
         selectedNodeName === VIDEO_CLIP) &&
       !isLinkToolTip
     ) {
