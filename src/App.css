@@ -482,6 +482,7 @@ img.ProseMirror-separator {
   padding-right: 32px;
   width: 100%;
   max-width: 558px;
+  appearance: none;
   -webkit-appearance: none;
   padding: 5px 11px;
   box-sizing: border-box;
