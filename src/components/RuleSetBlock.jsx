@@ -30,7 +30,8 @@ const RuleSetBlock = React.forwardRef(({ dropdownData,isFocused },ref) => {
     const view = window.view;
     if(view) {
       const node = view.state.schema.nodes[ATTRIBUTE_SPAN].create({
-        "data-template-identifier":attributeData.key
+        "data-template-identifier":attributeData.key,
+        "data-template-display":attributeData.display,
       }, [view.state.schema.text(attributeData.display)]);
       const transaction = view.state.tr.replaceSelectionWith(node);
       view.dispatch(transaction);

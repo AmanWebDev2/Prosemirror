@@ -7,7 +7,8 @@ const AttributeSpanNodeSpec = {
     style: { default: " " },
     contenteditable: { default: "false" },
     "data-template-fallback": {default: ""},
-    "data-template-identifier":{default: ""}
+    "data-template-identifier":{default: ""},
+    "data-template-display":{default: ""}
   },
   group: "inline",
   inline: true,
@@ -22,9 +23,15 @@ const AttributeSpanNodeSpec = {
   toDOM: (function(node){
     const span = document.createElement('span');
     const templateIdentifier = node.attrs['data-template-identifier']; 
-    if(!templateIdentifier) return span;
-    const val = attributes.find(attribute => attribute.key === templateIdentifier);
-    span.textContent = val.display + '\uFEFF' // Add zero-width non-breaking space at the end
+    const templateIdentifierDisplay = node.attrs['data-template-display']; 
+    
+    if(templateIdentifierDisplay) {
+      span.textContent = templateIdentifierDisplay + '\uFEFF' // Add zero-width non-breaking space at the end
+    }else {
+      if(!templateIdentifier) return span;
+      const val = attributes.find(attribute => attribute.key === templateIdentifier);
+      span.textContent = val.display + '\uFEFF' // Add zero-width non-breaking space at the end
+    }
     for (const [name, value] of Object.entries(node.attrs)) {
       if (value !== undefined) {
         span.setAttribute(name, value)
