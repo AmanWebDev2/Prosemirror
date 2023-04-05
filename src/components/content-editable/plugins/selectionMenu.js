@@ -85,11 +85,11 @@ class SelectionMenu {
 
   waitForUserInput({view,from,to,component,attribute}){
     const node = view.state.doc.nodeAt(from);
-    const url = node ? node.attrs[attribute] : null;
+    const value = node ? node.attrs[attribute] : null;
     return new Promise((resolve) => {
       this._popUp = createPopup(
         component,
-        { url },
+        { value },
         {
           modal: true,
           onClose: (val) => {
@@ -103,15 +103,15 @@ class SelectionMenu {
     });
   }
 
-  executeWithUserInput({state, dispatch, view, from,href,attribute}) {
+  executeWithUserInput({state, dispatch, view, from,value,attribute}) {
     if (dispatch) {
       const { selection, schema } = state;
       let { tr } = state;
       let trx = tr;
       trx = view ? hideSelectionPlaceholder(view.state) : tr;
       trx = trx.setSelection(selection);
-      if (href !== undefined) {
-        const attributes = { [attribute] : href };
+      if (value !== undefined) {
+        const attributes = { [attribute] : value };
         const node = state.doc.nodeAt(from);
         trx = state.tr.setNodeMarkup(from, null, { ...node.attrs, ...attributes });
         // trx = applyMark(trx, schema, markType, attrs);
@@ -145,18 +145,18 @@ class SelectionMenu {
     // popoover
     switch (selectedNodeName) {
       case ATTRIBUTE_SPAN:
-        this.waitForUserInput({view,from,to,component:AttributePopover,attribute:'data-link-url'}).then(href=>{
-          this.executeWithUserInput({state,dispatch:view.dispatch,view,from,href,attribute:'data-link-url'});
+        this.waitForUserInput({view,from,to,component:AttributePopover,attribute:'data-template-fallback'}).then(value=>{
+          this.executeWithUserInput({state,dispatch:view.dispatch,view,from,value,attribute:'data-template-fallback'});
         })
         break;
       case IMAGE:
-        this.waitForUserInput({view,from,to,component:ImagePopover,attribute:'data-link-url'}).then(href=>{
-          this.executeWithUserInput({state,dispatch:view.dispatch,view,from,href,attribute:'data-link-url'});
+        this.waitForUserInput({view,from,to,component:ImagePopover,attribute:'data-link-url'}).then(value=>{
+          this.executeWithUserInput({state,dispatch:view.dispatch,view,from,value,attribute:'data-link-url'});
         })
         break;
       case EMBED_VIDEO:
-        this.waitForUserInput({view,from,to,component:EmbedVideoPopover,attribute:'src'}).then(href=>{
-          this.executeWithUserInput({state,dispatch:view.dispatch,view,from,href,attribute:'src'});
+        this.waitForUserInput({view,from,to,component:EmbedVideoPopover,attribute:'src'}).then(value=>{
+          this.executeWithUserInput({state,dispatch:view.dispatch,view,from,value,attribute:'src'});
         })
         break;
       default:

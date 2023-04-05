@@ -5,7 +5,7 @@ const EmbedVideoPopover = (props) => {
     <>
     <div className="kudoshub-prosemirror-popover kudoshub-prosemirror-composer-pointer">
         <div className="kudoshub-prosemirror-composer-editor-readonly-text">
-            {props.url || ''}
+            {props.value || ''}
         </div>
     </div>
     </>
