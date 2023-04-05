@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import linkSvg from "../../../../src/assets/svg/link.svg";
 import attributeSvg from "../../../../src/assets/svg/attribute.svg";
 import crossSvg from "../../../../src/assets/svg/cross.svg";
-import sanitizeURL from "../utils/santizeURL";
+import sanitizeURL, { HTTP_PREFIX } from "../utils/santizeURL";
 import applyMark from "../utils/applyMark";
 import { BAD_CHARACTER_PATTER } from "../../LinkUrlEditor";
 import { ENTER } from "../utils/KeyCodes";
@@ -53,6 +53,16 @@ const ImagePopover = (props) => {
       props.close(sanitizeURL(inputRef.current.value), applyMark);
     }
   };
+
+  useEffect(()=>{
+    if(url) {
+      const link = url.replace(HTTP_PREFIX,'');
+      if(link.trim() === '') {
+        setUrl('');
+      }
+    }
+  },[]);
+
 
   return (
     <>
