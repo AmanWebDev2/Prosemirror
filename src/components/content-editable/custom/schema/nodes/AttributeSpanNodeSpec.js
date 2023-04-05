@@ -1,3 +1,5 @@
+import { attributes } from "../../../../../data/attributes";
+
 const AttributeSpanNodeSpec = {
   attrs: {
     // define attributes for the span node
@@ -18,8 +20,11 @@ const AttributeSpanNodeSpec = {
     }
   },
   toDOM: (function(node){
-    const span = document.createElement('span')
-    span.textContent = node.textContent + '\uFEFF' // Add zero-width non-breaking space at the end
+    const span = document.createElement('span');
+    const templateIdentifier = node.attrs['data-template-identifier']; 
+    if(!templateIdentifier) return span;
+    const val = attributes.find(attribute => attribute.key === templateIdentifier);
+    span.textContent = val.display + '\uFEFF' // Add zero-width non-breaking space at the end
     for (const [name, value] of Object.entries(node.attrs)) {
       if (value !== undefined) {
         span.setAttribute(name, value)

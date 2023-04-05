@@ -7,6 +7,7 @@ const AttributePopover = (props) => {
     const [fallback,setFallback] = useState(props.value);
     const handleKeyDown=(e)=>{
         if(e.keyCode === 13) {
+            e.preventDefault();
             const fallbackValue = inputRef.current.value;
             apply(fallbackValue);
         }
