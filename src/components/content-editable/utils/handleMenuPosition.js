@@ -1,5 +1,7 @@
 import { markActive } from "./markActive";
 
+const topSpace = 5;
+
 export const handleMenuPosition = ({ view, isLinkActive, iframe, menu }) => {
   const { state, readOnly } = view;
   const { from, to } = state.selection;
@@ -39,6 +41,7 @@ export const handleMenuPosition = ({ view, isLinkActive, iframe, menu }) => {
         //   menu.style.transform = `translate(${left + domNodeRect.width/2}px,${(start.top - offsetParentBox.top - box.height)}px)`;
         // }else {
         // }
+
         if (
           domNode &&
           domNode.nodeName === "DIV" &&
@@ -47,7 +50,7 @@ export const handleMenuPosition = ({ view, isLinkActive, iframe, menu }) => {
           const domNodeRect = domNode.getBoundingClientRect();
           console.log("positioned");
           menu.style.transform = `translate(${domNodeRect.width / 2 + left}px,${
-            start.top - offsetParentBox.top - box.height
+            start.top - offsetParentBox.top - box.height - topSpace
           }px)`;
         } else if (
           domNode &&
@@ -56,11 +59,11 @@ export const handleMenuPosition = ({ view, isLinkActive, iframe, menu }) => {
         ) {
           const domNodeRect = domNode.getBoundingClientRect();
           menu.style.transform = `translate(${domNodeRect.width / 2 + left}px,${
-            start.top - offsetParentBox.top - box.height
+            start.top - offsetParentBox.top - box.height - topSpace
           }px)`;
         } else {
           menu.style.transform = `translate(${left}px,${
-            start.top - offsetParentBox.top - box.height
+            start.top - offsetParentBox.top - box.height - topSpace
           }px)`;
         }
       }
