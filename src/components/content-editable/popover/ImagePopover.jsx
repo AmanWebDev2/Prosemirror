@@ -60,7 +60,9 @@ const ImagePopover = (props) => {
         <div>
           <div className="d-flex">
             {!show ? (
-              <button onClick={() => setShow(true)}>
+              <button
+              className={`kudoshub-prosemirror-composer-icon-btn ${url && "selected"}`}
+              onClick={() => setShow(true)}>
                 <img src={linkSvg} alt="link" />
               </button>
             ) : (
@@ -68,7 +70,7 @@ const ImagePopover = (props) => {
                 <div className="flex">
                   <input
                     placeholder="Enter a link"
-                    class="kudoshib-prosemirror-composer-editor-box-input o__with-icon"
+                    class="kudoshub-prosemirror-composer-editor-box-input o__with-icon"
                     data-test-image-editor-link-url-input=""
                     type="text"
                     onKeyDown={handleKeyDown}
@@ -78,12 +80,12 @@ const ImagePopover = (props) => {
                   />
                 </div>
                 <div className="flex flex-col">
-                  <button>
+                  <button className="kudoshub-prosemirror-composer-icon-btn flex content-start kudoshub-prosemirror-template-inserter-opener">
                     <img src={attributeSvg} alt="attribute" />
                   </button>
                 </div>
                 <div className="flex flex-col">
-                  <button>
+                  <button className="kudoshub-prosemirror-composer-icon-btn flex content-start kudoshub-prosemirror-template-inserter-opener">
                     <img src={crossSvg} alt="attribute" />
                   </button>
                 </div>

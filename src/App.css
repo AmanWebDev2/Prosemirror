@@ -771,3 +771,7 @@ img.ProseMirror-separator {
 .fallback-editor-input {
   border-left: 1px solid #f1f1f1;
 }
+
+.kudoshub-prosemirror-composer-icon-btn.selected {
+  background-color: #eef0fc;
+}
