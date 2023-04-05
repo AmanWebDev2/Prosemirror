@@ -12,7 +12,7 @@ import { setElementProperties } from "../utils/setNodeProperties";
 
 const ImagePopover = (props) => {
   const [show, setShow] = useState(false);
-  const [url, setUrl] = useState(() => props.url);
+  const [url, setUrl] = useState(() => props.value);
   const inputRef = useRef();
 
   useEffect(() => {
