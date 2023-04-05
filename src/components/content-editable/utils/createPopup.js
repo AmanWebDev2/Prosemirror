@@ -66,6 +66,7 @@ export default function createPopup(
     //   return;
     // }
     // unrenderPopUp(rootId);
+    // !have to check in case of without iframe: image popover
 
     if (modal) {
       modalsCount--;

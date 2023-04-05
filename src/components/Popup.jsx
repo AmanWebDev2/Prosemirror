@@ -7,7 +7,6 @@ import {
 } from "./content-editable/utils/PopupPosition";
 
 const Popup = (props) => {
-  console.log(props);
   const { View, viewProps, close,popUpParams } = props;
   const dummy = {};
   const _id = uuid();
@@ -31,6 +30,7 @@ const Popup = (props) => {
   return (
     <>
       <div data-pop-up-id={uuid()} id={uuid()} className='wrapper'>
+        {/* view --> component to be rendered */}
         <View {...(viewProps || dummy)} close={close} />
       </div>
     </>
