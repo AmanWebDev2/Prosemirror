@@ -10,16 +10,19 @@ export const handleMenuPosition = ({ view, isLinkActive, iframe, menu }) => {
 
   try {
     let box = menu.getBoundingClientRect();
-    let offsetParentBox = menu.offsetParent ? menu.offsetParent.getBoundingClientRect() : document.body.getBoundingClientRect();
-    let left = (start.left + end.left) / 2 - box.width / 2 - offsetParentBox.left;
+    let offsetParentBox = menu.offsetParent
+      ? menu.offsetParent.getBoundingClientRect()
+      : document.body.getBoundingClientRect();
+    let left =
+      (start.left + end.left) / 2 - box.width / 2 - offsetParentBox.left;
     if (left < 5) {
       left = 5;
     }
     if (
-      (
-        markActive(state, state.schema.marks.link) && !(!state || readOnly || state.selection.from !== state.selection.to)) ||
-        isLinkActive
-      ) {
+      (markActive(state, state.schema.marks.link) &&
+        !(!state || readOnly || state.selection.from !== state.selection.to)) ||
+      isLinkActive
+    ) {
       if (iframe) {
         menu.style.top = start.bottom + "px";
         menu.style.left = left + "px";
@@ -43,6 +46,15 @@ export const handleMenuPosition = ({ view, isLinkActive, iframe, menu }) => {
         ) {
           const domNodeRect = domNode.getBoundingClientRect();
           console.log("positioned");
+          menu.style.transform = `translate(${domNodeRect.width / 2 + left}px,${
+            start.top - offsetParentBox.top - box.height
+          }px)`;
+        } else if (
+          domNode &&
+          domNode.nodeName === "DIV" &&
+          domNode.classList.contains("embed-video-container")
+        ) {
+          const domNodeRect = domNode.getBoundingClientRect();
           menu.style.transform = `translate(${domNodeRect.width / 2 + left}px,${
             start.top - offsetParentBox.top - box.height
           }px)`;
