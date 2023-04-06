@@ -34,8 +34,7 @@ function handleHoveringElement({ event, lastNode, view, iframe,iframeDoc }) {
   const topHalf = event.clientY - elmRect.top < elmRect.height / 2;
   const blockInserterRect = blockInserter.getBoundingClientRect();
   if (blockInserterBtn.onClick == null) {
-    blockInserterBtn.onclick = () =>
-      handleBlockInsterClick({ topHalf, view, lastNode });
+    blockInserterBtn.onclick =()=> handleBlockInsterClick({ topHalf, view, lastNode });
   }
   if (topHalf) {
     setElementProperties(inserterPointer, {
@@ -43,7 +42,7 @@ function handleHoveringElement({ event, lastNode, view, iframe,iframeDoc }) {
     });
     setElementProperties(blockInserter, {
       transform: `translate(-${editorContainerRect.right}px,${
-        elmRect.top - blockInserterRect.height / 2
+        elmRect.top - (blockInserterRect.height / 2 )+ window.scrollY
       }px)`,
     });
   } else {
@@ -52,7 +51,7 @@ function handleHoveringElement({ event, lastNode, view, iframe,iframeDoc }) {
     });
     setElementProperties(blockInserter, {
       transform: `translate(-${editorContainerRect.right}px,${
-        elmRect.bottom - blockInserterRect.height / 2
+        elmRect.bottom - (blockInserterRect.height / 2) + window.scrollY
       }px)`,
     });
   }
@@ -227,23 +226,21 @@ function getTranslateXY(element) {
   }
 }
 function handleMouseEnter(view,event,iframe,iframeDoc) {
-  let blockInserterBtn;
-  let rulset;
+  let blockInserterBtn,rulset;
   if(iframe) {
     blockInserterBtn = iframeDoc.querySelector("#blockInserter-dropdown");
     rulset = iframeDoc.querySelector(".rulset-position");
   }else {
     blockInserterBtn = document.querySelector("#blockInserter-dropdown");
     rulset = document.querySelector(".rulset-position");
-
   } 
   const domRect = view.dom.getBoundingClientRect();
     if(rulset && !iframe) {
       rulset.classList.remove('hidden');
       const transform = getTranslateXY(rulset);
       rulset.style.transform = `translate(${
-        domRect.right - 15 + window.scrollX
-      }px, ${transform.translateY}px)`;
+        (transform.translateX) + window.scrollX
+      }px, ${transform.translateY ? transform.translateY: domRect.top }px)`;
     }else {
       const { state } = view;
       const { from } = state.selection;
@@ -298,9 +295,7 @@ export function editorDOMEvents(options) {
         },
         mouseenter(view, event) {
           const { iframe } = options;
-          let blockInserterMenu;
-          let rulsetMenu;
-          let iframeDoc
+          let blockInserterMenu, rulsetMenu,iframeDoc;
           if(iframe) {
             const iframe = document.getElementById("kudoshub-editor-frame");
             if(!iframe) return; 
@@ -319,16 +314,15 @@ export function editorDOMEvents(options) {
           }
 
           if(
-            blockInserterMenu && blockInserterMenu.style.display == "block" ||
-          rulsetMenu && rulsetMenu.style.display == "block"
+            ((blockInserterMenu && (blockInserterMenu.style.display === "block") )||
+          (rulsetMenu && (rulsetMenu.style.display === "block")))
           ) return;
           handleMouseEnter(view,event,iframe,iframeDoc)
         },
         mouseleave(view, event) {
           const { iframe } = options;
-          let blockInserterMenu;
-          let rulsetMenu;
-          let iframeDoc;
+          let blockInserterMenu, rulsetMenu,iframeDoc;
+
           if(iframe) {
             const iframe = document.getElementById("kudoshub-editor-frame");
             if(!iframe) return; 
@@ -354,9 +348,7 @@ export function editorDOMEvents(options) {
         },
         focus(view,event) {
           const { iframe } = options;
-          let rulsetBtn;
-          let rulsetMenu;
-          let iframeDoc;
+          let rulsetBtn, rulsetMenu,iframeDoc;
           if(iframe) {
             const iframe = document.getElementById("kudoshub-editor-frame");
             if(!iframe) return; 

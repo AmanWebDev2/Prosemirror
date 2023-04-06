@@ -101,6 +101,8 @@ const IframeComp = () => {
         margin: 0 auto;
         max-height: 300px;
         overflow-y: scroll;
+        padding: 0 26px 10px !important;
+
       }
 
   ::-webkit-scrollbar {
@@ -126,7 +128,6 @@ white-space: break-spaces;
 -webkit-font-variant-ligatures: none;
 font-variant-ligatures: none;
 font-feature-settings: "liga" 0;
-padding: 0 26px 10px !important;
 }
       
 .ProseMirror pre {
@@ -444,7 +445,6 @@ display: none;
   background-clip: padding-box;
   border-radius: 4px;
   border: 2px solid rgba(0, 0, 0, 0.2);
-  padding: 5px 0;
   margin-bottom: 23px;
 }
 
@@ -459,7 +459,6 @@ margin-top: 10px;
 }
 
 .ProseMirror {
-padding: 4px 8px 4px 14px;
 line-height: 1.2;
 outline: none;
 }

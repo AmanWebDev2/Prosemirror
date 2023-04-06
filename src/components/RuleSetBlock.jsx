@@ -1,10 +1,9 @@
-import React, { useEffect, useState, useRef, useImperativeHandle } from "react";
+import React, { useState, useRef, useImperativeHandle } from "react";
 
 import attributeSvg from "../assets/svg/attribute.svg";
 import { ATTRIBUTE_SPAN } from "./content-editable/custom/schema/nodes/Names";
 
 const RuleSetBlock = React.forwardRef(({ dropdownData,isFocused },ref) => {
-  const [left, setLeft] = useState(0);
   const [show,setShow] = useState(false);
   const ruleSetRef = useRef();
   const ruleSetPosRef = useRef();
@@ -39,13 +38,7 @@ const RuleSetBlock = React.forwardRef(({ dropdownData,isFocused },ref) => {
     setShow(!show);
   };
 
-  useEffect(() => {
-    if (!window.view) return;
-    const dom = window.view.dom;
-    const editorRect = dom.getBoundingClientRect();
-    setLeft(editorRect.width-15);
-  }, []);
-
+ 
   const handleRuleSetClick=(e)=>{
     e.stopPropagation();
     setShow(!show)

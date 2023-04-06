@@ -272,6 +272,7 @@ export default function Editor({iframe}) {
   const rulsetRef = useRef(null);
   const blockInserterRef = useRef(null);
   const [editorWidth,setEditorWidth] = useState(200);
+  const [show,setShow] = useState(false);
   
   useEffect(() => {
     if (editorRef.current) return;
@@ -355,7 +356,10 @@ export default function Editor({iframe}) {
 
   return(
     <>
-     <div id="editor" className="scroll" ref={editorDom} >
+     <div id="editor" className="scroll" ref={editorDom} 
+    //  onMouseEnter={()=>setShow(true)}
+    //  onMouseLeave={()=>setShow(false)}
+     >
 
      {!iframe ?createPortal(
         <RuleSetBlock dropdownData={attributes} ref={rulsetRef} />,

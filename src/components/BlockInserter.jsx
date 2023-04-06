@@ -275,7 +275,7 @@ const BlockInserter = React.forwardRef((props,ref) => {
       style={{
         display:show ? 'none': 'block'
       }}
-        className="attribute-btn kudoshub-prosemirror-composer-icon-btn hidden"
+        className="attribute-btn kudoshub-prosemirror-composer-icon-btn"
         variant="success"
         id="blockInserter-dropdown"
       >
