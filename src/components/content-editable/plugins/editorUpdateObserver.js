@@ -16,6 +16,7 @@ import applyMark from "../utils/applyMark";
 import lookUpElement from "../utils/lookUpElement";
 import { markActive } from "../utils/markActive";
 import { isIframe } from "../utils/isFrame";
+import { getProsemirrorMenu } from "../utils/getMenu";
 
 export function editorUpdateObserver(options) {
   return new Plugin({
@@ -68,7 +69,13 @@ class EditorUpdateObserver {
       state.selection.from !== state.selection.to
     ) {
       // update plugin
-      // console.log(state)
+
+      const menu = getProsemirrorMenu();
+      if(!menu) return;
+      
+      // check for if it has a default selection menu
+      const menuItem = menu.querySelector('.ProseMirror-menuitem');
+      if(menuItem) return;
 
       const myPlugin = state.plugins.filter((plugin) => {
         if (plugin?.spec?.name === "myPlugin") {
@@ -78,22 +85,10 @@ class EditorUpdateObserver {
         }
       });
 
-      // const sm = selectionMenu({ content: [tooltipMenuItems] });
-      // sm.setParent(state.plugins);
-
       const newState = state.reconfigure({
         plugins: [...myPlugin, selectionMenu({ content: [tooltipMenuItems], iframe:isIframe,elementClassNameToHandlingMenuPositionOnScroll:'scroll' })],
       });
 
-      // console.log(view);
-      // ! causes focus issue
-      // let newtr = state.tr.scrollIntoView();
-      // requestAnimationFrame(() => {
-      //   view.dom.scrollIntoView();
-      // });
-      // view.scrollToSelection();
-      // state.setPlugin(newState.plugins);
-      console.log(view)
       view.updateState(newState);
     } else {
       // when only cursor is put over link then show link tooltip
