@@ -1,5 +1,6 @@
 import {Plugin} from 'prosemirror-state';
 import {TextSelection} from 'prosemirror-state';
+
 import {MARK_LINK} from '../custom/schema/marks/Names';
 import {
   hideSelectionPlaceholder,
@@ -10,12 +11,8 @@ import findNodesWithSameMark from '../utils/findNodeWithSameMark';
 import lookUpElement from '../utils/lookUpElement';
 import LinkTooltip from '../../LinkTooltip';  
 import LinkUrlEditor from '../../LinkUrlEditor';  
-import { atAnchorTopCenter } from '../utils/PopupPosition';
 import createPopUp from '../utils/createPopup'; 
 
-// import './ui/czi-pop-up.css';
-
-// https://prosemirror.net/examples/tooltip/
 const SPEC = {
   view(editorView) {
     return new LinkTooltipView(editorView);
@@ -91,7 +88,6 @@ class LinkTooltipView {
         anchor: anchorEl,
         autoDismiss: false,
         onClose: this._onClose,
-        position: atAnchorTopCenter,
       });
     }
   }

@@ -1,4 +1,4 @@
-import { Plugin, TextSelection, PluginKey } from "prosemirror-state";
+import { Plugin, TextSelection } from "prosemirror-state";
 
 import { tooltipMenuItems } from "../custom/menu/menuItems";
 import { selectionMenu } from "./selectionMenu";
@@ -8,15 +8,12 @@ import {
   hideSelectionPlaceholder,
   showSelectionPlaceholder,
 } from "./SelectionPlaceholderPlugin";
-
 import findNodesWithSameMark from "../utils/findNodeWithSameMark";
 import createPopup from "../utils/createPopup";
-import { atAnchorTopCenter } from "../utils/PopupPosition";
 import applyMark from "../utils/applyMark";
 import lookUpElement from "../utils/lookUpElement";
 import { markActive } from "../utils/markActive";
 import { isIframe } from "../utils/isFrame";
-import { getProsemirrorMenu } from "../utils/getMenu";
 
 export function editorUpdateObserver(options) {
   return new Plugin({
@@ -24,22 +21,6 @@ export function editorUpdateObserver(options) {
     view(editorView) {
       return new EditorUpdateObserver(editorView, options);
     },
-    props: {
-      handleDOMEvents: {
-        focus(view, event) {
-          //
-        },
-      },
-    },
-    // state:{
-    //   init(_, state) {
-    //     return  selectionMenu({ content: [tooltipMenuItems] })
-    //   },
-    //   apply(tr, pluginState) {
-    //     console.log(tr,tr.getMeta("focus$"));
-    //     return selectionMenu({ content: [tooltipMenuItems] })
-    //   },
-    // }
   });
 }
 
@@ -49,34 +30,22 @@ class EditorUpdateObserver {
     this.options = options;
   }
 
-  updatePluginState(state, dispatch) {
-    // const pluginState = myPluginKey.getState(state);
-    // const newPluginState = /* modify the plugin state */;
-    // if (dispatch) {
-    //   dispatch(state.tr.setMeta(myPluginKey, newPluginState));
-    // } else {
-    //   return newPluginState;
-    // }
-  }
-
   update(view, lastState) {
     const { state, readOnly } = view;
-        // // Get the current state of the editor
-        // const currentState = view.state;
+    // // Get the current state of the editor
+    // const currentState = view.state;
 
-        // // Get the previous state's content
-        // const prevContent = lastState.doc.content;
-      
-        // // Get the current state's content
-        // const currentContent = currentState.doc.content;
-      
-        // // Compare the previous and current content
-        // if (prevContent == currentContent) return;
-    if (
-      !markActive(state, state.schema.marks.link) 
-    ) {
+    // // Get the previous state's content
+    // const prevContent = lastState.doc.content;
+
+    // // Get the current state's content
+    // const currentContent = currentState.doc.content;
+
+    // // Compare the previous and current content
+    // if (prevContent == currentContent) return;
+    if (!markActive(state, state.schema.marks.link)) {
       // update plugin
- 
+
       const myPlugin = state.plugins.filter((plugin) => {
         if (plugin?.spec?.name === "myPlugin") {
           return false;
@@ -86,7 +55,14 @@ class EditorUpdateObserver {
       });
 
       const newState = state.reconfigure({
-        plugins: [...myPlugin, selectionMenu({ content: [tooltipMenuItems], iframe:isIframe,elementClassNameToHandlingMenuPositionOnScroll:'scroll' })],
+        plugins: [
+          ...myPlugin,
+          selectionMenu({
+            content: [tooltipMenuItems],
+            iframe: isIframe,
+            elementClassNameToHandlingMenuPositionOnScroll: "scroll",
+          }),
+        ],
       });
 
       view.updateState(newState);
@@ -147,8 +123,7 @@ class EditorUpdateObserver {
             anchor: anchorEl,
             autoDismiss: false,
             onClose: this._onClose,
-            position: atAnchorTopCenter,
-            isIframe
+            isIframe,
           });
         }
       }

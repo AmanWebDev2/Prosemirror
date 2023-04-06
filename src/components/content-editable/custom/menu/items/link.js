@@ -1,6 +1,7 @@
 import { toggleMark } from "prosemirror-commands";
 import { MenuItem } from "prosemirror-menu";
 import { TextSelection } from "prosemirror-state";
+
 import LinkUrlEditor from "../../../../LinkUrlEditor";
 import {
   hideSelectionPlaceholder,
@@ -36,8 +37,6 @@ export const linkItem = new MenuItem({
       view.focus();
       return true;
     } else {
-   
-
       this.waitForUserInput(state, dispatch, undefined, undefined).then(
         (val) => {
           this.executeWithUserInput(state, dispatch, view, val);
@@ -69,7 +68,7 @@ export const linkItem = new MenuItem({
       dispatch(trx);
     }
     // view && view.focus();
-    
+
     return true;
   },
   waitForUserInput(state, dispatch, view, event, _popUp) {
@@ -90,19 +89,29 @@ export const linkItem = new MenuItem({
     const result = findNodesWithSameMark(doc, from, to, markType);
     const href = result ? result.mark.attrs.href : null;
     const iframe = document.getElementById("kudoshub-editor-frame");
-    if(iframe) {
+    if (iframe) {
       const iframeDoc = iframe.contentWindow.document;
-      if(!iframeDoc) return;
+      if (!iframeDoc) return;
       const smartLinkNode = iframeDoc.querySelector(".pm-selectionmenu");
-      const menu = iframeDoc.querySelector('.pm-selectionmenu');
-      if(smartLinkNode) {
-        handleMenuPosition({view:window.view,isLinkActive:true,menu,iframe:true})
+      const menu = iframeDoc.querySelector(".pm-selectionmenu");
+      if (smartLinkNode) {
+        handleMenuPosition({
+          view: window.view,
+          isLinkActive: true,
+          menu,
+          iframe: true,
+        });
       }
-    }else {
+    } else {
       const smartLinkNode = document.querySelector(".pm-selectionmenu");
-      const menu = document.querySelector('.pm-selectionmenu');
-      if(smartLinkNode && menu) {
-        handleMenuPosition({view:window.view,isLinkActive:true,menu,iframe:false})
+      const menu = document.querySelector(".pm-selectionmenu");
+      if (smartLinkNode && menu) {
+        handleMenuPosition({
+          view: window.view,
+          isLinkActive: true,
+          menu,
+          iframe: false,
+        });
       }
     }
 
@@ -118,8 +127,8 @@ export const linkItem = new MenuItem({
               resolve(val);
             }
           },
-          isIframe: iframe ? true : false
-        },
+          isIframe: iframe ? true : false,
+        }
       );
     });
   },

@@ -1,26 +1,19 @@
-import Popup from '../../Popup';
-// eslint-disable-next-line no-unused-vars
-import React from 'react';
-import ReactDOM from 'react-dom';
-import uuid from './uudi';
- 
+import React from "react";
+import ReactDOM from "react-dom";
+
+import Popup from "../../Popup";
+import uuid from "./uudi";
+
 let modalsCount = 0;
 let popUpsCount = 0;
- 
-function renderPopUp(
-  rootId,
-  close,
-  View,
-  viewProps,
-  popUpParams
-) {
-  // const rootNode = getRootElement(rootId, true, popUpParams);
+
+function renderPopUp(rootId, close, View, viewProps, popUpParams) {
   let tooltip;
-  if(popUpParams.isIframe) {
-    const iframe = document.getElementById('kudoshub-editor-frame');
-    tooltip = iframe.contentWindow.document.querySelector('.pm-selectionmenu');
-  }else {
-    tooltip = document.querySelector('.pm-selectionmenu');
+  if (popUpParams.isIframe) {
+    const iframe = document.getElementById("kudoshub-editor-frame");
+    tooltip = iframe.contentWindow.document.querySelector(".pm-selectionmenu");
+  } else {
+    tooltip = document.querySelector(".pm-selectionmenu");
   }
   const component = (
     <Popup
@@ -32,20 +25,10 @@ function renderPopUp(
   );
   try {
     ReactDOM.render(component, tooltip);
-  } catch (error) {
-    
-  }
-  
+  } catch (error) {}
 }
 
-
-export default function createPopup(
-  View,
-  viewProps,
-  popUpParams,
-  params
-) {
-
+export default function createPopup(View, viewProps, popUpParams, params) {
   const rootId = uuid();
   let handle = null;
   let currentViewProps = viewProps;
@@ -61,8 +44,7 @@ export default function createPopup(
     modalsCount++;
   }
 
-  const closePopUp = value => {
-
+  const closePopUp = (value) => {
     const onClose = popUpParams && popUpParams.onClose;
     onClose && onClose(value);
   };
@@ -72,7 +54,7 @@ export default function createPopup(
 
   handle = {
     close: closePopUp,
-    update: nextViewProps => {
+    update: (nextViewProps) => {
       currentViewProps = nextViewProps;
       render(currentViewProps || emptyObj, popUpParams || emptyObj);
     },

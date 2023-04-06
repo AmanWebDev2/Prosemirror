@@ -1,10 +1,5 @@
-import React, { useEffect } from "react";
+import React from "react";
 import uuid from "./content-editable/utils/uudi";
-import PopUpManager from "./content-editable/PopupManager";
-import {
-  atAnchorBottomLeft,
-  atViewportCenter,
-} from "./content-editable/utils/PopupPosition";
 
 const Popup = (props) => {
   const { View, viewProps, close } = props;

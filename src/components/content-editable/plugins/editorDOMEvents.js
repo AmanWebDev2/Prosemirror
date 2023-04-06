@@ -1,4 +1,5 @@
 import { Plugin } from "prosemirror-state";
+
 import { setElementProperties } from "../utils/setNodeProperties";
 
 function handleBlockInsterClick({ topHalf, view, lastNode }) {
@@ -7,11 +8,6 @@ function handleBlockInsterClick({ topHalf, view, lastNode }) {
   } else {
     view.insertionPos = lastNode.pmViewDesc ? lastNode.pmViewDesc.posAfter : 0;
   }
-}
-
-function findAncestor (el, prop) {
-  while ((el = el.parentElement) && !el[prop]);
-  return el;
 }
 
 function handleHoveringElement({ event, lastNode, view, iframe,iframeDoc }) {
@@ -131,28 +127,6 @@ export function toggleInserter(view,show,iframe) {
   }
 }
 
-// function handleRulesetMouseleave({e,blockInserterBtn,inserterPointer,rulset,blockInserterMenu,rulsetMenu}) {
-//   if((blockInserterMenu && blockInserterMenu.style.display == "block") || 
-//   (rulsetMenu && rulsetMenu.style.display == "block")
-//   ) return
-
-//   if (
-//     e.toElement &&
-//     !e.toElement.classList.contains("kudoshub-prosemirror-composer-editor")&&
-//     !e.toElement.pmViewDesc
-//   ) {
-//      if(blockInserterBtn){
-//       blockInserterBtn.classList.add('hidden');
-//     }
-//     if(inserterPointer) {
-//       inserterPointer.classList.add('hidden');
-//     }
-//     if(rulset) {
-//       rulset.classList.add('hidden');
-//     }
-//   }
-// }
-
 function handleInserterAndRulsetLeave(view, event,iframe,iframeDoc) {
   const inserterPointer = view.dom.parentNode.querySelector(
     ".prosemirror-composer-inserter-pointer-line"
@@ -253,28 +227,17 @@ function getTranslateXY(element) {
   }
 }
 function handleMouseEnter(view,event,iframe,iframeDoc) {
-  const inserterPointer = view.dom.parentNode.querySelector(
-    ".prosemirror-composer-inserter-pointer-line"
-  );
- 
   let blockInserterBtn;
-  let blockInserter;
   let rulset;
   if(iframe) {
-    blockInserter = iframeDoc.querySelector("#blockInserter");
     blockInserterBtn = iframeDoc.querySelector("#blockInserter-dropdown");
     rulset = iframeDoc.querySelector(".rulset-position");
   }else {
-    blockInserter = document.querySelector("#blockInserter");
     blockInserterBtn = document.querySelector("#blockInserter-dropdown");
     rulset = document.querySelector(".rulset-position");
 
   } 
   const domRect = view.dom.getBoundingClientRect();
-    // if(inserterPointer) {
-    //   inserterPointer.classList.remove('hidden');
-    //   inserterPointer.style.top = `${event.y}px`
-    // }
     if(rulset && !iframe) {
       rulset.classList.remove('hidden');
       const transform = getTranslateXY(rulset);
@@ -292,15 +255,6 @@ function handleMouseEnter(view,event,iframe,iframeDoc) {
     if(blockInserterBtn){
       blockInserterBtn.classList.remove('hidden');
     }
-    
-    // if(blockInserter) {
-    //   blockInserter.classList.remove('hidden')
-    //  const blockInserterRect = blockInserter.getBoundingClientRect();
-    //   // blockInserter.style.left = `-30px`
-    //   blockInserter.style.transform = `translate(-${domRect.right}px,${
-    //     event.y - blockInserterRect.height / 2
-    //   }px)`
-    // }
 }
 
 export function editorDOMEvents(options) {
@@ -440,20 +394,6 @@ export function editorDOMEvents(options) {
           toggleInserter(view,false,iframe);
         },
       },
-      // nodeViews: {
-      //   link(node, view, getPos) {
-      //     const dom = document.createElement("a");
-      //     dom.href = node.attrs.href;
-      //     dom.textContent = node.textContent;
-      //     dom.addEventListener("click", (event) => {
-      //       event.preventDefault();
-      //       console.log("Link clicked:", node.attrs.href);
-      //     });
-      //     return {
-      //       dom,
-      //     };
-      //   },
-      // },
     },
     view(editorView) {
       return {
