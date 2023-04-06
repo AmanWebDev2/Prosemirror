@@ -23,6 +23,7 @@ export const codeBlockItem = new MenuItem({
     tr = toggleCodeBlock(tr, schema);
     if (tr.docChanged) {
       dispatch && dispatch(tr);
+      view.focus();
       return true;
     } else {
       return false;
