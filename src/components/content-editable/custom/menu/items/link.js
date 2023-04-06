@@ -33,6 +33,7 @@ export const linkItem = new MenuItem({
   run(state, dispatch, view) {
     if (this.active(state)) {
       toggleMark(state.schema.marks.link)(state, dispatch);
+      view.focus();
       return true;
     } else {
       this.waitForUserInput(state, dispatch, undefined, undefined).then(
@@ -41,6 +42,7 @@ export const linkItem = new MenuItem({
         }
       );
     }
+    view.focus();
     return true;
   },
   active(state) {

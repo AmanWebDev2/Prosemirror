@@ -6,6 +6,7 @@ export const boldItem = new MenuItem({
   label: "B",
   run(state, dispatch, view) {
     toggleMark(state.schema.marks.strong)(state, dispatch);
+    view.focus();
     return true;
   },
   active(state) {

@@ -6,6 +6,7 @@ export const italicItem = new MenuItem({
   label: "I",
   run(state, dispatch, view) {
     toggleMark(state.schema.marks.em)(state, dispatch);
+    view.focus();
     return true;
   },
   active(state) {

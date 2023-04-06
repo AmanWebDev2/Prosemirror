@@ -15,7 +15,7 @@ export const alignCenterItem = new MenuItem({
       schema,
       "center"
     );
-
+    view.focus();
     if (tr.docChanged) {
       dispatch && dispatch(tr);
       return true;

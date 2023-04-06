@@ -10,6 +10,7 @@ export const codeItem = new MenuItem({
 
   run(state, dispatch, view) {
     toggleMark(state.schema.marks.code)(state, dispatch);
+    view.focus();
     return true;
   },
   active(state) {

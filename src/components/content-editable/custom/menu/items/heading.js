@@ -9,6 +9,7 @@ export const headingTwoItem = new MenuItem({
   run(state, dispatch, view) {
     const { schema, selection } = state;
     const tr = toggleHeading(state.tr.setSelection(selection), schema, 2);
+    view.focus();
     if (tr.docChanged) {
       dispatch && dispatch(tr);
       return true;
@@ -63,6 +64,7 @@ export const headingOneItem = new MenuItem({
   run(state, dispatch, view) {
     const { schema, selection } = state;
     const tr = toggleHeading(state.tr.setSelection(selection), schema, 1);
+    view.focus();
     if (tr.docChanged) {
       dispatch && dispatch(tr);
       return true;
