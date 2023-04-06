@@ -239,7 +239,7 @@ function handleMouseEnter(view,event,iframe,iframeDoc) {
       rulset.classList.remove('hidden');
       const transform = getTranslateXY(rulset);
       rulset.style.transform = `translate(${
-        (transform.translateX) + window.scrollX
+        domRect.right - 15 + window.scrollX
       }px, ${transform.translateY ? transform.translateY: domRect.top }px)`;
     }else {
       const { state } = view;
@@ -260,9 +260,7 @@ export function editorDOMEvents(options) {
       handleDOMEvents: {
         mousemove(view, event) {
           const { iframe } = options;
-          let blockInserterMenu;
-          let rulsetMenu;
-          let iframeDoc;
+          let blockInserterMenu,rulsetMenu,iframeDoc;
           if(iframe) {
             const iframe = document.getElementById("kudoshub-editor-frame");
             if(!iframe) return; 
