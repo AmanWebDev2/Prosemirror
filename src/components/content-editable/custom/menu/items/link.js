@@ -36,6 +36,8 @@ export const linkItem = new MenuItem({
       view.focus();
       return true;
     } else {
+   
+
       this.waitForUserInput(state, dispatch, undefined, undefined).then(
         (val) => {
           this.executeWithUserInput(state, dispatch, view, val);
@@ -66,7 +68,7 @@ export const linkItem = new MenuItem({
       trx = trx.setSelection(ns); // set the selection in the editor view
       dispatch(trx);
     }
-    view && view.focus();
+    // view && view.focus();
     
     return true;
   },

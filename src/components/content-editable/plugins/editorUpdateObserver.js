@@ -61,22 +61,22 @@ class EditorUpdateObserver {
 
   update(view, lastState) {
     const { state, readOnly } = view;
-    // when selection is made show menu items
+        // // Get the current state of the editor
+        // const currentState = view.state;
+
+        // // Get the previous state's content
+        // const prevContent = lastState.doc.content;
+      
+        // // Get the current state's content
+        // const currentContent = currentState.doc.content;
+      
+        // // Compare the previous and current content
+        // if (prevContent == currentContent) return;
     if (
-      !markActive(state, state.schema.marks.link) ||
-      !state ||
-      readOnly ||
-      state.selection.from !== state.selection.to
+      !markActive(state, state.schema.marks.link) 
     ) {
       // update plugin
-
-      const menu = getProsemirrorMenu();
-      if(!menu) return;
-      
-      // check for if it has a default selection menu
-      const menuItem = menu.querySelector('.ProseMirror-menuitem');
-      if(menuItem) return;
-
+ 
       const myPlugin = state.plugins.filter((plugin) => {
         if (plugin?.spec?.name === "myPlugin") {
           return false;

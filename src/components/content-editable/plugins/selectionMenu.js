@@ -80,7 +80,7 @@ class SelectionMenu {
         const rulsetElm = this.ruleSetPosBlockElm.firstElementChild;
         this.rulsetElm = rulsetElm;
       }
-    this.update(editorView, null);
+    this.update(editorView,editorView.state);
   }
 
   waitForUserInput({view,from,to,component,attribute}){
@@ -142,6 +142,8 @@ class SelectionMenu {
 
     if (state?.selection?.node?.type?.name === IMAGE) {
     }
+
+    // if(!state?.selection?.node) return;
     // popoover
     switch (selectedNodeName) {
       case ATTRIBUTE_SPAN:
@@ -186,9 +188,8 @@ class SelectionMenu {
       }
       return;
     }
-    // Update the Content state before calculating the position
-    this.contentUpdate(this.editorView.state);
-    handleMenuPosition({ view, iframe:this.options.iframe, menu:this.menu});
+      this.contentUpdate(this.editorView.state);
+      handleMenuPosition({ view, iframe:this.options.iframe, menu:this.menu});
 
   }
 

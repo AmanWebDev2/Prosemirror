@@ -25,6 +25,7 @@ const LinkUrlEditor = (props) => {
   const apply = () => {
     if (!BAD_CHARACTER_PATTER.test(url)) {
       // console.log(props)
+      console.log("closed popup")
       props.close(sanitizeURL(url),applyMark);
     }
   };

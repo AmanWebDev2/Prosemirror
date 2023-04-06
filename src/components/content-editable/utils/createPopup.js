@@ -62,18 +62,6 @@ export default function createPopup(
   }
 
   const closePopUp = value => {
-    // if (!handle) {
-    //   return;
-    // }
-    // unrenderPopUp(rootId);
-    // !have to check in case of without iframe: image popover
-
-    if (modal) {
-      modalsCount--;
-    }
-    popUpsCount--;
-
-    handle = null;
 
     const onClose = popUpParams && popUpParams.onClose;
     onClose && onClose(value);
