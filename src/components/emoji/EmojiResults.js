@@ -37,8 +37,9 @@ const EmojiResults=(props)=>{
             ))
           );
         }
-        setEmoji(array);
       }
+      setEmoji(array);
+      // console.log(array);
     },[]);
 
     return (
