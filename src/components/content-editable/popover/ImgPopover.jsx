@@ -9,6 +9,7 @@ import { ENTER } from "../utils/KeyCodes";
 import { isIframe } from "../utils/isFrame";
 import { getTranslateXY } from "../utils/getTransformXY";
 import { setElementProperties } from "../utils/setNodeProperties";
+import { getProsemirrorMenu } from "../utils/getMenu";
 
 const ImagePopover = (props) => {
   const [show, setShow] = useState(false);
@@ -19,6 +20,13 @@ const ImagePopover = (props) => {
     if (!show) return;
     let menuNode;
     if (isIframe) {
+      const iframe = document.getElementById('kudoshub-editor-frame');
+      if(!iframe) return null;
+      const iframeDoc = iframe.contentWindow.document;
+      if(!iframeDoc) return null;
+      menuNode = iframeDoc.querySelector('.pm-selectionmenu');
+      if(!menuNode) return null;
+      positionMenuInsideFrame(menuNode);
     } else {
       menuNode = document.querySelector(".pm-selectionmenu");
       if (!menuNode) return;
@@ -29,12 +37,22 @@ const ImagePopover = (props) => {
   const translateMenuPos = (menuNode) => {
     const translate = getTranslateXY(menuNode);
     const menuNodeRect = menuNode.getBoundingClientRect();
+    console.log(menuNode);
     setElementProperties(menuNode, {
       transform: `translate(${
         translate.translateX - menuNodeRect.width / 2
       }px,${translate.translateY}px)`,
     });
   };
+
+  const positionMenuInsideFrame=(menuNode)=>{
+    let left = menuNode.style.left;
+    const menuNodeRect = menuNode.getBoundingClientRect();
+    if(left) {
+      left = +left.replace("px","");
+      menuNode.style.left = (left - (menuNodeRect.width / 2)) + "px";
+    } 
+  } 
 
   const handleKeyDown = (e) => {
     if (e.keyCode === ENTER) {

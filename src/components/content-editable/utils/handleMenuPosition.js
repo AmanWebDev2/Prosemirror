@@ -33,15 +33,30 @@ export const handleMenuPosition = ({ view, isLinkActive, iframe, menu }) => {
       }
     } else {
       if (iframe) {
-        menu.style.top = start.top - offsetParentBox.top - box.height + "px";
-        menu.style.left = left + "px";
-      } else {
-        // if(domNode && domNode.nodeName !== 'SPAN') {
-        //   const domNodeRect = domNode.getBoundingClientRect();
-        //   menu.style.transform = `translate(${left + domNodeRect.width/2}px,${(start.top - offsetParentBox.top - box.height)}px)`;
-        // }else {
-        // }
+        if (
+          domNode &&
+          domNode.nodeName === "DIV" &&
+          domNode.classList.contains("image-container")
+        ) {
+          const domNodeRect = domNode.getBoundingClientRect();
+          menu.style.top = start.top - offsetParentBox.top - box.height - topSpace + "px";
+          menu.style.left = domNodeRect.width / 2 + left + "px";
+        } else if (
+          domNode &&
+          domNode.nodeName === "DIV" &&
+          domNode.classList.contains("embed-video-container")
+        ) {
+          const domNodeRect = domNode.getBoundingClientRect();
 
+          menu.style.top = start.top - offsetParentBox.top - box.height - topSpace + "px";
+          menu.style.left = domNodeRect.width / 2 + "px";
+        } else {
+          menu.style.top = start.top - offsetParentBox.top - box.height + "px";
+          menu.style.left = left + "px";
+        }
+        /** */
+
+      } else {
         if (
           domNode &&
           domNode.nodeName === "DIV" &&
