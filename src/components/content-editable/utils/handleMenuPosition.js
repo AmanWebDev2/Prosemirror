@@ -49,13 +49,11 @@ export const handleMenuPosition = ({ view, isLinkActive, iframe, menu }) => {
           const domNodeRect = domNode.getBoundingClientRect();
 
           menu.style.top = start.top - offsetParentBox.top - box.height - topSpace + "px";
-          menu.style.left = domNodeRect.width / 2 + "px";
+          menu.style.left = (domNodeRect.width / 2) - left + "px";
         } else {
           menu.style.top = start.top - offsetParentBox.top - box.height + "px";
           menu.style.left = left + "px";
         }
-        /** */
-
       } else {
         if (
           domNode &&
