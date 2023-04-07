@@ -248,6 +248,7 @@
 }
 
 #popoverWrapper .popover{
+  position: unset !important;
   display: block;
   top: -330px;
   border: 1px solid rgba(0,0,0,.2);

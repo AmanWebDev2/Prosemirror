@@ -52,7 +52,9 @@ const EmbedVideo = () => {
     <div>
       <div className="kudoshub-prosemirror-composer-video-inserter">
         <div className="container d-flex">
-          <div className="d-flex flex-shrink-1 flex-grow-1 ">
+          <div className="d-flex" style={{
+            flex:1
+          }}>
             <input
               placeholder="Enter video URL from Youtube, Vimeo, Wistia, Loom, JWPlayer, Microsoft Stream, Brightcove Synthesia or Guidde"
               id="embed-video-inserter"

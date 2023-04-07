@@ -28,7 +28,7 @@ function handleHoveringElement({ event, lastNode, view, iframe,iframeDoc }) {
       "#blockInserter-dropdown"
     );
   }
-  const editorContainer = view.dom;
+  const editorContainer = view.dom.parentNode;
   const elmRect = lastNode.getBoundingClientRect();
   const editorContainerRect = editorContainer.getBoundingClientRect();
   const topHalf = event.clientY - elmRect.top < elmRect.height / 2;
@@ -41,7 +41,7 @@ function handleHoveringElement({ event, lastNode, view, iframe,iframeDoc }) {
       top: `${elmRect.top}px`,
     });
     setElementProperties(blockInserter, {
-      transform: `translate(-${editorContainerRect.right}px,${
+      transform: `translate(-${window.innerWidth-editorContainerRect.left - window.scrollX}px,${
         elmRect.top - (blockInserterRect.height / 2 )+ window.scrollY
       }px)`,
     });
@@ -50,7 +50,7 @@ function handleHoveringElement({ event, lastNode, view, iframe,iframeDoc }) {
       top: `${elmRect.bottom}px`,
     });
     setElementProperties(blockInserter, {
-      transform: `translate(-${editorContainerRect.right}px,${
+      transform: `translate(-${window.innerWidth-editorContainerRect.left - window.scrollX}px,${
         elmRect.bottom - (blockInserterRect.height / 2) + window.scrollY
       }px)`,
     });
