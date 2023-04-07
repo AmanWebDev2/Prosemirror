@@ -249,7 +249,11 @@ class SelectionMenu {
       }
       if(elements && elements.length > 0) {
         Array.from(elements).forEach(element => {
-          element.onscroll = () => handleMenuPosition({view,iframe,menu})            
+          // element.onscroll = () => handleMenuPosition({view,iframe,menu})            
+          element.onscroll = () => {
+            handleMenuPosition({view,iframe,menu})
+            toggleInserter(view,false,this.isIframe);
+          }            
         });
       }
     }
