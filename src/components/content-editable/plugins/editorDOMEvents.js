@@ -261,7 +261,7 @@ export function editorDOMEvents(options) {
     props: {
       handleDOMEvents: {
         mousemove(view, event) {
-          const { iframe } = options;
+          const { iframe,hideBlockInserter } = options;
           let blockInserterMenu,rulsetMenu,iframeDoc;
           if(iframe) {
             const iframe = document.getElementById("kudoshub-editor-frame");
@@ -281,7 +281,7 @@ export function editorDOMEvents(options) {
           }
           
           if((blockInserterMenu && blockInserterMenu.style.display !== "block") &&
-          (rulsetMenu && rulsetMenu.style.display !== "block")) {
+          (rulsetMenu && rulsetMenu.style.display !== "block" && !hideBlockInserter)) {
             handleMousemove(view, event, iframe,iframeDoc);
           }
           const { state, } = view;
