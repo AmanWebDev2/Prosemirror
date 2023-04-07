@@ -55,6 +55,8 @@ function handleHoveringElement({ event, lastNode, view, iframe,iframeDoc }) {
       }px)`,
     });
   }
+  // view, show,iframe
+  toggleInserter(view,true,iframe);
 }
 
 function handleblockInserterMouseleave({e,blockInserterBtn,inserterPointer,rulset,blockInserter,blockInserterMenu,rulsetMenu}) {
@@ -280,8 +282,6 @@ export function editorDOMEvents(options) {
           
           if((blockInserterMenu && blockInserterMenu.style.display !== "block") &&
           (rulsetMenu && rulsetMenu.style.display !== "block")) {
-             // view, show,iframe
-             toggleInserter(view,true,iframe);
             handleMousemove(view, event, iframe,iframeDoc);
           }
           const { state, } = view;

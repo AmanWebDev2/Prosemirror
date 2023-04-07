@@ -726,6 +726,7 @@ cursor:pointer;
   border: 1px dashed red;
   box-sizing: border-box;
   width:400px;
+  pointer-events:none;
 }
 
 .inserter-container {
