@@ -10,6 +10,8 @@ import RuleSetBlock from "../RuleSetBlock";
 import { attributes } from "../../data/attributes";
 import BlockInserter from "../BlockInserter";
 import { createPortal } from "react-dom";
+import MessageBarInsert from "../MessageBarInserter";
+import ButtonAttributePopover from "../ButtonAttributePopover";
 
 const doc = prosmirrorSchema.nodeFromJSON(  {
   "type": "doc",
@@ -267,12 +269,15 @@ function handleObserver(mutations) {
 }
 
 export default function Editor({iframe}) {
+  const blockInserterRef = useRef(null);
   const editorRef = useRef(null);
   const editorDom = useRef(null); 
   const rulsetRef = useRef(null);
-  const blockInserterRef = useRef(null);
+  const msgRef = useRef(null);
+  
   const [editorWidth,setEditorWidth] = useState(200);
   const [show,setShow] = useState(false);
+  const [nodeRef,setNodeRef] = useState(null);
   
   useEffect(() => {
     if (editorRef.current) return;
@@ -353,7 +358,7 @@ export default function Editor({iframe}) {
       blockInserterRef.current.closeInserterMenu()
     }
   }
-
+console.log(msgRef.current)
   return(
     <>
      <div id="editor" className="scroll" ref={editorDom} 
@@ -390,7 +395,13 @@ export default function Editor({iframe}) {
     }
 
      </div>
-     {/* <MessageBarInsert/> */}
+     <MessageBarInsert 
+     setNodeRef={setNodeRef} 
+     />
+
+     <ButtonAttributePopover
+      target={nodeRef}
+     />
      <button onClick={handleAddSpan}>ADD SPAN</button>
      <button onClick={()=>{
         const view = editorRef.current;

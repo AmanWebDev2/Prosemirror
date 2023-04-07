@@ -22,7 +22,7 @@ export const plugins = [
     elementClassNameToHandlingMenuPositionOnScroll: "scroll",
   }),
   // toggle hideblockInserter
-  editorDOMEvents({ iframe: isIframe,hideBlockInserter: true }),
+  editorDOMEvents({ iframe: isIframe,hideBlockInserter: false }),
   editorUpdateObserver(),
   buildInputRules(prosmirrorSchema),
 ];

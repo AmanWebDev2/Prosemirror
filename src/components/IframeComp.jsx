@@ -820,6 +820,26 @@ cursor:pointer;
   border: none;
 }
 
+.settings__saved-replies__inserters {
+  height: 32px;
+  padding-left: 8px;
+}
+
+.inbox__conversation-controls__info-area {
+  padding: 0 5px 5px;
+  margin-left: 3px;
+}
+
+.inbox__conversation-controls__inserter {
+  height: 32px;
+  width: 32px;
+  box-sizing: border-box;
+  padding: 6px 8px;
+  display: block;
+  float: left;
+  text-decoration: none;
+}
+
       </style>
       <body>
         <div id="mountHere"></div>

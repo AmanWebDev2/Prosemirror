@@ -777,3 +777,34 @@ img.ProseMirror-separator {
 .kudoshub-prosemirror-composer-icon-btn.selected {
   background-color: #eef0fc;
 }
+
+.settings__saved-replies__inserters {
+  height: 32px;
+  padding-left: 8px;
+}
+
+.inbox__conversation-controls__info-area {
+  padding: 0 5px 5px;
+  margin-left: 3px;
+}
+
+.inbox__conversation-controls__inserter {
+  height: 32px;
+  width: 32px;
+  box-sizing: border-box;
+  padding: 6px 8px;
+  display: block;
+  float: left;
+}
+
+.interface-icon.o__social, .interface-icon.o__standard {
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+  vertical-align: bottom;
+  margin-bottom: 2px;
+}
+
+.inbox__conversation-controls__additional-inserters-opener, .inbox__conversation-controls__inserter-opener {
+  color: #757575;
+}

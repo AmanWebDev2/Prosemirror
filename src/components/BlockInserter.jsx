@@ -23,7 +23,7 @@ const ITEM = [
   },
   {
     display: "Insert video clip",
-    type: "video",
+    type: "video-clip",
     dataAttributes: {
       captions: "",
       duration: 0.0,
@@ -107,9 +107,97 @@ export const insertAtPos=({insertionPos,newNode})=>{
   view.dispatch(tr.setSelection(selection));
 }
 
-const handleChange = async(file) => {
+export const handleChange = async(file) => {
   const base64 = await convertToBase64(file)
   return base64
+};
+
+export const handleInsertBlock = ({item,setShow,setShowEmbedVideo,setShowEmoji,setShowPopoverOf,setShowGIF,type}) => {
+  let itemType, content
+  const input = document.createElement("input");
+  let insertionPos = 0;
+  if(type === 'macro') {
+    const { state } = window.view;
+    const { from } = state.selection;
+    insertionPos = from;
+  }else {
+    insertionPos = window.view.insertionPos
+  }
+  switch (item.type) {
+    case "Insert button":
+      break;
+    case "unordered-list":
+      itemType = prosmirrorSchema.nodes.bullet_list;
+      content = itemType.createAndFill(null, [
+      ]);
+      insertAtPos({insertionPos,newNode:content })
+      window.view.focus();
+      setShow(false);
+      break;
+    case "ordered-list":
+      itemType = prosmirrorSchema.nodes.list_item;
+      content = itemType.createAndFill(null, [
+      ]);
+      insertAtPos({insertionPos,newNode:content })
+      window.view.focus();
+      setShow(false);
+      break;
+    case "code":
+      itemType = prosmirrorSchema.nodes.code_block;
+      content = itemType.createAndFill(null, [
+      ]);
+      insertAtPos({insertionPos,newNode:content })
+      window.view.focus();
+      setShow(false);
+      break;
+    case "emoji":
+      setShowEmoji(true);
+      setShowPopoverOf("showEmoji");
+      break;
+    case "gif":
+      setShowGIF(true);
+      setShowPopoverOf("showGIF");
+      break;
+    case "image":
+       input.type = "file";
+       input.click();
+       input.setAttribute("accept", "image/x-png,image/gif,image/jpeg,image/jpg");
+       input.addEventListener("change",async(e)=>{
+        const { target: { files } } = e
+        const base64 = await convertToBase64(files[0])
+        itemType = prosmirrorSchema.nodes.image;
+        const imageNode = itemType.create({
+          src: base64,
+          alt: "random",
+        });
+        insertAtPos({ insertionPos,newNode:imageNode })
+       });
+       setShow(false);
+      break;
+    case "file":
+     
+      break;
+    case "video-clip":
+      input.type = "file";
+      input.click();
+      input.addEventListener("change",async(e)=>{
+        const { target: { files } } = e
+        const url = await handleChange(files[0])
+        console.log(url);
+        itemType = prosmirrorSchema.nodes.video_clip;
+        content = itemType.create(
+          { src: url }
+        )
+        insertAtPos({insertionPos,newNode:content })   
+      })
+      setShow(false);
+      break;
+    case "embed-video":
+      setShowEmbedVideo(true);
+      break;
+    default:
+      return
+  }
 };
 
 const BlockInserter = React.forwardRef((props,ref) => {
@@ -118,8 +206,6 @@ const BlockInserter = React.forwardRef((props,ref) => {
   const [showEmbedVideo,setShowEmbedVideo] = useState(false);
   const [showPopoverOf, setShowPopoverOf] = useState("showEmoji");
   const [currentlyRenderedMenu,setCurrentlyRenderedMenu] = useState("");
-
-
 
   useEffect(()=>{ 
     if(showEmbedVideo) {
@@ -131,83 +217,6 @@ const BlockInserter = React.forwardRef((props,ref) => {
     }
 
   },[showEmbedVideo,showEmoji]);
-
-  const handleInsertBlock = (item) => {
-      let itemType;
-      let content;
-      const input = document.createElement("input");
-      switch (item.display) {
-        case "Insert button":
-          break;
-        case "Bulleted List":
-          itemType = prosmirrorSchema.nodes.bullet_list;
-          content = itemType.createAndFill(null, [
-          ]);
-          insertAtPos({insertionPos: window.view.insertionPos,newNode:content })
-          window.view.focus();
-          setShow(false);
-          break;
-        case "Numbered List":
-          itemType = prosmirrorSchema.nodes.list_item;
-          content = itemType.createAndFill(null, [
-          ]);
-          insertAtPos({insertionPos: window.view.insertionPos,newNode:content })
-          window.view.focus();
-          setShow(false);
-          break;
-        case "Insert code":
-          itemType = prosmirrorSchema.nodes.code_block;
-          content = itemType.createAndFill(null, [
-          ]);
-          insertAtPos({insertionPos: window.view.insertionPos,newNode:content })
-          window.view.focus();
-          setShow(false);
-          break;
-        case "Insert emoji":
-          setShowEmoji(true);
-          
-          break;
-        case "Insert image":
-           input.type = "file";
-           input.click();
-           input.setAttribute("accept", "image/x-png,image/gif,image/jpeg,image/jpg");
-           input.addEventListener("change",async(e)=>{
-            const { target: { files } } = e
-            const base64 = await convertToBase64(files[0])
-            itemType = prosmirrorSchema.nodes.image;
-            const imageNode = itemType.create({
-              src: base64,
-              alt: "random",
-            });
-            insertAtPos({ insertionPos: window.view.insertionPos,newNode:imageNode })
-           });
-           setShow(false);
-          break;
-        case "Attach file":
-         
-          break;
-        case "Insert video clip":
-          input.type = "file";
-          input.click();
-          input.addEventListener("change",async(e)=>{
-            const { target: { files } } = e
-            const url = await handleChange(files[0])
-            console.log(url);
-            itemType = prosmirrorSchema.nodes.video_clip;
-            content = itemType.create(
-              { src: url }
-            )
-            insertAtPos({insertionPos: window.view.insertionPos,newNode:content })   
-          })
-          setShow(false);
-          break;
-        case "Embed video":
-          setShowEmbedVideo(true);
-          break;
-        default:
-          return
-      }
-  };
 
   useImperativeHandle(ref, () => {
     return {
@@ -247,6 +256,8 @@ const BlockInserter = React.forwardRef((props,ref) => {
       src: message.text,
       alt: "random",
     });
+    const { state, dispatch } = window.view;
+    const { from } = state.selection;
     insertAtPos({ insertionPos: window.view.insertionPos,newNode:imageNode })
     toggleInserter(window.view,false,false);
     window.view.focus();
@@ -263,7 +274,7 @@ const BlockInserter = React.forwardRef((props,ref) => {
       case "embedVideo":
         return <EmbedVideo/>
       default:
-        return <BlockInserterMenu handleInsertBlock={handleInsertBlock} />;
+        return <BlockInserterMenu handleInsertBlock={handleInsertBlock} setShow={setShow} setShowEmoji={setShowEmoji} setShowEmbedVideo={setShowEmbedVideo}/>;
     }
   }
 
@@ -297,8 +308,9 @@ const BlockInserter = React.forwardRef((props,ref) => {
   );
 });
 
-const BlockInserterMenu=(props)=>{
-  const { handleInsertBlock } = props;
+export const BlockInserterMenu=(props)=>{
+  const { setShow,setShowEmoji,setShowEmbedVideo } = props;
+
   return (
     <div className="attributes-item-container">
     {ITEM.map((data, index) => {
@@ -306,7 +318,7 @@ const BlockInserterMenu=(props)=>{
         <div
           className="attribute-items"
           key={index}
-          onClick={() => handleInsertBlock(data)}
+          onClick={() => handleInsertBlock({item:data,setShow,setShowEmoji,setShowEmbedVideo,insertionPos:window.view.insertionPos })}
         >
           {data.display}
         </div>
