@@ -2,6 +2,8 @@ import { Plugin } from "prosemirror-state";
 
 import { setElementProperties } from "../utils/setNodeProperties";
 
+const SPACE = 20;
+
 function handleBlockInsterClick({ topHalf, view, lastNode }) {
   if (topHalf) {
     view.insertionPos = lastNode.pmViewDesc ? lastNode.pmViewDesc.posBefore : 0;
@@ -41,7 +43,7 @@ function handleHoveringElement({ event, lastNode, view, iframe,iframeDoc }) {
       top: `${elmRect.top}px`,
     });
     setElementProperties(blockInserter, {
-      transform: `translate(-${window.innerWidth-editorContainerRect.left - window.scrollX}px,${
+      transform: `translate(-${window.innerWidth-editorContainerRect.left - window.scrollX - SPACE}px,${
         elmRect.top - (blockInserterRect.height / 2 )+ window.scrollY
       }px)`,
     });
@@ -50,7 +52,7 @@ function handleHoveringElement({ event, lastNode, view, iframe,iframeDoc }) {
       top: `${elmRect.bottom}px`,
     });
     setElementProperties(blockInserter, {
-      transform: `translate(-${window.innerWidth-editorContainerRect.left - window.scrollX}px,${
+      transform: `translate(-${window.innerWidth-editorContainerRect.left - window.scrollX - SPACE}px,${
         elmRect.bottom - (blockInserterRect.height / 2) + window.scrollY
       }px)`,
     });
