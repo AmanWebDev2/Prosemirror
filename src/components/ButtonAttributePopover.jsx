@@ -1,5 +1,4 @@
 import React from "react";
-import Button from 'react-bootstrap/Button';
 import Overlay from 'react-bootstrap/Overlay';
 import Popover from 'react-bootstrap/Popover';
 import Emoji from "./emoji/Emoji";
@@ -8,7 +7,7 @@ import { prosmirrorSchema } from "./content-editable/custom/schema/schema";
 import { insertAtPos } from "./BlockInserter";
 
 const ButtonAttributePopover = (props) => {
-  const { target,shown } = props;
+  const { target } = props;
 
   console.log(target);
 
@@ -26,13 +25,12 @@ const ButtonAttributePopover = (props) => {
 
   const handleGIF = (e, message, type) => {
     // insert image
-    // console.log(e,message,type);
     let itemType = prosmirrorSchema.nodes.image;
     const imageNode = itemType.create({
       src: message.text,
       alt: "random",
     });
-    const { state, dispatch } = window.view;
+    const { state } = window.view;
     const { from } = state.selection;
     insertAtPos({ insertionPos: from, newNode: imageNode });
     toggleInserter(window.view, false, false);

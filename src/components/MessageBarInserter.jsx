@@ -1,18 +1,11 @@
-import React, { useEffect, useImperativeHandle, useRef, useState } from "react";
+import React, { useState } from "react";
 import galleySvg from "../../src/assets/svg/gallery.svg";
 import attachmentSvg from "../../src/assets/svg/attachment.svg";
 import gifSvg from "../../src/assets/svg/gif.svg";
 import smileySvg from "../../src/assets/svg/smiley.svg";
 import {
-  BlockInserterMenu,
-  handleChange,
   handleInsertBlock,
-  insertAtPos,
 } from "./BlockInserter";
-import { prosmirrorSchema } from "./content-editable/custom/schema/schema";
-import convertToBase64 from "./content-editable/utils/convert";
-import Emoji from "./emoji/Emoji";
-import { toggleInserter } from "./content-editable/plugins/editorDOMEvents";
 import { Button } from "react-bootstrap";
 import ButtonAttributePopover from "./ButtonAttributePopover";
 
@@ -56,35 +49,8 @@ const MessageBarInsert = (props, ref) => {
   const [showPopoverOf, setShowPopoverOf] = useState("");
   const [target,setTarget] = useState(null);
 
-  const handleEmoji = (e) => {
-    if (!(e || e.target || e.target.innerText)) return;
-    // get cursor pos
-    const { state, dispatch } = window.view;
-    const { from } = state.selection;
-    dispatch(state.tr.insertText(e.target.innerText, from, from));
-    setShowEmoji(false);
-    // view show isIframe
-    toggleInserter(window.view, false, false);
-    window.view.focus();
-  };
-
-  const handleGIF = (e, message, type) => {
-    // insert image
-    // console.log(e,message,type);
-    let itemType = prosmirrorSchema.nodes.image;
-    const imageNode = itemType.create({
-      src: message.text,
-      alt: "random",
-    });
-    const { state, dispatch } = window.view;
-    const { from } = state.selection;
-    insertAtPos({ insertionPos: from, newNode: imageNode });
-    toggleInserter(window.view, false, false);
-    window.view.focus();
-  };
-
   return (
-    <div className="d-flex align-items-center settings__saved-replies__inserters mt-2 inbox__conversation-controls__info-area"
+    <div className="input-icon d-flex align-items-center settings__saved-replies__inserters mt-2 inbox__conversation-controls__info-area"
     style={{
       gap:'10px'
     }}
@@ -92,7 +58,7 @@ const MessageBarInsert = (props, ref) => {
       {
         ITEMS.map((item) => {
           return (
-            <Button
+            <button className="attech-button"
             onClick={(e) =>
               {
                 setTarget(e.currentTarget)
@@ -118,21 +84,15 @@ const MessageBarInsert = (props, ref) => {
                   </div>
                 </div>
               </span>
-            </Button>
+            </button>
           );
         })
 
-        // <BlockInserterMenu handleInsertBlock={handleInsertBlock} setShow={setShow} setShowEmoji={setShowEmoji} setShowEmbedVideo={setShowEmbedVideo}/>
       }
       <ButtonAttributePopover
       target={target}
       showPopoverOf={showPopoverOf}
       />
-      {/* <Emoji
-        showPopoverOf={showPopoverOf}
-        getEmoji={handleEmoji}
-        handleNewUserMessage={handleGIF}
-      /> */}
     </div>
   );
 };
