@@ -13,98 +13,98 @@ import { createPortal } from "react-dom";
 import MessageBarInsert from "../MessageBarInserter";
 import ButtonAttributePopover from "../ButtonAttributePopover";
 
-const doc = prosmirrorSchema.nodeFromJSON(  {
-  "type": "doc",
-  "content": [
-      {
-          "type": "paragraph",
-          "attrs": {
-              "align": null,
-              "color": null,
-              "id": null,
-              "indent": null,
-              "lineSpacing": null,
-              "paddingBottom": null,
-              "paddingTop": null
-          },
-          "content": [
-              {
-                  "type": "text",
-                  "text": "line one"
-              }
-          ]
+const doc = prosmirrorSchema.nodeFromJSON({
+  type: "doc",
+  content: [
+    {
+      type: "paragraph",
+      attrs: {
+        align: null,
+        color: null,
+        id: null,
+        indent: null,
+        lineSpacing: null,
+        paddingBottom: null,
+        paddingTop: null,
       },
-      {
-          "type": "paragraph",
-          "attrs": {
-              "align": null,
-              "color": null,
-              "id": null,
-              "indent": null,
-              "lineSpacing": null,
-              "paddingBottom": null,
-              "paddingTop": null
-          },
-          "content": [
-              {
-                  "type": "text",
-                  "text": "line two"
-              }
-          ]
+      content: [
+        {
+          type: "text",
+          text: "line one",
+        },
+      ],
+    },
+    {
+      type: "paragraph",
+      attrs: {
+        align: null,
+        color: null,
+        id: null,
+        indent: null,
+        lineSpacing: null,
+        paddingBottom: null,
+        paddingTop: null,
       },
-      {
-          "type": "paragraph",
-          "attrs": {
-              "align": null,
-              "color": null,
-              "id": null,
-              "indent": null,
-              "lineSpacing": null,
-              "paddingBottom": null,
-              "paddingTop": null
-          },
-          "content": [
-              {
-                  "type": "text",
-                  "text": "line three"
-              },
-              {
-                  "type": "attribute_span",
-                  "attrs": {
-                      "class": "highlight",
-                      "style": "background-color: yellow",
-                      "contenteditable": "false"
-                  },
-                  "content": [
-                      {
-                          "type": "text",
-                          "text": "My custom text"
-                      }
-                  ]
-              }
-          ]
+      content: [
+        {
+          type: "text",
+          text: "line two",
+        },
+      ],
+    },
+    {
+      type: "paragraph",
+      attrs: {
+        align: null,
+        color: null,
+        id: null,
+        indent: null,
+        lineSpacing: null,
+        paddingBottom: null,
+        paddingTop: null,
       },
-      {
-          "type": "paragraph",
-          "attrs": {
-              "align": null,
-              "color": null,
-              "id": null,
-              "indent": null,
-              "lineSpacing": null,
-              "paddingBottom": null,
-              "paddingTop": null
+      content: [
+        {
+          type: "text",
+          text: "line three",
+        },
+        {
+          type: "attribute_span",
+          attrs: {
+            class: "highlight",
+            style: "background-color: yellow",
+            contenteditable: "false",
           },
-          "content": [
-              {
-                  "type": "text",
-                  "text": "🤞"
-              }
-          ]
-      }
-  ]
+          content: [
+            {
+              type: "text",
+              text: "My custom text",
+            },
+          ],
+        },
+      ],
+    },
+    {
+      type: "paragraph",
+      attrs: {
+        align: null,
+        color: null,
+        id: null,
+        indent: null,
+        lineSpacing: null,
+        paddingBottom: null,
+        paddingTop: null,
+      },
+      content: [
+        {
+          type: "text",
+          text: "🤞",
+        },
+      ],
+    },
+  ],
 });
-console.log("running")
+console.log("running");
 let CONFIG = {
   characterData: true,
   attributes: true,
@@ -145,30 +145,31 @@ function handleObserver(mutations) {
                   }
                 });
               }
-            break;
+              break;
             case "BR":
-             console.log("BR");
+              console.log("BR");
               break;
             // If block is Div
             case "DIV":
-              if(blocknode.classList.contains('kudoshub-smartlink__tooltip')) {
+              if (blocknode.classList.contains("kudoshub-smartlink__tooltip")) {
                 console.log("DIV");
                 const { state } = window.view;
                 const { from } = state.selection;
                 const start = window.view.coordsAtPos(from);
                 // let offsetParentBox = blocknode.parentNode.offsetParent.getBoundingClientRect();
-                const kudoshubIframe = document.getElementById('kudoshub-editor-frame');
-                if(kudoshubIframe) {
+                const kudoshubIframe = document.getElementById(
+                  "kudoshub-editor-frame"
+                );
+                if (kudoshubIframe) {
                   const st = kudoshubIframe.contentWindow.scrollY;
-                  console.log(kudoshubIframe.contentWindow)
-                  blocknode.parentNode.style.top = (start.bottom+st) + "px";
-
+                  console.log(kudoshubIframe.contentWindow);
+                  blocknode.parentNode.style.top = start.bottom + st + "px";
                 }
-               }
+              }
               break;
             case "SPAN":
-               console.log("SPAN");
-               console.log(blocknode)
+              console.log("SPAN");
+              console.log(blocknode);
               break;
             case "A":
               console.log("A");
@@ -202,7 +203,7 @@ function handleObserver(mutations) {
             //         break;
             //     }
             //   }
-              // break;
+            // break;
             default:
               break;
           }
@@ -237,12 +238,10 @@ function handleObserver(mutations) {
     }
     if (mutation.type === "attributes") {
       if (mutation.attributeName === "data-align") {
-      
       }
 
       if (mutation.attributeName === "class") {
         if (mutation.target.classList.contains("block-is-current")) {
-
         }
       }
     }
@@ -263,22 +262,21 @@ function handleObserver(mutations) {
       if (lastAddedInputNode.nextSibling.data === "") {
         lastAddedInputNode.nextSibling.data = " ";
       }
-       
     }
   }
 }
 
-export default function Editor({iframe}) {
+export default function Editor({ iframe }) {
   const blockInserterRef = useRef(null);
   const editorRef = useRef(null);
-  const editorDom = useRef(null); 
+  const editorDom = useRef(null);
   const rulsetRef = useRef(null);
   const msgRef = useRef(null);
-  
-  const [editorWidth,setEditorWidth] = useState(200);
-  const [show,setShow] = useState(false);
-  const [nodeRef,setNodeRef] = useState(null);
-  
+
+  const [editorWidth, setEditorWidth] = useState(200);
+  const [show, setShow] = useState(false);
+  const [nodeRef, setNodeRef] = useState(null);
+
   useEffect(() => {
     if (editorRef.current) return;
     const tooltipContent = document.createElement("div");
@@ -308,107 +306,106 @@ export default function Editor({iframe}) {
     }
 
     editorRef.current = new EditorView(editorDom.current, {
-      state: EditorState.create({ schema:prosmirrorSchema,doc, plugins }),
+      state: EditorState.create({ schema: prosmirrorSchema, doc, plugins }),
       decorations: (state) => tooltipDecoration(state),
     });
     const editorWrapper = editorRef.current.dom;
-    editorWrapper.classList.add('kudoshub-prosemirror-composer-editor');
+    editorWrapper.classList.add("kudoshub-prosemirror-composer-editor");
 
-    const editorRect = editorWrapper.getBoundingClientRect()
-    setEditorWidth(editorRect.width)
+    const editorRect = editorWrapper.getBoundingClientRect();
+    setEditorWidth(editorRect.width);
 
     const observer = new MutationObserver((mutations) => {
-      handleObserver(mutations)
+      handleObserver(mutations);
     });
     editorRef.current.dom.focus();
     window.view = editorRef.current;
     observer.observe(editorWrapper.parentNode, CONFIG);
 
-    // hide attribute menu 
-    editorWrapper.addEventListener("input",handleEditorClick);
-    editorWrapper.addEventListener("click",handleEditorClick);
-    editorWrapper.addEventListener("focus",handleEditorClick);
+    // hide attribute menu
+    editorWrapper.addEventListener("input", handleEditorClick);
+    editorWrapper.addEventListener("click", handleEditorClick);
+    editorWrapper.addEventListener("focus", handleEditorClick);
     // clean up causes issue
     // return () => {
     //   editorWrapper.removeEventListener("input",handleEditorClick);
     //   editorWrapper.removeEventListener("click",handleEditorClick);
     //   editorWrapper.removeEventListener("focus",handleEditorClick);
     // }
-
   }, []);
 
-  const handleAddSpan=()=>{
+  const handleAddSpan = () => {
     // 1. find cursor position
     // 2. append span
     const view = editorRef.current;
     if (view) {
-      const node = view.state.schema.nodes[ATTRIBUTE_SPAN].create({}, [view.state.schema.text("My custom text")]);
+      const node = view.state.schema.nodes[ATTRIBUTE_SPAN].create({}, [
+        view.state.schema.text("My custom text"),
+      ]);
       const transaction = view.state.tr.replaceSelectionWith(node);
       view.dispatch(transaction);
     }
-  }
+  };
 
-
-  const handleEditorClick=(e)=>{
+  const handleEditorClick = (e) => {
     e.stopPropagation();
-    if(rulsetRef.current) {
-      rulsetRef.current.closeRuleSetMenu()
+    if (rulsetRef.current) {
+      rulsetRef.current.closeRuleSetMenu();
     }
-    if(blockInserterRef.current) {
-      blockInserterRef.current.closeInserterMenu()
+    if (blockInserterRef.current) {
+      blockInserterRef.current.closeInserterMenu();
     }
-  }
-console.log(msgRef.current)
-  return(
+  };
+  console.log(msgRef.current);
+  return (
     <>
-     <div id="editor" className="scroll" ref={editorDom} 
-    //  onMouseEnter={()=>setShow(true)}
-    //  onMouseLeave={()=>setShow(false)}
-     >
-
-     {!iframe ?createPortal(
-        <RuleSetBlock dropdownData={attributes} ref={rulsetRef} />,
-        document.body
-      ):
-      editorDom.current &&
-      createPortal(
-        <RuleSetBlock dropdownData={attributes} ref={rulsetRef} />,
-        editorDom.current.parentNode
-      )
-    }
-      <div className="pe-none prosemirror-composer-inserter-pointer-line hidden"
-      style={{
-        width:editorWidth+"px"
-      }}
+      <div
+        id="editor"
+        className="scroll"
+        ref={editorDom}
       >
-     </div>
+        {!iframe
+          ? createPortal(
+              <RuleSetBlock dropdownData={attributes} ref={rulsetRef} />,
+              document.body
+            )
+          : editorDom.current &&
+            createPortal(
+              <RuleSetBlock dropdownData={attributes} ref={rulsetRef} />,
+              editorDom.current.parentNode
+            )}
+        <div
+          className="pe-none prosemirror-composer-inserter-pointer-line hidden"
+          style={{
+            width: editorWidth + "px",
+          }}
+        ></div>
 
-     {!iframe ? createPortal(
-       <BlockInserter ref={blockInserterRef}/>,
-       document.body
-     ):
-     editorDom.current &&
-      createPortal(
-        <BlockInserter ref={blockInserterRef}/>,
-        editorDom.current.parentNode
-      )
-    }
+        {!iframe
+          ? createPortal(
+              <BlockInserter ref={blockInserterRef} />,
+              document.body
+            )
+          : editorDom.current &&
+            createPortal(
+              <BlockInserter ref={blockInserterRef} />,
+              editorDom.current.parentNode
+            )}
+      </div>
+      <MessageBarInsert setNodeRef={setNodeRef} />
 
-     </div>
-     <MessageBarInsert 
-     setNodeRef={setNodeRef} 
-     />
-
-     <ButtonAttributePopover
-      target={nodeRef}
-     />
-     <button onClick={handleAddSpan}>ADD SPAN</button>
-     <button onClick={()=>{
-        const view = editorRef.current;
-        console.log(view.state.doc.toJSON())
-        console.log(view.state.doc.textContent)
-        console.log(view.state.doc)
-     }}>GET DATA</button>
+      <ButtonAttributePopover target={nodeRef} />
+      <button onClick={handleAddSpan}>ADD SPAN</button>
+      <button
+        onClick={() => {
+          const view = editorRef.current;
+          console.log(view.state.doc.toJSON());
+          console.log(view.state.doc.textContent);
+          console.log(view.state.doc);
+        }}
+      >
+        GET DATA
+      </button>
     </>
   );
-} 
+}
