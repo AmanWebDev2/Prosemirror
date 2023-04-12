@@ -10,9 +10,11 @@ import { buildKeymap } from "./keyMap";
 import { prosmirrorSchema } from "../custom/schema/schema";
 import { buildInputRules } from "../utils/inputRules";
 import { isIframe } from "../utils/isFrame";
+import placeholderPlugin  from "./placeholder";
 
 export const plugins = [
   history(),
+  placeholderPlugin,
   keymap({ "Mod-z": undo, "Mod-y": redo }),
   keymap(buildKeymap(prosmirrorSchema)),
   keymap(baseKeymap),

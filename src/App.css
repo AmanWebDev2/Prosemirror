@@ -808,3 +808,9 @@ img.ProseMirror-separator {
 .inbox__conversation-controls__additional-inserters-opener, .inbox__conversation-controls__inserter-opener {
   color: #757575;
 }
+
+.placeholder::before {
+  content: var(--placeholder-text);
+  color: #aaa;
+  position: absolute;
+}
