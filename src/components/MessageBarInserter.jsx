@@ -3,10 +3,7 @@ import galleySvg from "../../src/assets/svg/gallery.svg";
 import attachmentSvg from "../../src/assets/svg/attachment.svg";
 import gifSvg from "../../src/assets/svg/gif.svg";
 import smileySvg from "../../src/assets/svg/smiley.svg";
-import {
-  handleInsertBlock,
-} from "./BlockInserter";
-import { Button } from "react-bootstrap";
+import { handleInsertBlock } from "./BlockInserter";
 import ButtonAttributePopover from "./ButtonAttributePopover";
 
 const ITEMS = [
@@ -47,22 +44,22 @@ const MessageBarInsert = (props, ref) => {
   const [showGIF, setShowGIF] = useState(false);
   const [showEmbedVideo, setShowEmbedVideo] = useState(false);
   const [showPopoverOf, setShowPopoverOf] = useState("");
-  const [target,setTarget] = useState(null);
+  const [target, setTarget] = useState(null);
 
   return (
-    <div className="input-icon d-flex align-items-center settings__saved-replies__inserters mt-2 inbox__conversation-controls__info-area"
-    style={{
-      gap:'10px'
-    }}
+    <div
+      className="input-icon d-flex align-items-center settings__saved-replies__inserters mt-2 inbox__conversation-controls__info-area"
+      style={{
+        gap: "10px",
+      }}
     >
-      {
-        ITEMS.map((item) => {
-          return (
-            <button className="attech-button"
-            onClick={(e) =>
-              {
-                setTarget(e.currentTarget)
-                handleInsertBlock({
+      {ITEMS.map((item) => {
+        return (
+          <button
+            className="attech-button"
+            onClick={(e) => {
+              setTarget(e.currentTarget);
+              handleInsertBlock({
                 item,
                 setShow,
                 setShowEmbedVideo,
@@ -70,29 +67,20 @@ const MessageBarInsert = (props, ref) => {
                 setShowGIF,
                 setShowPopoverOf,
                 type: "macro",
-              })
-            }
-            }
-            >
-              <span
-                className="inbox__conversation-controls__inserter"
-                
-              >
-                <div className="popover__opener inbox__conversation-controls__inserter-opener">
-                  <div className="popover__opener overlay__opener">
-                    <img src={item.svg} alt="_" />
-                  </div>
+              });
+            }}
+          >
+            <span className="inbox__conversation-controls__inserter">
+              <div className="popover__opener inbox__conversation-controls__inserter-opener">
+                <div className="popover__opener overlay__opener">
+                  <img src={item.svg} alt="_" />
                 </div>
-              </span>
-            </button>
-          );
-        })
-
-      }
-      <ButtonAttributePopover
-      target={target}
-      showPopoverOf={showPopoverOf}
-      />
+              </div>
+            </span>
+          </button>
+        );
+      })}
+      <ButtonAttributePopover target={target} showPopoverOf={showPopoverOf} />
     </div>
   );
 };

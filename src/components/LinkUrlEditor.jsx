@@ -25,8 +25,8 @@ const LinkUrlEditor = (props) => {
   const apply = () => {
     if (!BAD_CHARACTER_PATTER.test(url)) {
       // console.log(props)
-      console.log("closed popup")
-      props.close(sanitizeURL(url),applyMark);
+      console.log("closed popup");
+      props.close(sanitizeURL(url), applyMark);
     }
   };
 
@@ -72,9 +72,11 @@ const LinkUrlEditor = (props) => {
 
           <div className="smart-links__list flex flex-col overflow-auto -mx-1">
             <div className="smart-links-wrapper hover:text-blue hover:bg-blue-light cursor-pointer flex flex-row items-center px-4 py-2 gap-4">
-              <div style={{
-                marginRight:'16px'
-              }}>
+              <div
+                style={{
+                  marginRight: "16px",
+                }}
+              >
                 <svg
                   className="kudoshub-icon o__standard o__standard__link o__by-text"
                   width="16"
@@ -90,15 +92,16 @@ const LinkUrlEditor = (props) => {
                 </svg>
               </div>
               <div className="flex flex-col flex-1 u__one-truncated-line">
-               {url}
+                {url}
               </div>
             </div>
 
             <div className="smart-links__list-two flex flex-row items-center gap-1 text-sm pl-4 py-1 h-9">
-              <span className="text-blue"
-              style={{
-                marginRight:'16px'
-              }}
+              <span
+                className="text-blue"
+                style={{
+                  marginRight: "16px",
+                }}
               >
                 <svg
                   className="kudoshub-icon o__standard o__standard__trigger o__by-text"
@@ -122,10 +125,11 @@ const LinkUrlEditor = (props) => {
 
             <div className="smart-links-info flex flex-row items-center px-4 gap-4 h-8">
               <div className="decoration__line w-px bg-gray ml-2 h-6 mb-2"></div>
-              <div className="text-gray"
-              style={{
-                marginRight:'16px'
-              }}
+              <div
+                className="text-gray"
+                style={{
+                  marginRight: "16px",
+                }}
               >
                 <svg
                   className="interface-icon o__standard o__standard__error"
@@ -148,7 +152,6 @@ const LinkUrlEditor = (props) => {
             </div>
           </div>
         </div>
-        
       </form>
     </div>
   );

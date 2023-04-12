@@ -4,7 +4,6 @@ import { NavLink } from "react-router-dom";
 const Navbar = () => {
   return (
     <>
-      kdlnsfslkdnf
       <nav>
         <div className="d-flex justify-content-between w-25 mx-auto">
           <div className="link">

@@ -1,6 +1,6 @@
 import React from "react";
-import Overlay from 'react-bootstrap/Overlay';
-import Popover from 'react-bootstrap/Popover';
+import Overlay from "react-bootstrap/Overlay";
+import Popover from "react-bootstrap/Popover";
 import Emoji from "./emoji/Emoji";
 import { toggleInserter } from "./content-editable/plugins/editorDOMEvents";
 import { prosmirrorSchema } from "./content-editable/custom/schema/schema";
@@ -8,9 +8,7 @@ import { insertAtPos } from "./BlockInserter";
 
 const ButtonAttributePopover = (props) => {
   const { target } = props;
-
-  console.log(target);
-
+  
   const handleEmoji = (e) => {
     if (!(e || e.target || e.target.innerText)) return;
     // get cursor pos
@@ -39,22 +37,21 @@ const ButtonAttributePopover = (props) => {
 
   const emojiPopover = (
     <Popover id="popover-contained">
-     <Emoji
+      <Emoji
         showPopoverOf={props.showPopoverOf}
         getEmoji={handleEmoji}
         handleNewUserMessage={handleGIF}
-        />
-  </Popover>
+      />
+    </Popover>
   );
   return (
-    <Overlay 
-    target={target}
-    show={true} 
-    placement="bottom"
-    containerPadding={20}
-    // container={ref}
+    <Overlay
+      target={target}
+      show={true}
+      placement="bottom"
+      containerPadding={20}
+      // container={ref}
     >
-
       {emojiPopover}
     </Overlay>
   );
