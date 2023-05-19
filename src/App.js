@@ -1,7 +1,4 @@
-import { useEffect, useRef } from "react";
-import Frame from "react-frame-component";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { Button } from "react-bootstrap";
 
 import "./App.css";
 import Editor from "./components/content-editable/Editor";
@@ -53,8 +50,8 @@ const doc = {
 function App() {
  
   return (
-    <div className="App">
-      <Navbar/>
+    <div className="App d-flex align-items-center justify-content-center flex-column">
+      {/* <Navbar/> */}
       <Editor iframe={isIframe}/>
     </div>
   );

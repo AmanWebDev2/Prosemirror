@@ -3,8 +3,10 @@ import galleySvg from "../../src/assets/svg/gallery.svg";
 import attachmentSvg from "../../src/assets/svg/attachment.svg";
 import gifSvg from "../../src/assets/svg/gif.svg";
 import smileySvg from "../../src/assets/svg/smiley.svg";
-import { handleInsertBlock } from "./BlockInserter";
+import { handleInsertBlock, insertAtPos } from "./BlockInserter";
 import ButtonAttributePopover from "./ButtonAttributePopover";
+import { prosmirrorSchema } from "./content-editable/custom/schema/schema";
+import { toggleInserter } from "./content-editable/plugins/editorDOMEvents";
 
 const ITEMS = [
   {
@@ -45,6 +47,20 @@ const MessageBarInsert = (props, ref) => {
   const [showEmbedVideo, setShowEmbedVideo] = useState(false);
   const [showPopoverOf, setShowPopoverOf] = useState("");
   const [target, setTarget] = useState(null);
+
+  const handleGIF = (e, message, type) => {
+    // insert image
+    let itemType = prosmirrorSchema.nodes.image;
+    const imageNode = itemType.create({
+      src: message.text,
+      alt: "random",
+    });
+    const { state } = window.view;
+    const { from } = state.selection;
+    insertAtPos({ insertionPos: from, newNode: imageNode });
+    toggleInserter(window.view, false, false);
+    window.view.focus();
+  };
 
   return (
     <div

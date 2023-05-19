@@ -47,12 +47,6 @@ const ITEM = [
     // icon: <VideoIcon />,
   },
   {
-    display: "Attach file",
-    type: "file",
-    dataAttributes: { type: "file-upload" },
-    // icon: <AttechIcon />,
-  },
-  {
     display: "Insert code",
     type: "code",
     // icon: <CodeIcon />,
@@ -75,6 +69,12 @@ const ITEM = [
     type: "ordered-list",
     // icon: <NumberedListIcon />,
     dataAttributes: { type: "ordered-list" },
+  },
+  {
+    display: "Insert gif",
+    type: "gif",
+    dataAttributes: { type: "gif" },
+    // svg: gifSvg,
   },
 ];
 
@@ -155,8 +155,9 @@ export const handleInsertBlock = ({item,setShow,setShowEmbedVideo,setShowEmoji,s
       setShowPopoverOf("showEmoji");
       break;
     case "gif":
-      setShowGIF(true);
+      setShowEmoji(true);
       setShowPopoverOf("showGIF");
+
       break;
     case "image":
        input.type = "file";
@@ -274,7 +275,7 @@ const BlockInserter = React.forwardRef((props,ref) => {
       case "embedVideo":
         return <EmbedVideo/>
       default:
-        return <BlockInserterMenu handleInsertBlock={handleInsertBlock} setShow={setShow} setShowEmoji={setShowEmoji} setShowEmbedVideo={setShowEmbedVideo}/>;
+        return <BlockInserterMenu handleInsertBlock={handleInsertBlock} setShow={setShow} setShowEmoji={setShowEmoji} setShowEmbedVideo={setShowEmbedVideo} setShowPopoverOf={setShowPopoverOf}/>;
     }
   }
 
@@ -309,7 +310,7 @@ const BlockInserter = React.forwardRef((props,ref) => {
 });
 
 export const BlockInserterMenu=(props)=>{
-  const { setShow,setShowEmoji,setShowEmbedVideo } = props;
+  const { setShow,setShowEmoji,setShowEmbedVideo,setShowPopoverOf } = props;
 
   return (
     <div className="attributes-item-container">
@@ -318,7 +319,7 @@ export const BlockInserterMenu=(props)=>{
         <div
           className="attribute-items"
           key={index}
-          onClick={() => handleInsertBlock({item:data,setShow,setShowEmoji,setShowEmbedVideo,insertionPos:window.view.insertionPos })}
+          onClick={() => handleInsertBlock({item:data,setShow,setShowEmoji,setShowEmbedVideo,insertionPos:window.view.insertionPos,setShowPopoverOf })}
         >
           {data.display}
         </div>

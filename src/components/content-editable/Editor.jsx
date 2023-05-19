@@ -274,7 +274,6 @@ export default function Editor({ iframe }) {
   const msgRef = useRef(null);
 
   const [editorWidth, setEditorWidth] = useState(200);
-  const [show, setShow] = useState(false);
   const [nodeRef, setNodeRef] = useState(null);
 
   useEffect(() => {
@@ -356,7 +355,6 @@ export default function Editor({ iframe }) {
       blockInserterRef.current.closeInserterMenu();
     }
   };
-  console.log(msgRef.current);
   return (
     <>
       <div
@@ -392,11 +390,11 @@ export default function Editor({ iframe }) {
               editorDom.current.parentNode
             )}
       </div>
-      <MessageBarInsert setNodeRef={setNodeRef} />
+      {/* <MessageBarInsert setNodeRef={setNodeRef} /> */}
 
       <ButtonAttributePopover target={nodeRef} />
-      <button onClick={handleAddSpan}>ADD SPAN</button>
-      <button
+      {/* <button onClick={handleAddSpan}>ADD SPAN</button> */}
+      <button className="btn btn-primary"
         onClick={() => {
           const view = editorRef.current;
           console.log(view.state.doc.toJSON());
